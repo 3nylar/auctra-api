@@ -8,7 +8,7 @@
     "termsOfService": "https://auctra.dev/terms",
     "contact": {
       "name": "Auctra developer support",
-      "url": "https://docs.auctra.dev",
+      "url": "https://auctra-api.vercel.app",
       "email": "developers@auctra.dev"
     },
     "license": {
