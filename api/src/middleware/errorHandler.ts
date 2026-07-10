@@ -3,7 +3,7 @@ import { ZodError } from "zod";
 import { AuctraError, errors } from "../lib/errors.js";
 import { env } from "../lib/env.js";
 
-const DOCS = "https://auctra-api.vercel.app/introduction";
+const DOCS = "https://auctra-api.vercel.app";
 
 export function registerErrorHandler(app: FastifyInstance) {
   app.setErrorHandler((err: FastifyError | AuctraError, req: FastifyRequest, reply: FastifyReply) => {
