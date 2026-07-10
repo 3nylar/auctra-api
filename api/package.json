@@ -4,7 +4,9 @@
   "private": true,
   "description": "Auctra API — on-chain English auctions as HTTP infrastructure",
   "type": "module",
-  "engines": { "node": ">=20" },
+  "engines": {
+    "node": ">=20"
+  },
   "scripts": {
     "dev": "tsx watch src/index.ts",
     "build": "tsc -p tsconfig.json",
