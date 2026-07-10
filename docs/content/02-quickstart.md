@@ -13,7 +13,7 @@ Sign up, then go to **Developers → API keys** and create a key. It appears onc
 
 ```bash
 export AUCTRA_KEY="sk_test_4f1c8b9d2e6a0b1c2d3e4f5a6b7c8d9e"
-export AUCTRA_URL="https://sandbox-api.auctra.dev"
+export AUCTRA_URL="https://auctra-api-production.up.railway.app"
 ```
 
 Sandbox keys start with `sk_test_`, production keys with `sk_live_`. They are not interchangeable, and sending one to the wrong host returns `environment_mismatch` rather than a confusing `invalid_api_key`.

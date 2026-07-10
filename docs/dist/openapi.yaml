@@ -27,11 +27,9 @@ info:
     identifier: MIT
 
 servers:
-  - url: https://sandbox-api.auctra.dev
+  - url: https://auctra-api-production.up.railway.app
     description: Sandbox — Sepolia testnet. Test ETH, real code paths.
-  - url: https://api.auctra.dev
-    description: Production — Ethereum mainnet.
-
+    
 security:
   - bearerAuth: []
 
