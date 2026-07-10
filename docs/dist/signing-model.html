@@ -1,59 +1,186 @@
 <!doctype html>
 <html lang="en" data-theme="light">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>The signing model — Auctra API</title>
-<meta name="description" content="Why write endpoints return a transaction instead of doing the work.">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="styles.css">
-<script>
-  // Applied before first paint so a dark-mode reader never sees a white flash.
-  try {
-    const t = localStorage.getItem("auctra-theme");
-    if (t) document.documentElement.dataset.theme = t;
-    else if (matchMedia("(prefers-color-scheme: dark)").matches)
-      document.documentElement.dataset.theme = "dark";
-  } catch {}
-</script>
-</head>
-<body>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>The signing model — Auctra API</title>
+    <meta
+      name="description"
+      content="Why write endpoints return a transaction instead of doing the work."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+    <script>
+      // Applied before first paint so a dark-mode reader never sees a white flash.
+      try {
+        const t = localStorage.getItem("auctra-theme");
+        if (t) document.documentElement.dataset.theme = t;
+        else if (matchMedia("(prefers-color-scheme: dark)").matches)
+          document.documentElement.dataset.theme = "dark";
+      } catch {}
+    </script>
+  </head>
+  <body>
+    <header class="masthead">
+      <button
+        class="icon-btn"
+        id="menu-toggle"
+        aria-label="Toggle navigation"
+        aria-expanded="false"
+      >
+        ☰
+      </button>
+      <a class="wordmark" href="introduction.html"
+        ><b>Auctra</b><span>Docs</span></a
+      >
+      <nav>
+        <a class="hide-sm" href="api-reference.html">API reference</a>
+        <a class="hide-sm" href="changelog.html">Changelog</a>
+        <a class="hide-sm" href="https://github.com/3nylar/auctra-api"
+          >GitHub</a
+        >
+        <button
+          class="icon-btn"
+          id="theme-toggle"
+          aria-label="Toggle colour theme"
+        >
+          ◐
+        </button>
+      </nav>
+    </header>
 
-<header class="masthead">
-  <button class="icon-btn" id="menu-toggle" aria-label="Toggle navigation" aria-expanded="false">☰</button>
-  <a class="wordmark" href="introduction.html"><b>Auctra</b><span>Docs</span></a>
-  <nav>
-    <a class="hide-sm" href="api-reference.html">API reference</a>
-    <a class="hide-sm" href="changelog.html">Changelog</a>
-    <a class="hide-sm" href="https://github.com/auctra/auctra-api">GitHub</a>
-    <button class="icon-btn" id="theme-toggle" aria-label="Toggle colour theme">◐</button>
-  </nav>
-</header>
+    <div class="shell">
+      <aside class="sidebar" id="sidebar">
+        <div class="search-wrap">
+          <input
+            id="search"
+            type="search"
+            placeholder="Search the docs"
+            autocomplete="off"
+          />
+        </div>
+        <h4>Get started</h4>
+        <a
+          href="introduction.html"
+          data-search="Introduction An auction house that settles on Ethereum, exposed as a JSON API."
+          >Introduction</a
+        ><a
+          href="quickstart.html"
+          data-search="Quickstart From zero to a live auction on Sepolia in four steps."
+          >Quickstart</a
+        ><a
+          href="authentication.html"
+          data-search="Authentication API keys, scopes, environments, and what to do when one leaks."
+          >Authentication</a
+        ><a
+          href="environments.html"
+          data-search="Environments Sandbox and production are the same code against different chains."
+          >Environments</a
+        >
+        <h4>Core concepts</h4>
+        <a
+          href="signing-model.html"
+          aria-current="page"
+          data-search="The signing model Why write endpoints return a transaction instead of doing the work."
+          >The signing model</a
+        ><a
+          href="auction-lifecycle.html"
+          data-search="Auction lifecycle Six states, one clock, and the two transitions nobody controls."
+          >Auction lifecycle</a
+        ><a
+          href="errors.html"
+          data-search="Errors One shape, stable codes, and a request id worth quoting."
+          >Errors</a
+        ><a
+          href="idempotency.html"
+          data-search="Idempotency Retry a POST safely, even when you never saw the response."
+          >Idempotency</a
+        ><a
+          href="pagination.html"
+          data-search="Pagination Cursors, not page numbers, and why that isn't pedantry."
+          >Pagination</a
+        ><a
+          href="rate-limits.html"
+          data-search="Rate limits 100 requests a minute, per key, and how to not need them."
+          >Rate limits</a
+        ><a
+          href="webhooks.html"
+          data-search="Webhooks Signed, retried, replayable — and how to verify one before you trust it."
+          >Webhooks</a
+        >
+        <h4>Guides</h4>
+        <a
+          href="guide-list-an-item.html"
+          data-search="Guide: list an item Approve, create, confirm — the full seller flow, end to end."
+          >Guide: list an item</a
+        ><a
+          href="guide-place-a-bid.html"
+          data-search="Guide: place a bid Read the minimum, prepare, sign, and handle being outbid."
+          >Guide: place a bid</a
+        ><a
+          href="guide-settle.html"
+          data-search="Guide: settle and pay out The clock runs out. Now someone has to close the loop."
+          >Guide: settle and pay out</a
+        >
+        <h4>Reference</h4>
+        <a
+          href="api-reference.html"
+          data-search="API reference Every endpoint, parameter and response."
+          >API reference</a
+        ><a
+          href="changelog.html"
+          data-search="Changelog Versions are dated. Breaking changes get a new one."
+          >Changelog</a
+        >
+      </aside>
 
-<div class="shell">
-  <aside class="sidebar" id="sidebar">
-    <div class="search-wrap">
-      <input id="search" type="search" placeholder="Search the docs" autocomplete="off">
-    </div>
-    <h4>Get started</h4><a href="introduction.html" data-search="Introduction An auction house that settles on Ethereum, exposed as a JSON API.">Introduction</a><a href="quickstart.html" data-search="Quickstart From zero to a live auction on Sepolia in four steps.">Quickstart</a><a href="authentication.html" data-search="Authentication API keys, scopes, environments, and what to do when one leaks.">Authentication</a><a href="environments.html" data-search="Environments Sandbox and production are the same code against different chains.">Environments</a><h4>Core concepts</h4><a href="signing-model.html" aria-current="page" data-search="The signing model Why write endpoints return a transaction instead of doing the work.">The signing model</a><a href="auction-lifecycle.html" data-search="Auction lifecycle Six states, one clock, and the two transitions nobody controls.">Auction lifecycle</a><a href="errors.html" data-search="Errors One shape, stable codes, and a request id worth quoting.">Errors</a><a href="idempotency.html" data-search="Idempotency Retry a POST safely, even when you never saw the response.">Idempotency</a><a href="pagination.html" data-search="Pagination Cursors, not page numbers, and why that isn't pedantry.">Pagination</a><a href="rate-limits.html" data-search="Rate limits 100 requests a minute, per key, and how to not need them.">Rate limits</a><a href="webhooks.html" data-search="Webhooks Signed, retried, replayable — and how to verify one before you trust it.">Webhooks</a><h4>Guides</h4><a href="guide-list-an-item.html" data-search="Guide: list an item Approve, create, confirm — the full seller flow, end to end.">Guide: list an item</a><a href="guide-place-a-bid.html" data-search="Guide: place a bid Read the minimum, prepare, sign, and handle being outbid.">Guide: place a bid</a><a href="guide-settle.html" data-search="Guide: settle and pay out The clock runs out. Now someone has to close the loop.">Guide: settle and pay out</a><h4>Reference</h4><a href="api-reference.html" data-search="API reference Every endpoint, parameter and response.">API reference</a><a href="changelog.html" data-search="Changelog Versions are dated. Breaking changes get a new one.">Changelog</a>
-  </aside>
+      <main class="content">
+        <p class="eyebrow">Core concepts</p>
+        <h1>The signing model</h1>
+        <p class="lede">
+          Why write endpoints return a transaction instead of doing the work.
+        </p>
 
-  <main class="content">
-    <p class="eyebrow">Core concepts</p>
-    <h1>The signing model</h1>
-      <p class="lede">Why write endpoints return a transaction instead of doing the work.</p>
-      
-      <div class="prose"><p>This is the concept that makes the rest of the API make sense. It&#39;s short.</p>
-<h2 id="the-problem"><a class="anchor" href="#the-problem" aria-hidden="true">#</a>The problem</h2>
-<p>A bid transfers ETH out of the bidder&#39;s wallet. On Ethereum, exactly one thing authorises that transfer: a signature from the bidder&#39;s private key. There is no admin override, no <code>x-i-am-really-the-bidder</code> header, no arrangement we can make with the contract.</p>
-<p>So an API endpoint that <em>just placed a bid</em> would have to hold that key. And a service holding the keys of everyone bidding in an auction it also runs is a custodian, an exchange, and a very attractive target — and it is exactly the arrangement the AuctionHouse contract was written to make unnecessary.</p>
-<h2 id="what-we-do-instead"><a class="anchor" href="#what-we-do-instead" aria-hidden="true">#</a>What we do instead</h2>
-<p>Auctra returns an unsigned transaction and steps out of the way.</p>
-<div class="code">
-  <div class="bar"><span>text</span><button class="copy" type="button">Copy</button></div>
-  <pre><code>      you                    Auctra                    chain
+        <div class="prose">
+          <p>
+            This is the concept that makes the rest of the API make sense.
+            It&#39;s short.
+          </p>
+          <h2 id="the-problem">
+            <a class="anchor" href="#the-problem" aria-hidden="true">#</a>The
+            problem
+          </h2>
+          <p>
+            A bid transfers ETH out of the bidder&#39;s wallet. On Ethereum,
+            exactly one thing authorises that transfer: a signature from the
+            bidder&#39;s private key. There is no admin override, no
+            <code>x-i-am-really-the-bidder</code> header, no arrangement we can
+            make with the contract.
+          </p>
+          <p>
+            So an API endpoint that <em>just placed a bid</em> would have to
+            hold that key. And a service holding the keys of everyone bidding in
+            an auction it also runs is a custodian, an exchange, and a very
+            attractive target — and it is exactly the arrangement the
+            AuctionHouse contract was written to make unnecessary.
+          </p>
+          <h2 id="what-we-do-instead">
+            <a class="anchor" href="#what-we-do-instead" aria-hidden="true">#</a
+            >What we do instead
+          </h2>
+          <p>
+            Auctra returns an unsigned transaction and steps out of the way.
+          </p>
+          <div class="code">
+            <div class="bar">
+              <span>text</span><button class="copy" type="button">Copy</button>
+            </div>
+            <pre><code>      you                    Auctra                    chain
        │                        │                        │
        │  POST /auctions/…/bids │                        │
        ├───────────────────────&gt;│                        │
@@ -73,51 +200,91 @@
        │                        │      log confirmed     │
        │  auction.bid_placed    │&lt;───────────────────────┤
        │&lt;───────────────────────┤                        │</code></pre>
-</div><p>The simulation step is not decoration. We call <code>eth_estimateGas</code> against the bidder&#39;s actual address, so a bid that would revert — reserve not met, auction over, insufficient balance — fails in the HTTP response, with a decoded reason, before anyone pays gas for the privilege of finding out.</p>
-<h2 id="mode-quotpreparedquot-vs-mode-quotmanagedquot"><a class="anchor" href="#mode-quotpreparedquot-vs-mode-quotmanagedquot" aria-hidden="true">#</a><code>mode: &quot;prepared&quot;</code> vs <code>mode: &quot;managed&quot;</code></h2>
-<p>Some operations act on a wallet <strong>your organisation owns</strong>. Listing your own inventory. Settling an auction you ran. For those, you may configure a signer and let us broadcast:</p>
-<div class="code">
-  <div class="bar"><span>json</span><button class="copy" type="button">Copy</button></div>
-  <pre><code class="language-json">{ &quot;mode&quot;: &quot;managed&quot;, &quot;seller&quot;: &quot;0x…&quot;, &quot;token_contract&quot;: &quot;0x…&quot;, &quot;token_id&quot;: &quot;42&quot; }</code></pre>
-</div><table>
-<thead>
-<tr>
-<th></th>
-<th><code>prepared</code> (default)</th>
-<th><code>managed</code></th>
-</tr>
-</thead>
-<tbody><tr>
-<td>Who holds the key</td>
-<td>You</td>
-<td>Auctra, in a KMS</td>
-</tr>
-<tr>
-<td>Available for <code>createAuction</code></td>
-<td>Yes</td>
-<td>Yes</td>
-</tr>
-<tr>
-<td>Available for <code>settle</code> / <code>cancel</code></td>
-<td>Yes</td>
-<td>Yes</td>
-</tr>
-<tr>
-<td>Available for <strong><code>bid</code></strong></td>
-<td>Yes</td>
-<td><strong>Never</strong></td>
-</tr>
-<tr>
-<td>Response</td>
-<td><code>transaction_request</code></td>
-<td><code>transaction_hash</code></td>
-</tr>
-</tbody></table>
-<p>Bidding has no managed mode and never will. There is no configuration under which it is appropriate for Auctra to spend a bidder&#39;s balance.</p>
-<h2 id="anatomy-of-a-transaction_request"><a class="anchor" href="#anatomy-of-a-transaction_request" aria-hidden="true">#</a>Anatomy of a <code>transaction_request</code></h2>
-<div class="code">
-  <div class="bar"><span>json</span><button class="copy" type="button">Copy</button></div>
-  <pre><code class="language-json">{
+          </div>
+          <p>
+            The simulation step is not decoration. We call
+            <code>eth_estimateGas</code> against the bidder&#39;s actual
+            address, so a bid that would revert — reserve not met, auction over,
+            insufficient balance — fails in the HTTP response, with a decoded
+            reason, before anyone pays gas for the privilege of finding out.
+          </p>
+          <h2 id="mode-quotpreparedquot-vs-mode-quotmanagedquot">
+            <a
+              class="anchor"
+              href="#mode-quotpreparedquot-vs-mode-quotmanagedquot"
+              aria-hidden="true"
+              >#</a
+            ><code>mode: &quot;prepared&quot;</code> vs
+            <code>mode: &quot;managed&quot;</code>
+          </h2>
+          <p>
+            Some operations act on a wallet
+            <strong>your organisation owns</strong>. Listing your own inventory.
+            Settling an auction you ran. For those, you may configure a signer
+            and let us broadcast:
+          </p>
+          <div class="code">
+            <div class="bar">
+              <span>json</span><button class="copy" type="button">Copy</button>
+            </div>
+            <pre><code class="language-json">{ &quot;mode&quot;: &quot;managed&quot;, &quot;seller&quot;: &quot;0x…&quot;, &quot;token_contract&quot;: &quot;0x…&quot;, &quot;token_id&quot;: &quot;42&quot; }</code></pre>
+          </div>
+          <table>
+            <thead>
+              <tr>
+                <th></th>
+                <th><code>prepared</code> (default)</th>
+                <th><code>managed</code></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Who holds the key</td>
+                <td>You</td>
+                <td>Auctra, in a KMS</td>
+              </tr>
+              <tr>
+                <td>Available for <code>createAuction</code></td>
+                <td>Yes</td>
+                <td>Yes</td>
+              </tr>
+              <tr>
+                <td>Available for <code>settle</code> / <code>cancel</code></td>
+                <td>Yes</td>
+                <td>Yes</td>
+              </tr>
+              <tr>
+                <td>
+                  Available for <strong><code>bid</code></strong>
+                </td>
+                <td>Yes</td>
+                <td><strong>Never</strong></td>
+              </tr>
+              <tr>
+                <td>Response</td>
+                <td><code>transaction_request</code></td>
+                <td><code>transaction_hash</code></td>
+              </tr>
+            </tbody>
+          </table>
+          <p>
+            Bidding has no managed mode and never will. There is no
+            configuration under which it is appropriate for Auctra to spend a
+            bidder&#39;s balance.
+          </p>
+          <h2 id="anatomy-of-a-transaction_request">
+            <a
+              class="anchor"
+              href="#anatomy-of-a-transaction_request"
+              aria-hidden="true"
+              >#</a
+            >Anatomy of a <code>transaction_request</code>
+          </h2>
+          <div class="code">
+            <div class="bar">
+              <span>json</span><button class="copy" type="button">Copy</button>
+            </div>
+            <pre><code class="language-json">{
   &quot;object&quot;: &quot;transaction_request&quot;,
   &quot;chain_id&quot;: 11155111,
   &quot;to&quot;: &quot;0x5c9d3f1a7b2e4c6d8f0a2b4c6d8e0f2a4b6c8d0e&quot;,
@@ -128,81 +295,147 @@
   &quot;max_priority_fee_per_gas&quot;: &quot;1500000000&quot;,
   &quot;nonce_hint&quot;: 17
 }</code></pre>
-</div><p><code>gas_limit</code> is the estimate plus 20%. <code>nonce_hint</code> is the account&#39;s transaction count at the moment we looked — if you have other transactions in flight from the same wallet, it&#39;s stale, and your wallet library should compute its own. <code>value</code> is what the bidder actually spends; for <code>createAuction</code> and <code>settle</code> it is <code>&quot;0&quot;</code>.</p>
-<p>Two things you must check before signing, because we can&#39;t:</p>
-<ol>
-<li><strong><code>to</code> is the AuctionHouse address you expect.</strong> Pin it. An API you don&#39;t control telling you where to send money is a category of trust you should never extend, to us included.</li>
-<li><strong><code>value</code> matches the amount you intended to bid.</strong> Compare it to the <code>amount_wei</code> you sent.</li>
-</ol>
-<h2 id="where-this-leaves-you"><a class="anchor" href="#where-this-leaves-you" aria-hidden="true">#</a>Where this leaves you</h2>
-<p>An Auctra API key cannot move anyone&#39;s funds. Leaked, it prepares transactions nobody signs. Subpoenaed, it produces no keys. Compromised at the database layer, it yields hashed keys and public auction data that was already on a public chain.</p>
-<p>That property costs you one round trip through a wallet. It is worth it.</p>
-</div>
-      <nav class="pager">
-    <a class="prev" href="environments.html"><span>Previous</span><b>Environments</b></a>
-    <a class="next" href="auction-lifecycle.html"><span>Next</span><b>Auction lifecycle</b></a>
-  </nav>
-  </main>
+          </div>
+          <p>
+            <code>gas_limit</code> is the estimate plus 20%.
+            <code>nonce_hint</code> is the account&#39;s transaction count at
+            the moment we looked — if you have other transactions in flight from
+            the same wallet, it&#39;s stale, and your wallet library should
+            compute its own. <code>value</code> is what the bidder actually
+            spends; for <code>createAuction</code> and <code>settle</code> it is
+            <code>&quot;0&quot;</code>.
+          </p>
+          <p>Two things you must check before signing, because we can&#39;t:</p>
+          <ol>
+            <li>
+              <strong
+                ><code>to</code> is the AuctionHouse address you expect.</strong
+              >
+              Pin it. An API you don&#39;t control telling you where to send
+              money is a category of trust you should never extend, to us
+              included.
+            </li>
+            <li>
+              <strong
+                ><code>value</code> matches the amount you intended to
+                bid.</strong
+              >
+              Compare it to the <code>amount_wei</code> you sent.
+            </li>
+          </ol>
+          <h2 id="where-this-leaves-you">
+            <a class="anchor" href="#where-this-leaves-you" aria-hidden="true"
+              >#</a
+            >Where this leaves you
+          </h2>
+          <p>
+            An Auctra API key cannot move anyone&#39;s funds. Leaked, it
+            prepares transactions nobody signs. Subpoenaed, it produces no keys.
+            Compromised at the database layer, it yields hashed keys and public
+            auction data that was already on a public chain.
+          </p>
+          <p>
+            That property costs you one round trip through a wallet. It is worth
+            it.
+          </p>
+        </div>
+        <nav class="pager">
+          <a class="prev" href="environments.html"
+            ><span>Previous</span><b>Environments</b></a
+          >
+          <a class="next" href="auction-lifecycle.html"
+            ><span>Next</span><b>Auction lifecycle</b></a
+          >
+        </nav>
+      </main>
 
-  <aside class="rail"><h5>On this page</h5><a class="h2" href="#the-problem">The problem</a><a class="h2" href="#what-we-do-instead">What we do instead</a><a class="h2" href="#mode-quotpreparedquot-vs-mode-quotmanagedquot"><code>mode: &quot;prepared&quot;</code> vs <code>mode: &quot;managed&quot;</code></a><a class="h2" href="#anatomy-of-a-transaction_request">Anatomy of a <code>transaction_request</code></a><a class="h2" href="#where-this-leaves-you">Where this leaves you</a></aside>
-</div>
+      <aside class="rail">
+        <h5>On this page</h5>
+        <a class="h2" href="#the-problem">The problem</a
+        ><a class="h2" href="#what-we-do-instead">What we do instead</a
+        ><a class="h2" href="#mode-quotpreparedquot-vs-mode-quotmanagedquot"
+          ><code>mode: &quot;prepared&quot;</code> vs
+          <code>mode: &quot;managed&quot;</code></a
+        ><a class="h2" href="#anatomy-of-a-transaction_request"
+          >Anatomy of a <code>transaction_request</code></a
+        ><a class="h2" href="#where-this-leaves-you">Where this leaves you</a>
+      </aside>
+    </div>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
-<script>
-  hljs.highlightAll();
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script>
+      hljs.highlightAll();
 
-  // Copy buttons
-  document.querySelectorAll(".copy").forEach((btn) => {
-    btn.addEventListener("click", async () => {
-      const code = btn.closest(".code").querySelector("code").innerText;
-      await navigator.clipboard.writeText(code);
-      const was = btn.textContent;
-      btn.textContent = "Copied";
-      setTimeout(() => (btn.textContent = was), 1400);
-    });
-  });
+      // Copy buttons
+      document.querySelectorAll(".copy").forEach((btn) => {
+        btn.addEventListener("click", async () => {
+          const code = btn.closest(".code").querySelector("code").innerText;
+          await navigator.clipboard.writeText(code);
+          const was = btn.textContent;
+          btn.textContent = "Copied";
+          setTimeout(() => (btn.textContent = was), 1400);
+        });
+      });
 
-  // Theme
-  document.getElementById("theme-toggle").addEventListener("click", () => {
-    const next = document.documentElement.dataset.theme === "dark" ? "light" : "dark";
-    document.documentElement.dataset.theme = next;
-    try { localStorage.setItem("auctra-theme", next); } catch {}
-  });
+      // Theme
+      document.getElementById("theme-toggle").addEventListener("click", () => {
+        const next =
+          document.documentElement.dataset.theme === "dark" ? "light" : "dark";
+        document.documentElement.dataset.theme = next;
+        try {
+          localStorage.setItem("auctra-theme", next);
+        } catch {}
+      });
 
-  // Mobile nav
-  const sidebar = document.getElementById("sidebar");
-  const toggle = document.getElementById("menu-toggle");
-  toggle.addEventListener("click", () => {
-    const open = sidebar.dataset.open === "true";
-    sidebar.dataset.open = String(!open);
-    toggle.setAttribute("aria-expanded", String(!open));
-  });
+      // Mobile nav
+      const sidebar = document.getElementById("sidebar");
+      const toggle = document.getElementById("menu-toggle");
+      toggle.addEventListener("click", () => {
+        const open = sidebar.dataset.open === "true";
+        sidebar.dataset.open = String(!open);
+        toggle.setAttribute("aria-expanded", String(!open));
+      });
 
-  // Filter the nav, rather than shipping a search index for fifteen pages.
-  const search = document.getElementById("search");
-  search.addEventListener("input", () => {
-    const q = search.value.toLowerCase().trim();
-    document.querySelectorAll(".sidebar a").forEach((a) => {
-      const hit = !q || (a.dataset.search ?? "").toLowerCase().includes(q);
-      a.style.display = hit ? "" : "none";
-    });
-    document.querySelectorAll(".sidebar h4").forEach((h) => {
-      let n = h.nextElementSibling, any = false;
-      while (n && n.tagName === "A") { if (n.style.display !== "none") any = true; n = n.nextElementSibling; }
-      h.style.display = any ? "" : "none";
-    });
-  });
+      // Filter the nav, rather than shipping a search index for fifteen pages.
+      const search = document.getElementById("search");
+      search.addEventListener("input", () => {
+        const q = search.value.toLowerCase().trim();
+        document.querySelectorAll(".sidebar a").forEach((a) => {
+          const hit = !q || (a.dataset.search ?? "").toLowerCase().includes(q);
+          a.style.display = hit ? "" : "none";
+        });
+        document.querySelectorAll(".sidebar h4").forEach((h) => {
+          let n = h.nextElementSibling,
+            any = false;
+          while (n && n.tagName === "A") {
+            if (n.style.display !== "none") any = true;
+            n = n.nextElementSibling;
+          }
+          h.style.display = any ? "" : "none";
+        });
+      });
 
-  // Highlight the rail entry for whatever section is on screen.
-  const links = [...document.querySelectorAll(".rail a")];
-  if (links.length) {
-    const seen = new Set();
-    const io = new IntersectionObserver((entries) => {
-      entries.forEach((e) => e.isIntersecting ? seen.add(e.target.id) : seen.delete(e.target.id));
-      links.forEach((l) => l.classList.toggle("active", seen.has(l.hash.slice(1))));
-    }, { rootMargin: "-80px 0px -70% 0px" });
-    document.querySelectorAll("h2[id], h3[id]").forEach((h) => io.observe(h));
-  }
-</script>
-</body>
+      // Highlight the rail entry for whatever section is on screen.
+      const links = [...document.querySelectorAll(".rail a")];
+      if (links.length) {
+        const seen = new Set();
+        const io = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((e) =>
+              e.isIntersecting
+                ? seen.add(e.target.id)
+                : seen.delete(e.target.id),
+            );
+            links.forEach((l) =>
+              l.classList.toggle("active", seen.has(l.hash.slice(1))),
+            );
+          },
+          { rootMargin: "-80px 0px -70% 0px" },
+        );
+        document
+          .querySelectorAll("h2[id], h3[id]")
+          .forEach((h) => io.observe(h));
+      }
+    </script>
+  </body>
 </html>

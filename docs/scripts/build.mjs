@@ -176,7 +176,7 @@ function layout({ title, description, section, body, sidebarHtml, railHtml }) {
   <nav>
     <a class="hide-sm" href="api-reference.html">API reference</a>
     <a class="hide-sm" href="changelog.html">Changelog</a>
-    <a class="hide-sm" href="https://github.com/auctra/auctra-api">GitHub</a>
+    <a class="hide-sm" href="https://github.com/3nylar/auctra-api">GitHub</a>
     <button class="icon-btn" id="theme-toggle" aria-label="Toggle colour theme">◐</button>
   </nav>
 </header>
