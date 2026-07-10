@@ -19,7 +19,7 @@ export default async function handler(req) {
   const host = req.headers.get("host") || "localhost";
   const url = new URL(req.url, `https://${host}`);
   const provided = url.searchParams.get("secret") ?? req.headers.get("x-cron-secret");
-  
+
   if (!process.env.CRON_SECRET || provided !== process.env.CRON_SECRET) {
     return new Response(JSON.stringify({ error: "unauthorized" }), {
       status: 401,
@@ -42,4 +42,4 @@ export default async function handler(req) {
   }
 }
 
-export const config = { runtime: "nodejs" };
+export const config = { runtime: "edge" };
