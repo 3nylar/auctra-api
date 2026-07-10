@@ -29,5 +29,7 @@ export function ethToWei(eth: string): bigint {
 /** The smallest bid the contract will accept right now. */
 export function minimumBid(highestBidWei: bigint, reserveWei: bigint, incrementBps: number): bigint {
   if (highestBidWei === 0n) return reserveWei;
-  return highestBidWei + (highestBidWei * BigInt(incrementBps)) / 10_000n;
+  // 10000n, not 10_000n — Vercel's function bundler can mis-transform an
+  // underscore-separated BigInt literal. Plain digits sidestep it entirely.
+  return highestBidWei + (highestBidWei * BigInt(incrementBps)) / 10000n;
 }
