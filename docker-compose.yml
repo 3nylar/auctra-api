@@ -1,0 +1,39 @@
+# Local stack: Postgres, the API, and the indexer.
+#   cp api/.env.example api/.env && docker compose up
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: auctra
+      POSTGRES_PASSWORD: auctra
+      POSTGRES_DB: auctra
+    ports: ["5432:5432"]
+    volumes: ["pgdata:/var/lib/postgresql/data"]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U auctra"]
+      interval: 5s
+
+  api:
+    build: ./api
+    env_file: ./api/.env
+    environment:
+      DATABASE_URL: postgresql://auctra:auctra@db:5432/auctra
+    ports: ["8080:8080"]
+    depends_on:
+      db: { condition: service_healthy }
+    command: sh -c "npx prisma migrate deploy && node dist/index.js"
+
+  # A singleton. Two indexers race for the same cursor row and double-emit events.
+  indexer:
+    build: ./api
+    env_file: ./api/.env
+    environment:
+      DATABASE_URL: postgresql://auctra:auctra@db:5432/auctra
+    depends_on:
+      db: { condition: service_healthy }
+    deploy:
+      replicas: 1
+    command: node dist/services/indexer.js
+
+volumes:
+  pgdata:

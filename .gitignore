@@ -1,0 +1,7 @@
+node_modules
+dist
+.env
+*.log
+
+api/.env.example
+api/.env
