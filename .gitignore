@@ -1,7 +1,143 @@
-node_modules
-dist
-.env
-*.log
+# =============================================================================
+# auctra-api
+#
+# The rule this file enforces: a secret is never a tracked file. Not once, not
+# briefly, not "I'll remove it before I push." Git remembers, and a commit that
+# reaches a remote has already been scraped.
+#
+# Secrets live in exactly two places:
+#   1. api/.env         — on your machine only, ignored below
+#   2. Your host's variables panel (Railway, Vercel, Fly) — typed, never a file
+#
+# Everything else is noise.
+# =============================================================================
 
-api/.env.example
-api/.env
+
+# --- Secrets -----------------------------------------------------------------
+# The negation on .env.example is deliberate: it documents which variables exist
+# without ever holding a value.
+
+.env
+.env.*
+!.env.example
+.env.example
+.env.local
+.env.test
+.env.production
+.env.development
+.env.staging
+.env.*.local
+*.pem
+*.key
+*.p12
+*.pfx
+*.keystore
+id_rsa
+id_ed25519
+
+# Wallet material. If one of these lands in the repo, rotate before you delete.
+*.mnemonic
+*.seed
+keystore/
+wallets/
+secrets/
+
+
+# --- Dependencies ------------------------------------------------------------
+
+node_modules/
+.pnp
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/releases
+!.yarn/plugins
+
+
+# --- Build output ------------------------------------------------------------
+# api/dist is compiled JavaScript. docs/dist is generated HTML.
+#
+# Both are rebuilt from source by the host, so neither belongs in git. If you
+# switch the docs to GitHub Pages, which serves committed files rather than
+# building them, uncomment the negation below.
+
+dist/
+build/
+out/
+*.tsbuildinfo
+
+# !docs/dist/
+
+
+# --- Prisma ------------------------------------------------------------------
+# The generated client is machine-specific. The migrations are not — commit those.
+
+node_modules/.prisma/
+prisma/*.db
+prisma/*.db-journal
+prisma/dev.db*
+
+
+# --- Solidity artifacts ------------------------------------------------------
+# Only relevant if you vendor the contracts back into this repo. The ABI under
+# api/src/abi is hand-maintained and should stay tracked.
+
+artifacts/
+cache/
+typechain/
+typechain-types/
+coverage/
+coverage.json
+
+
+# --- Logs and runtime junk ---------------------------------------------------
+
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+.npm
+*.pid
+*.seed
+pids/
+
+
+# --- Test and tooling --------------------------------------------------------
+
+.nyc_output/
+.eslintcache
+.cache/
+tmp/
+temp/
+
+
+# --- Editors and OS ----------------------------------------------------------
+
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+Thumbs.db
+ehthumbs.db
+desktop.ini
+
+.vscode/*
+!.vscode/extensions.json
+.idea/
+*.swp
+*.swo
+*~
+
+
+# --- Deployment platforms ----------------------------------------------------
+# These directories hold project ids and, in Vercel's case, pulled environment
+# variables. That last part is why .vercel is here and not merely untidy.
+
+.vercel
+.netlify
+.railway
+.fly/
+.wrangler/
