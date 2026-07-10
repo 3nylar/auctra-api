@@ -6,7 +6,7 @@ import { newAuctionRef } from "../lib/ids.js";
 import { assertWei, minimumBid } from "../lib/money.js";
 import { listResponse, paginationSchema } from "../lib/pagination.js";
 import { effectiveStatus, serializeAuction, serializeBid } from "../lib/serialize.js";
-import { prepare, sendManaged, managedSignerEnabled } from "../lib/chain.js";
+import { prepare, sendManaged, managedSignerEnabled, type PreparedTransaction } from "../lib/chain.js";
 import { withIdempotency } from "../lib/idempotency.js";
 import { requireScope } from "../middleware/auth.js";
 import type { Address } from "viem";
@@ -29,6 +29,20 @@ const listSchema = paginationSchema.extend({
   seller: addressSchema.optional(),
   token_contract: addressSchema.optional(),
 });
+
+/**
+ * `POST /auctions` and `POST /auctions/:id/settle` each return one of two
+ * shapes depending on `mode`: a broadcast result (`transaction_hash`) or a
+ * prepared one (`transaction_request`). Both are valid responses for the
+ * same endpoint, so the body type has to say so explicitly — otherwise
+ * TypeScript infers a type from whichever branch it checks first and rejects
+ * the other one as a mismatch. This is exactly the error Railway's build hit.
+ */
+type AuctionBody = ReturnType<typeof serializeAuction> & {
+  transaction_hash?: `0x${string}`;
+  transaction_request?: PreparedTransaction;
+  next_step?: string;
+};
 
 export async function auctionRoutes(app: FastifyInstance) {
   // ---- List -------------------------------------------------------------
@@ -70,7 +84,7 @@ export async function auctionRoutes(app: FastifyInstance) {
 
     if (body.mode === "managed" && !managedSignerEnabled) throw errors.managedSignerDisabled();
 
-    return withIdempotency(req, reply, req.auth!.orgId, async () => {
+    return withIdempotency<AuctionBody>(req, reply, req.auth!.orgId, async () => {
       const tx = await prepare({
         functionName: "createAuction",
         args: [body.token_contract as Address, BigInt(body.token_id), reserve, BigInt(body.duration_seconds)],
@@ -191,7 +205,7 @@ export async function auctionRoutes(app: FastifyInstance) {
     if (!auction) throw errors.notFound("auction", id);
     if (new Date() < auction.endTime) throw errors.auctionNotEnded(auction.endTime.toISOString());
 
-    return withIdempotency(req, reply, req.auth!.orgId, async () => {
+    return withIdempotency<AuctionBody>(req, reply, req.auth!.orgId, async () => {
       const tx = await prepare({ functionName: "endAuction", args: [auction.onchainId ?? 0n] });
 
       if (body.mode === "managed") {
@@ -219,7 +233,7 @@ export async function auctionRoutes(app: FastifyInstance) {
     });
   });
 
-  // ---- Claim the item ---------------------------------------------------
+  // ---- Claim the item -----------------------------------------------------
   app.post("/v1/auctions/:id/claim", { preHandler: requireScope("auctions:write") }, async (req, reply) => {
     const { id } = z.object({ id: z.string() }).parse(req.params);
     const auction = await prisma.auction.findFirst({ where: { ref: id, orgId: req.auth!.orgId } });
