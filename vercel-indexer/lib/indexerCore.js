@@ -7,7 +7,7 @@ import { newBidRef, newRefundRef } from "./ids.js";
 import { serializeAuction } from "./serialize.js";
 import { drainDeliveryQueue, emitEvent } from "./webhooks.js";
 
-const BATCH_SIZE = 2000n;
+const BATCH_SIZE = 10n;
 
 async function loadCursor() {
   const row = await prisma.indexerCursor.findUnique({
