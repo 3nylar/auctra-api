@@ -61,7 +61,7 @@ node_modules/
 # switch the docs to GitHub Pages, which serves committed files rather than
 # building them, uncomment the negation below.
 
-dist/
+
 build/
 out/
 *.tsbuildinfo
