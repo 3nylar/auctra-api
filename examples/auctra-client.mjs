@@ -9,18 +9,19 @@
  */
 import { randomUUID } from "node:crypto";
 
-const AUCTRA_URL = process.env.AUCTRA_URL ?? "https://sandbox-api.auctra.dev";
+const AUCTRA_URL =
+  process.env.AUCTRA_URL ?? "https://auctra-api-production.up.railway.app";
 const AUCTRA_KEY = process.env.AUCTRA_KEY;
 
 export class AuctraError extends Error {
   constructor(error, status) {
     super(error.message);
     this.name = "AuctraError";
-    this.code = error.code;      // switch on this
+    this.code = error.code; // switch on this
     this.type = error.type;
     this.param = error.param;
     this.detail = error.detail;
-    this.requestId = error.request_id;  // quote this to support
+    this.requestId = error.request_id; // quote this to support
     this.status = status;
   }
 }
@@ -69,35 +70,49 @@ export const auctra = {
 
   getAuction: (id) => request("GET", `/v1/auctions/${id}`),
 
-  createAuction: (body, key) => request("POST", "/v1/auctions", { body, idempotencyKey: key }),
+  createAuction: (body, key) =>
+    request("POST", "/v1/auctions", { body, idempotencyKey: key }),
 
   prepareBid: (id, body, key) =>
     request("POST", `/v1/auctions/${id}/bids`, { body, idempotencyKey: key }),
 
   broadcast: (signed, key) =>
-    request("POST", "/v1/transactions", { body: { signed_transaction: signed }, idempotencyKey: key }),
+    request("POST", "/v1/transactions", {
+      body: { signed_transaction: signed },
+      idempotencyKey: key,
+    }),
 
   getTransaction: (hash) => request("GET", `/v1/transactions/${hash}`),
 
-  refundBalance: (bidder) => request("GET", `/v1/refunds/balance?bidder=${bidder}`),
+  refundBalance: (bidder) =>
+    request("GET", `/v1/refunds/balance?bidder=${bidder}`),
 
   /** Every auction, one page at a time. Cursors, so nothing is skipped or seen twice. */
   async *auctions(params = {}) {
     let cursor = null;
     do {
-      const page = await auctra.listAuctions({ ...params, limit: 100, ...(cursor ? { starting_after: cursor } : {}) });
+      const page = await auctra.listAuctions({
+        ...params,
+        limit: 100,
+        ...(cursor ? { starting_after: cursor } : {}),
+      });
       yield* page.data;
       cursor = page.next_cursor;
     } while (cursor);
   },
 
   /** Poll a hash until the chain decides. Never assume a broadcast is a win. */
-  async waitForConfirmation(hash, { confirmations = 2, timeoutMs = 180_000 } = {}) {
+  async waitForConfirmation(
+    hash,
+    { confirmations = 2, timeoutMs = 180_000 } = {},
+  ) {
     const deadline = Date.now() + timeoutMs;
     while (Date.now() < deadline) {
       const tx = await auctra.getTransaction(hash);
-      if (tx.status === "reverted") throw new Error(`transaction reverted: ${hash}`);
-      if (tx.status === "confirmed" && tx.confirmations >= confirmations) return tx;
+      if (tx.status === "reverted")
+        throw new Error(`transaction reverted: ${hash}`);
+      if (tx.status === "confirmed" && tx.confirmations >= confirmations)
+        return tx;
       await sleep(3000);
     }
     throw new Error(`timed out waiting for ${hash}`);
@@ -107,11 +122,15 @@ export const auctra = {
 // --- demo -------------------------------------------------------------------
 if (import.meta.url === `file://${process.argv[1]}`) {
   const health = await auctra.health();
-  console.log(`${health.environment} · chain ${health.chain_id} · block ${health.head_block}`);
+  console.log(
+    `${health.environment} · chain ${health.chain_id} · block ${health.head_block}`,
+  );
 
   let live = 0;
   for await (const a of auctra.auctions({ status: "live" })) {
-    console.log(`${a.id}  ${a.minimum_bid_display.padStart(10)} ETH  closes ${a.end_time}`);
+    console.log(
+      `${a.id}  ${a.minimum_bid_display.padStart(10)} ETH  closes ${a.end_time}`,
+    );
     live++;
   }
   console.log(`\n${live} live auctions`);

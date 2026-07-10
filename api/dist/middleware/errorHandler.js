@@ -1,7 +1,7 @@
 import { ZodError } from "zod";
 import { AuctraError, errors } from "../lib/errors.js";
 import { env } from "../lib/env.js";
-const DOCS = "https://docs.auctra.dev";
+const DOCS = "https://auctra-api.vercel.app";
 export function registerErrorHandler(app) {
     app.setErrorHandler((err, req, reply) => {
         const requestId = req.id;

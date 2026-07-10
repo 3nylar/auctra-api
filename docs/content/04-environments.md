@@ -5,23 +5,23 @@ section: Get started
 slug: environments
 ---
 
-| | Sandbox | Production |
-|---|---|---|
-| Base URL | `https://sandbox-api.auctra.dev` | `https://api.auctra.dev` |
-| Key prefix | `sk_test_` | `sk_live_` |
-| Chain | Sepolia (`11155111`) | Ethereum mainnet (`1`) |
-| ETH | Worthless. [Faucet](https://sepoliafaucet.com) | Real |
-| Block time | ~12s | ~12s |
-| Data retention | Reset periodically | Permanent |
+|                | Sandbox                                        | Production                      |
+| -------------- | ---------------------------------------------- | ------------------------------- |
+| Base URL       | `https://auctra-api-production.up.railway.app` | `https://auctra-api.vercel.app` |
+| Key prefix     | `sk_test_`                                     | `sk_live_`                      |
+| Chain          | Sepolia (`11155111`)                           | Ethereum mainnet (`1`)          |
+| ETH            | Worthless. [Faucet](https://sepoliafaucet.com) | Real                            |
+| Block time     | ~12s                                           | ~12s                            |
+| Data retention | Reset periodically                             | Permanent                       |
 
 The only differences are the chain and the key prefix. Sandbox is not a mock: transactions are really signed, really broadcast, really mined, and really reverted when they're wrong. Reorgs happen. Gas estimation fails. RPC nodes go down. This is on purpose — a sandbox that always succeeds teaches you nothing about the failure paths you'll meet on a Tuesday afternoon in production.
 
 ## Going live
 
 ```diff
-- export AUCTRA_URL="https://sandbox-api.auctra.dev"
+- export AUCTRA_URL="https://auctra-api-production.up.railway.app"
 - export AUCTRA_KEY="sk_test_..."
-+ export AUCTRA_URL="https://api.auctra.dev"
++ export AUCTRA_URL="https://auctra-api.vercel.app"
 + export AUCTRA_KEY="sk_live_..."
 ```
 

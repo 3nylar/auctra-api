@@ -7,7 +7,13 @@
  *
  *   node scripts/build.mjs
  */
-import { readFileSync, writeFileSync, mkdirSync, readdirSync, copyFileSync } from "node:fs";
+import {
+  readFileSync,
+  writeFileSync,
+  mkdirSync,
+  readdirSync,
+  copyFileSync,
+} from "node:fs";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 import { Marked } from "marked";
@@ -16,12 +22,14 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(__dirname, "..");
 const CONTENT = join(ROOT, "content");
 const DIST = join(ROOT, "dist");
-const SPEC = JSON.parse(readFileSync(join(ROOT, "..", "spec", "openapi.json"), "utf8"));
+const SPEC = JSON.parse(
+  readFileSync(join(ROOT, "..", "spec", "openapi.json"), "utf8"),
+);
 
 const SITE = {
   name: "Auctra",
   tagline: "On-chain English auctions, over HTTP.",
-  sandbox: "https://sandbox-api.auctra.dev",
+  sandbox: "https://auctra-api-production.up.railway.app",
 };
 
 // ---------------------------------------------------------------------------
@@ -60,7 +68,11 @@ function makeRenderer(toc) {
 }
 
 const escapeHtml = (s) =>
-  s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+  s
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;");
 
 function codeBlock(source, lang = "text") {
   const cls = lang === "text" ? "" : ` class="language-${lang}"`;
@@ -99,16 +111,17 @@ function sidebar(pages, current) {
   }
   return sections
     .map(
-      (s) => `<h4>${s.name}</h4>${s.items
-        .map(
-          (p) =>
-            `<a href="${p.meta.slug}.html"${
-              p.meta.slug === current ? ' aria-current="page"' : ""
-            } data-search="${escapeHtml(p.meta.title + " " + (p.meta.description ?? ""))}">${
-              p.meta.title
-            }</a>`,
-        )
-        .join("")}`,
+      (s) =>
+        `<h4>${s.name}</h4>${s.items
+          .map(
+            (p) =>
+              `<a href="${p.meta.slug}.html"${
+                p.meta.slug === current ? ' aria-current="page"' : ""
+              } data-search="${escapeHtml(p.meta.title + " " + (p.meta.description ?? ""))}">${
+                p.meta.title
+              }</a>`,
+          )
+          .join("")}`,
     )
     .join("");
 }
@@ -116,7 +129,10 @@ function sidebar(pages, current) {
 function rail(toc) {
   if (!toc.length) return "";
   return `<h5>On this page</h5>${toc
-    .map((h) => `<a class="${h.depth === 3 ? "h3" : "h2"}" href="#${h.id}">${h.text}</a>`)
+    .map(
+      (h) =>
+        `<a class="${h.depth === 3 ? "h3" : "h2"}" href="#${h.id}">${h.text}</a>`,
+    )
     .join("")}`;
 }
 
@@ -289,7 +305,10 @@ function paramList(rawParams = []) {
   const rows = params
     .map((p) => {
       const s = deref(p.schema) ?? {};
-      const def = s.default !== undefined ? ` <span class="type">default ${s.default}</span>` : "";
+      const def =
+        s.default !== undefined
+          ? ` <span class="type">default ${s.default}</span>`
+          : "";
       return `<div class="param">
         <div class="param-head">
           <span class="name">${p.name}</span>
@@ -348,7 +367,9 @@ function curlSample(method, path, op) {
     lines.push(`  -H "Content-Type: application/json" \\`);
     if (method === "post") lines[lines.length - 1] += "";
     lines.push(`  -H "Idempotency-Key: $(uuidgen)" \\`);
-    lines.push(`  -d '${JSON.stringify(example, null, 2).split("\n").join("\n  ")}'`);
+    lines.push(
+      `  -d '${JSON.stringify(example, null, 2).split("\n").join("\n  ")}'`,
+    );
   }
   return lines.join("\n");
 }
@@ -438,9 +459,13 @@ function apiReference(toc) {
 
 let md = new Marked({ gfm: true });
 
-const files = readdirSync(CONTENT).filter((f) => f.endsWith(".md")).sort();
+const files = readdirSync(CONTENT)
+  .filter((f) => f.endsWith(".md"))
+  .sort();
 const pages = files.map((f) => {
-  const { meta, body } = parseFrontmatter(readFileSync(join(CONTENT, f), "utf8"));
+  const { meta, body } = parseFrontmatter(
+    readFileSync(join(CONTENT, f), "utf8"),
+  );
   return { file: f, meta, body };
 });
 
@@ -494,8 +519,14 @@ pages.forEach((page, i) => {
 // index.html mirrors the introduction so a bare domain lands somewhere useful.
 copyFileSync(join(DIST, "introduction.html"), join(DIST, "index.html"));
 copyFileSync(join(ROOT, "theme", "styles.css"), join(DIST, "styles.css"));
-copyFileSync(join(ROOT, "..", "spec", "openapi.yaml"), join(DIST, "openapi.yaml"));
-copyFileSync(join(ROOT, "..", "spec", "openapi.json"), join(DIST, "openapi.json"));
+copyFileSync(
+  join(ROOT, "..", "spec", "openapi.yaml"),
+  join(DIST, "openapi.yaml"),
+);
+copyFileSync(
+  join(ROOT, "..", "spec", "openapi.json"),
+  join(DIST, "openapi.json"),
+);
 
 console.log(`built ${pages.length} pages → docs/dist`);
 for (const p of pages) console.log(`  ${p.meta.slug}.html`);

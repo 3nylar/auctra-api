@@ -18,11 +18,11 @@
   },
   "servers": [
     {
-      "url": "https://sandbox-api.auctra.dev",
+      "url": "https://auctra-api-production.up.railway.app",
       "description": "Sandbox \u2014 Sepolia testnet. Test ETH, real code paths."
     },
     {
-      "url": "https://api.auctra.dev",
+      "url": "https://auctra-api.vercel.app",
       "description": "Production \u2014 Ethereum mainnet."
     }
   ],
@@ -60,9 +60,7 @@
   "paths": {
     "/v1/health": {
       "get": {
-        "tags": [
-          "Health"
-        ],
+        "tags": ["Health"],
         "summary": "Check API health",
         "security": [],
         "description": "Reports the two dependencies that can take the API down: the database\nand the RPC node. Use `head_block` to tell whether the indexer is\nkeeping up with the chain.\n",
@@ -92,9 +90,7 @@
     },
     "/v1/auctions": {
       "get": {
-        "tags": [
-          "Auctions"
-        ],
+        "tags": ["Auctions"],
         "summary": "List auctions",
         "parameters": [
           {
@@ -169,9 +165,7 @@
         }
       },
       "post": {
-        "tags": [
-          "Auctions"
-        ],
+        "tags": ["Auctions"],
         "summary": "Create an auction",
         "description": "Escrows the item and opens the clock. Returns `201` with a\n`transaction_request` you must sign as the seller.\n\nThe auction is `pending` until the `AuctionCreated` log confirms \u2014 a\nbroadcast is not a confirmation. Wait for the `auction.created` webhook\nbefore showing it to bidders.\n\nCreating an auction requires the AuctionHouse contract to already be\napproved to transfer the token. Call `approve()` or `setApprovalForAll()`\non the token contract first, or the transaction will revert with\n`NotApprovedForTransfer`.\n",
         "parameters": [
@@ -245,9 +239,7 @@
     },
     "/v1/auctions/{id}": {
       "get": {
-        "tags": [
-          "Auctions"
-        ],
+        "tags": ["Auctions"],
         "summary": "Retrieve an auction",
         "parameters": [
           {
@@ -273,9 +265,7 @@
     },
     "/v1/auctions/{id}/bids": {
       "get": {
-        "tags": [
-          "Bids"
-        ],
+        "tags": ["Bids"],
         "summary": "List bids on an auction",
         "parameters": [
           {
@@ -320,9 +310,7 @@
         }
       },
       "post": {
-        "tags": [
-          "Bids"
-        ],
+        "tags": ["Bids"],
         "summary": "Place a bid",
         "description": "Validates the bid against the live minimum, simulates it against the\nbidder's address, and returns an unsigned transaction. Nothing is\ncommitted until the bidder signs and the transaction confirms.\n\nThere is no `managed` mode here. Bidding spends the bidder's balance;\nno configuration makes it appropriate for Auctra to do that on their\nbehalf.\n\nA bid landing inside the final `extension_window_seconds` pushes the\nend time back, up to `max_extensions` times. Your countdown must read\n`end_time` from the `auction.extended` webhook, not cache it.\n",
         "parameters": [
@@ -339,10 +327,7 @@
             "application/json": {
               "schema": {
                 "type": "object",
-                "required": [
-                  "bidder",
-                  "amount_wei"
-                ],
+                "required": ["bidder", "amount_wei"],
                 "properties": {
                   "bidder": {
                     "$ref": "#/components/schemas/Address"
@@ -401,9 +386,7 @@
     },
     "/v1/auctions/{id}/settle": {
       "post": {
-        "tags": [
-          "Auctions"
-        ],
+        "tags": ["Auctions"],
         "summary": "Settle an ended auction",
         "description": "Transfers the item to the winner and credits the proceeds to the seller.\nCallable by anyone once `end_time` has passed \u2014 settlement is a public\ngood, not a privilege. Set `mode: \"managed\"` to have Auctra broadcast\nit from your configured signer.\n",
         "parameters": [
@@ -422,10 +405,7 @@
                 "properties": {
                   "mode": {
                     "type": "string",
-                    "enum": [
-                      "prepared",
-                      "managed"
-                    ],
+                    "enum": ["prepared", "managed"],
                     "default": "prepared"
                   }
                 }
@@ -459,9 +439,7 @@
     },
     "/v1/auctions/{id}/cancel": {
       "post": {
-        "tags": [
-          "Auctions"
-        ],
+        "tags": ["Auctions"],
         "summary": "Cancel an auction",
         "description": "Only possible while the auction has zero bids. Once someone has\ncommitted ETH, no one \u2014 not the seller, not the contract deployer, not\nAuctra \u2014 can pull the lot.\n",
         "parameters": [
@@ -498,9 +476,7 @@
     },
     "/v1/auctions/{id}/claim": {
       "post": {
-        "tags": [
-          "Auctions"
-        ],
+        "tags": ["Auctions"],
         "summary": "Claim a won item",
         "description": "Prepares `claimItem()` for the winning bidder.",
         "parameters": [
@@ -539,9 +515,7 @@
     },
     "/v1/refunds": {
       "get": {
-        "tags": [
-          "Refunds"
-        ],
+        "tags": ["Refunds"],
         "summary": "List refund credits",
         "description": "When a bidder is outbid, the contract credits them rather than sending\nETH back. Pushing a refund would let a malicious contract revert on\nreceive and freeze the auction for everyone. Refunds are pulled.\n",
         "parameters": [
@@ -597,9 +571,7 @@
     },
     "/v1/refunds/balance": {
       "get": {
-        "tags": [
-          "Refunds"
-        ],
+        "tags": ["Refunds"],
         "summary": "Read a withdrawable balance",
         "description": "Reads `pendingReturns()` straight from the chain, not the cache.",
         "parameters": [
@@ -632,9 +604,7 @@
     },
     "/v1/refunds/withdraw": {
       "post": {
-        "tags": [
-          "Refunds"
-        ],
+        "tags": ["Refunds"],
         "summary": "Withdraw a refund balance",
         "description": "Prepares `withdraw()`, which sweeps the bidder's entire credited\nbalance across all auctions in a single transaction.\n",
         "parameters": [
@@ -648,9 +618,7 @@
             "application/json": {
               "schema": {
                 "type": "object",
-                "required": [
-                  "bidder"
-                ],
+                "required": ["bidder"],
                 "properties": {
                   "bidder": {
                     "$ref": "#/components/schemas/Address"
@@ -688,9 +656,7 @@
     },
     "/v1/transactions": {
       "post": {
-        "tags": [
-          "Transactions"
-        ],
+        "tags": ["Transactions"],
         "summary": "Broadcast a signed transaction",
         "description": "Optional. You can send a signed transaction to any node; this endpoint\nexists so an integration needs one network dependency instead of two.\n\nReturns `202 Accepted`, not `200`. The chain decides whether a\ntransaction succeeds, and it has not decided yet.\n",
         "parameters": [
@@ -704,9 +670,7 @@
             "application/json": {
               "schema": {
                 "type": "object",
-                "required": [
-                  "signed_transaction"
-                ],
+                "required": ["signed_transaction"],
                 "properties": {
                   "signed_transaction": {
                     "type": "string",
@@ -740,9 +704,7 @@
     },
     "/v1/transactions/{hash}": {
       "get": {
-        "tags": [
-          "Transactions"
-        ],
+        "tags": ["Transactions"],
         "summary": "Retrieve a transaction",
         "parameters": [
           {
@@ -771,9 +733,7 @@
     },
     "/v1/webhook_endpoints": {
       "get": {
-        "tags": [
-          "Webhooks"
-        ],
+        "tags": ["Webhooks"],
         "summary": "List webhook endpoints",
         "responses": {
           "200": {
@@ -805,9 +765,7 @@
         }
       },
       "post": {
-        "tags": [
-          "Webhooks"
-        ],
+        "tags": ["Webhooks"],
         "summary": "Create a webhook endpoint",
         "description": "The response contains `secret` exactly once. Store it; every subsequent\nrequest is signed with it, and you must verify that signature before\ntrusting the body.\n",
         "requestBody": {
@@ -816,10 +774,7 @@
             "application/json": {
               "schema": {
                 "type": "object",
-                "required": [
-                  "url",
-                  "enabled_events"
-                ],
+                "required": ["url", "enabled_events"],
                 "properties": {
                   "url": {
                     "type": "string",
@@ -869,9 +824,7 @@
     },
     "/v1/webhook_endpoints/{id}": {
       "delete": {
-        "tags": [
-          "Webhooks"
-        ],
+        "tags": ["Webhooks"],
         "summary": "Delete a webhook endpoint",
         "parameters": [
           {
@@ -892,9 +845,7 @@
     },
     "/v1/events": {
       "get": {
-        "tags": [
-          "Webhooks"
-        ],
+        "tags": ["Webhooks"],
         "summary": "List events",
         "description": "Every webhook we send is also a durable row here. If your listener was\ndown, don't ask us to redeliver \u2014 read the log and reconcile.\n",
         "parameters": [
@@ -945,9 +896,7 @@
     },
     "/v1/events/{id}": {
       "get": {
-        "tags": [
-          "Webhooks"
-        ],
+        "tags": ["Webhooks"],
         "summary": "Retrieve an event",
         "parameters": [
           {
@@ -1022,17 +971,13 @@
         "type": "string",
         "pattern": "^0x[a-fA-F0-9]{40}$",
         "description": "A 20-byte Ethereum address, lowercased in responses.",
-        "examples": [
-          "0x7a3f1c8b9d2e4f6a0b1c2d3e4f5a6b7c8d9e0f1a"
-        ]
+        "examples": ["0x7a3f1c8b9d2e4f6a0b1c2d3e4f5a6b7c8d9e0f1a"]
       },
       "Wei": {
         "type": "string",
         "pattern": "^[0-9]+$",
         "description": "A decimal string of wei. Always a string: 1 ETH = 10^18 wei, and JSON\nnumbers are doubles, which lose integer precision above 2^53.\n",
-        "examples": [
-          "1050000000000000000"
-        ]
+        "examples": ["1050000000000000000"]
       },
       "EventType": {
         "type": "string",
@@ -1061,10 +1006,7 @@
             "type": "boolean"
           },
           "next_cursor": {
-            "type": [
-              "string",
-              "null"
-            ],
+            "type": ["string", "null"],
             "description": "Pass as `starting_after` to fetch the next page. `null` on the last page."
           }
         }
@@ -1090,28 +1032,16 @@
             "$ref": "#/components/schemas/Wei"
           },
           "gas_limit": {
-            "type": [
-              "string",
-              "null"
-            ]
+            "type": ["string", "null"]
           },
           "max_fee_per_gas": {
-            "type": [
-              "string",
-              "null"
-            ]
+            "type": ["string", "null"]
           },
           "max_priority_fee_per_gas": {
-            "type": [
-              "string",
-              "null"
-            ]
+            "type": ["string", "null"]
           },
           "nonce_hint": {
-            "type": [
-              "integer",
-              "null"
-            ]
+            "type": ["integer", "null"]
           }
         }
       },
@@ -1124,9 +1054,7 @@
           },
           "id": {
             "type": "string",
-            "examples": [
-              "auc_3f9a2c7b1d4e"
-            ]
+            "examples": ["auc_3f9a2c7b1d4e"]
           },
           "status": {
             "type": "string",
@@ -1147,10 +1075,7 @@
             "$ref": "#/components/schemas/Address"
           },
           "onchain_id": {
-            "type": [
-              "integer",
-              "null"
-            ]
+            "type": ["integer", "null"]
           },
           "seller": {
             "$ref": "#/components/schemas/Address"
@@ -1183,10 +1108,7 @@
             "$ref": "#/components/schemas/Wei"
           },
           "highest_bidder": {
-            "type": [
-              "string",
-              "null"
-            ]
+            "type": ["string", "null"]
           },
           "start_time": {
             "type": "string",
@@ -1215,16 +1137,10 @@
             "type": "object",
             "properties": {
               "created": {
-                "type": [
-                  "string",
-                  "null"
-                ]
+                "type": ["string", "null"]
               },
               "settled": {
-                "type": [
-                  "string",
-                  "null"
-                ]
+                "type": ["string", "null"]
               }
             }
           },
@@ -1288,9 +1204,7 @@
           },
           "id": {
             "type": "string",
-            "examples": [
-              "bid_8d2f4a6c1e3b"
-            ]
+            "examples": ["bid_8d2f4a6c1e3b"]
           },
           "auction": {
             "type": "string"
@@ -1316,16 +1230,10 @@
             ]
           },
           "transaction_hash": {
-            "type": [
-              "string",
-              "null"
-            ]
+            "type": ["string", "null"]
           },
           "block_number": {
-            "type": [
-              "integer",
-              "null"
-            ]
+            "type": ["integer", "null"]
           },
           "placed_at": {
             "type": "string",
@@ -1403,10 +1311,7 @@
             "type": "boolean"
           },
           "withdrawal_transaction": {
-            "type": [
-              "string",
-              "null"
-            ]
+            "type": ["string", "null"]
           },
           "chain_id": {
             "type": "integer"
@@ -1442,32 +1347,19 @@
           },
           "status": {
             "type": "string",
-            "enum": [
-              "pending",
-              "confirmed",
-              "reverted"
-            ]
+            "enum": ["pending", "confirmed", "reverted"]
           },
           "block_number": {
-            "type": [
-              "integer",
-              "null"
-            ]
+            "type": ["integer", "null"]
           },
           "confirmations": {
             "type": "integer"
           },
           "gas_used": {
-            "type": [
-              "string",
-              "null"
-            ]
+            "type": ["string", "null"]
           },
           "effective_gas_price": {
-            "type": [
-              "string",
-              "null"
-            ]
+            "type": ["string", "null"]
           }
         }
       },
@@ -1480,26 +1372,17 @@
           },
           "status": {
             "type": "string",
-            "enum": [
-              "ok",
-              "degraded"
-            ]
+            "enum": ["ok", "degraded"]
           },
           "environment": {
             "type": "string",
-            "enum": [
-              "sandbox",
-              "production"
-            ]
+            "enum": ["sandbox", "production"]
           },
           "chain_id": {
             "type": "integer"
           },
           "head_block": {
-            "type": [
-              "integer",
-              "null"
-            ]
+            "type": ["integer", "null"]
           },
           "database": {
             "type": "string"
@@ -1509,10 +1392,7 @@
           },
           "managed_signer": {
             "type": "string",
-            "enum": [
-              "enabled",
-              "disabled"
-            ]
+            "enum": ["enabled", "disabled"]
           }
         }
       },
@@ -1521,12 +1401,7 @@
         "properties": {
           "error": {
             "type": "object",
-            "required": [
-              "type",
-              "code",
-              "message",
-              "request_id"
-            ],
+            "required": ["type", "code", "message", "request_id"],
             "properties": {
               "type": {
                 "type": "string",

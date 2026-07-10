@@ -7,7 +7,7 @@
  *                "message": "Bid must exceed 1.05 ETH.",
  *                "param": "amount_wei",
  *                "request_id": "req_9f2a...",
- *                "docs_url": "https://docs.auctra.dev/errors#bid_below_minimum" } }
+ *                "docs_url": "https://auctra-api.vercel.app/errors#bid_below_minimum" } }
  */
 export type ErrorType =
   | "authentication_error"
