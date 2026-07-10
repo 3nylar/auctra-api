@@ -15,9 +15,11 @@
 import { runIndexerOnce } from "../lib/indexerCore.js";
 
 export default async function handler(req) {
-  const url = new URL(req.url);
+  // Fallback to localhost if the host header is missing, ensuring a valid full URL
+  const host = req.headers.get("host") || "localhost";
+  const url = new URL(req.url, `https://${host}`);
   const provided = url.searchParams.get("secret") ?? req.headers.get("x-cron-secret");
-
+  
   if (!process.env.CRON_SECRET || provided !== process.env.CRON_SECRET) {
     return new Response(JSON.stringify({ error: "unauthorized" }), {
       status: 401,
