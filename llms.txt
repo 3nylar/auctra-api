@@ -1,0 +1,33 @@
+# Auctra API
+
+> An auction house that settles on Ethereum, exposed as a JSON API. English auctions — open bidding, ascending price, a clock — settled on-chain, with the blockchain plumbing handled for you.
+
+Base URL: https://auctra-api-production.up.railway.app
+Auth: Authorization: Bearer sk_test_...
+
+## Get started
+- [Introduction](https://auctra-api.vercel.app/introduction.html): What Auctra is, the signing model, and what you get.
+- [Quickstart](https://auctra-api.vercel.app/quickstart.html): Key → auction → bid → settlement, in about 4 minutes.
+- [Authentication](https://auctra-api.vercel.app/authentication.html): Secret keys and scopes.
+- [Environments](https://auctra-api.vercel.app/environments.html): Sandbox (Sepolia) vs production.
+
+## Core concepts
+- [The signing model](https://auctra-api.vercel.app/signing-model.html): Why write endpoints return unsigned transactions instead of moving funds directly.
+- [Auction lifecycle](https://auctra-api.vercel.app/auction-lifecycle.html): pending → live → ending → ended → settled / cancelled.
+- [Errors](https://auctra-api.vercel.app/errors.html): The `{error: {...}}` shape and error codes.
+- [Idempotency](https://auctra-api.vercel.app/idempotency.html): `Idempotency-Key` header behavior, 24-hour expiry.
+- [Pagination](https://auctra-api.vercel.app/pagination.html): Cursor-based via `starting_after` and `next_cursor`.
+- [Rate limits](https://auctra-api.vercel.app/rate-limits.html)
+- [Webhooks](https://auctra-api.vercel.app/webhooks.html): HMAC-signed events, retried with backoff for 24 hours.
+
+## Guides
+- [Guide: list an item](https://auctra-api.vercel.app/guide-list-an-item.html)
+- [Guide: place a bid](https://auctra-api.vercel.app/guide-place-a-bid.html)
+- [Guide: settle and pay out](https://auctra-api.vercel.app/guide-settle.html)
+
+## Reference
+- [API reference](https://auctra-api.vercel.app/api-reference.html): Every endpoint — Auctions, Bids, Refunds, Transactions, Webhooks, Health.
+- [Changelog](https://auctra-api.vercel.app/changelog.html)
+
+## Optional
+- [GitHub](https://github.com/3nylar/auctra-api)
