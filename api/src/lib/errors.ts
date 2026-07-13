@@ -95,6 +95,21 @@ export const errors = {
       message: `This key is missing the "${scope}" scope.`,
     }),
 
+  invalidCredentials: () =>
+    new AuctraError({
+      type: "authentication_error",
+      code: "invalid_credentials",
+      message: "Incorrect email or password.",
+    }),
+
+  emailTaken: () =>
+    new AuctraError({
+      type: "invalid_request_error",
+      code: "email_taken",
+      message: "An account with this email already exists.",
+      param: "email",
+    }),
+
   notFound: (resource: string, ref: string) =>
     new AuctraError({
       type: "invalid_request_error",
