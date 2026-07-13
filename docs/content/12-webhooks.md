@@ -1,7 +1,7 @@
 ---
 title: Webhooks
 description: Signed, retried, replayable — and how to verify one before you trust it.
-section: Core concepts
+section: Build
 slug: webhooks
 ---
 

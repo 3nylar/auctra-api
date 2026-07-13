@@ -1,233 +1,77 @@
 <!doctype html>
 <html lang="en" data-theme="light">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Pagination — Auctra API</title>
-    <meta
-      name="description"
-      content="Cursors, not page numbers, and why that isn't pedantry."
-    />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap"
-      rel="stylesheet"
-    />
-    <link rel="stylesheet" href="styles.css" />
-    <script>
-      // Applied before first paint so a dark-mode reader never sees a white flash.
-      try {
-        const t = localStorage.getItem("auctra-theme");
-        if (t) document.documentElement.dataset.theme = t;
-        else if (matchMedia("(prefers-color-scheme: dark)").matches)
-          document.documentElement.dataset.theme = "dark";
-      } catch {}
-    </script>
-  </head>
-  <body>
-    <header class="masthead">
-      <button
-        class="icon-btn"
-        id="menu-toggle"
-        aria-label="Toggle navigation"
-        aria-expanded="false"
-      >
-        ☰
-      </button>
-      <a class="wordmark" href="introduction.html"
-        ><b>Auctra</b><span>Docs</span></a
-      >
-      <nav>
-        <a class="hide-sm" href="api-reference.html">API reference</a>
-        <a class="hide-sm" href="changelog.html">Changelog</a>
-        <a class="hide-sm" href="https://github.com/3nylar/auctra-api"
-          >GitHub</a
-        >
-        <button
-          class="icon-btn"
-          id="theme-toggle"
-          aria-label="Toggle colour theme"
-        >
-          ◐
-        </button>
-      </nav>
-    </header>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pagination — Auctra API</title>
+<meta name="description" content="Cursors, not page numbers, and why that isn't pedantry.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<script>
+  // Applied before first paint so a dark-mode reader never sees a white flash.
+  try {
+    const t = localStorage.getItem("auctra-theme");
+    if (t) document.documentElement.dataset.theme = t;
+    else if (matchMedia("(prefers-color-scheme: dark)").matches)
+      document.documentElement.dataset.theme = "dark";
+  } catch {}
+</script>
+</head>
+<body>
 
-    <div class="shell">
-      <aside class="sidebar" id="sidebar">
-        <div class="search-wrap">
-          <input
-            id="search"
-            type="search"
-            placeholder="Search the docs"
-            autocomplete="off"
-          />
-        </div>
-        <h4>Get started</h4>
-        <a
-          href="introduction.html"
-          data-search="Introduction An auction house that settles on Ethereum, exposed as a JSON API."
-          >Introduction</a
-        ><a
-          href="quickstart.html"
-          data-search="Quickstart From zero to a live auction on Sepolia in four steps."
-          >Quickstart</a
-        ><a
-          href="authentication.html"
-          data-search="Authentication API keys, scopes, environments, and what to do when one leaks."
-          >Authentication</a
-        ><a
-          href="environments.html"
-          data-search="Environments Sandbox and production are the same code against different chains."
-          >Environments</a
-        >
-        <h4>Core concepts</h4>
-        <a
-          href="signing-model.html"
-          data-search="The signing model Why write endpoints return a transaction instead of doing the work."
-          >The signing model</a
-        ><a
-          href="auction-lifecycle.html"
-          data-search="Auction lifecycle Six states, one clock, and the two transitions nobody controls."
-          >Auction lifecycle</a
-        ><a
-          href="errors.html"
-          data-search="Errors One shape, stable codes, and a request id worth quoting."
-          >Errors</a
-        ><a
-          href="idempotency.html"
-          data-search="Idempotency Retry a POST safely, even when you never saw the response."
-          >Idempotency</a
-        ><a
-          href="pagination.html"
-          aria-current="page"
-          data-search="Pagination Cursors, not page numbers, and why that isn't pedantry."
-          >Pagination</a
-        ><a
-          href="rate-limits.html"
-          data-search="Rate limits 100 requests a minute, per key, and how to not need them."
-          >Rate limits</a
-        ><a
-          href="webhooks.html"
-          data-search="Webhooks Signed, retried, replayable — and how to verify one before you trust it."
-          >Webhooks</a
-        >
-        <h4>Guides</h4>
-        <a
-          href="guide-list-an-item.html"
-          data-search="Guide: list an item Approve, create, confirm — the full seller flow, end to end."
-          >Guide: list an item</a
-        ><a
-          href="guide-place-a-bid.html"
-          data-search="Guide: place a bid Read the minimum, prepare, sign, and handle being outbid."
-          >Guide: place a bid</a
-        ><a
-          href="guide-settle.html"
-          data-search="Guide: settle and pay out The clock runs out. Now someone has to close the loop."
-          >Guide: settle and pay out</a
-        >
-        <h4>Reference</h4>
-        <a
-          href="api-reference.html"
-          data-search="API reference Every endpoint, parameter and response."
-          >API reference</a
-        ><a
-          href="changelog.html"
-          data-search="Changelog Versions are dated. Breaking changes get a new one."
-          >Changelog</a
-        >
-      </aside>
+<header class="masthead">
+  <button class="icon-btn" id="menu-toggle" aria-label="Toggle navigation" aria-expanded="false">☰</button>
+  <a class="wordmark" href="introduction.html"><b>Auctra</b><span>Docs</span></a>
+  <nav>
+    <a class="hide-sm" href="api-reference.html">API reference</a>
+    <a class="hide-sm" href="changelog.html">Changelog</a>
+    <a class="hide-sm" href="https://github.com/3nylar/auctra-api">GitHub</a>
+    <button class="icon-btn" id="theme-toggle" aria-label="Toggle colour theme">◐</button>
+  </nav>
+</header>
 
-      <main class="content">
-        <p class="eyebrow">Core concepts</p>
-        <h1>Pagination</h1>
-        <p class="lede">
-          Cursors, not page numbers, and why that isn't pedantry.
-        </p>
+<div class="shell">
+  <aside class="sidebar" id="sidebar">
+    <div class="search-wrap">
+      <input id="search" type="search" placeholder="Search the docs" autocomplete="off">
+    </div>
+    <h4>Get started</h4><a href="introduction.html" data-search="Introduction An auction house that settles on Ethereum, exposed as a JSON API.">Introduction</a><a href="quickstart.html" data-search="Quickstart From zero to a live auction on Sepolia in four steps.">Quickstart</a><a href="authentication.html" data-search="Authentication API keys, scopes, environments, and what to do when one leaks.">Authentication</a><a href="environments.html" data-search="Environments Sandbox and production are the same code against different chains.">Environments</a><h4>Build</h4><a href="signing-model.html" data-search="The signing model Why write endpoints return a transaction instead of doing the work.">The signing model</a><a href="auction-lifecycle.html" data-search="Auction lifecycle Six states, one clock, and the two transitions nobody controls.">Auction lifecycle</a><a href="response-format.html" data-search="Response format The shapes every Auctra response follows, stated once.">Response format</a><a href="idempotency.html" data-search="Idempotency Retry a POST safely, even when you never saw the response.">Idempotency</a><a href="pagination.html" aria-current="page" data-search="Pagination Cursors, not page numbers, and why that isn't pedantry.">Pagination</a><a href="rate-limits.html" data-search="Rate limits 100 requests a minute, per key, and how to not need them.">Rate limits</a><a href="webhooks.html" data-search="Webhooks Signed, retried, replayable — and how to verify one before you trust it.">Webhooks</a><a href="guide-list-an-item.html" data-search="Guide: list an item Approve, create, confirm — the full seller flow, end to end.">Guide: list an item</a><a href="guide-place-a-bid.html" data-search="Guide: place a bid Read the minimum, prepare, sign, and handle being outbid.">Guide: place a bid</a><a href="guide-settle.html" data-search="Guide: settle and pay out The clock runs out. Now someone has to close the loop.">Guide: settle and pay out</a><h4>Reference</h4><a href="errors.html" data-search="Errors One shape, stable codes, and a request id worth quoting.">Errors</a><a href="api-reference.html" data-search="API reference Every endpoint, parameter and response.">API reference</a><a href="changelog.html" data-search="Changelog Versions are dated. Breaking changes get a new one.">Changelog</a>
+  </aside>
 
-        <div class="prose">
-          <p>List endpoints return the same envelope.</p>
-          <div class="code">
-            <div class="bar">
-              <span>json</span><button class="copy" type="button">Copy</button>
-            </div>
-            <pre><code class="language-json">{
+  <main class="content">
+    <p class="eyebrow">Build</p>
+    <h1>Pagination</h1>
+      <p class="lede">Cursors, not page numbers, and why that isn't pedantry.</p>
+      
+      <div class="prose"><p>List endpoints return the same envelope.</p>
+<div class="code">
+  <div class="bar"><span>json</span><button class="copy" type="button">Copy</button></div>
+  <pre><code class="language-json">{
   &quot;object&quot;: &quot;list&quot;,
   &quot;data&quot;: [ { &quot;object&quot;: &quot;auction&quot;, &quot;id&quot;: &quot;auc_3f9a2c7b1d4e&quot; } ],
   &quot;has_more&quot;: true,
   &quot;next_cursor&quot;: &quot;auc_3f9a2c7b1d4e&quot;
 }</code></pre>
-          </div>
-          <p>
-            Pass <code>next_cursor</code> as <code>starting_after</code> to get
-            the next page. When <code>has_more</code> is <code>false</code>,
-            <code>next_cursor</code> is <code>null</code> and you&#39;re done.
-          </p>
-          <div class="code">
-            <div class="bar">
-              <span>bash</span><button class="copy" type="button">Copy</button>
-            </div>
-            <pre><code class="language-bash">curl &quot;$AUCTRA_URL/v1/auctions?limit=50&amp;starting_after=auc_3f9a2c7b1d4e&quot; \
+</div><p>Pass <code>next_cursor</code> as <code>starting_after</code> to get the next page. When <code>has_more</code> is <code>false</code>, <code>next_cursor</code> is <code>null</code> and you&#39;re done.</p>
+<div class="code">
+  <div class="bar"><span>bash</span><button class="copy" type="button">Copy</button></div>
+  <pre><code class="language-bash">curl &quot;$AUCTRA_URL/v1/auctions?limit=50&amp;starting_after=auc_3f9a2c7b1d4e&quot; \
   -H &quot;Authorization: Bearer $AUCTRA_KEY&quot;</code></pre>
-          </div>
-          <p><code>limit</code> is 1–100, default 25.</p>
-          <h2 id="why-not-page2">
-            <a class="anchor" href="#why-not-page2" aria-hidden="true">#</a>Why
-            not <code>?page=2</code>
-          </h2>
-          <p>
-            Because auctions are created while you&#39;re paging through them.
-          </p>
-          <p>
-            Offset pagination asks &quot;skip 25 rows, give me the next
-            25.&quot; If three auctions are created between your first request
-            and your second, rows 23, 24 and 25 from page one shift down into
-            page two — and you see them twice. If three are settled and filtered
-            out instead, three auctions vanish from your results entirely,
-            having never appeared on any page.
-          </p>
-          <p>
-            A cursor says &quot;give me the 25 rows after
-            <em>this specific object</em>.&quot; New rows landing elsewhere in
-            the ordering change nothing. Nothing is skipped and nothing is
-            duplicated, no matter how long you take.
-          </p>
-          <p>
-            Treat the cursor as opaque. Today it&#39;s an object id; tomorrow it
-            might not be.
-          </p>
-          <h2 id="filtering-status-is-a-special-case">
-            <a
-              class="anchor"
-              href="#filtering-status-is-a-special-case"
-              aria-hidden="true"
-              >#</a
-            >Filtering <code>status</code> is a special case
-          </h2>
-          <p>
-            <code>status</code> is derived from the chain clock at read time,
-            not stored. An auction whose <code>end_time</code> passed four
-            seconds ago is reported <code>ended</code> even though its database
-            row still says <code>live</code>.
-          </p>
-          <p>
-            That means <code>?status=live</code> filters after the rows come out
-            of the database. A page can therefore come back with fewer items
-            than <code>limit</code> while <code>has_more</code> is still
-            <code>true</code>. This is correct, not a bug. Page until
-            <code>has_more</code> is false; don&#39;t stop early because a page
-            looked short.
-          </p>
-          <h2 id="draining-a-list">
-            <a class="anchor" href="#draining-a-list" aria-hidden="true">#</a
-            >Draining a list
-          </h2>
-          <div class="code">
-            <div class="bar">
-              <span>js</span><button class="copy" type="button">Copy</button>
-            </div>
-            <pre><code class="language-js">async function* allAuctions(params = {}) {
+</div><p><code>limit</code> is 1–100, default 25.</p>
+<h2 id="why-not-page2"><a class="anchor" href="#why-not-page2" aria-hidden="true">#</a>Why not <code>?page=2</code></h2>
+<p>Because auctions are created while you&#39;re paging through them.</p>
+<p>Offset pagination asks &quot;skip 25 rows, give me the next 25.&quot; If three auctions are created between your first request and your second, rows 23, 24 and 25 from page one shift down into page two — and you see them twice. If three are settled and filtered out instead, three auctions vanish from your results entirely, having never appeared on any page.</p>
+<p>A cursor says &quot;give me the 25 rows after <em>this specific object</em>.&quot; New rows landing elsewhere in the ordering change nothing. Nothing is skipped and nothing is duplicated, no matter how long you take.</p>
+<p>Treat the cursor as opaque. Today it&#39;s an object id; tomorrow it might not be.</p>
+<h2 id="filtering-status-is-a-special-case"><a class="anchor" href="#filtering-status-is-a-special-case" aria-hidden="true">#</a>Filtering <code>status</code> is a special case</h2>
+<p><code>status</code> is derived from the chain clock at read time, not stored. An auction whose <code>end_time</code> passed four seconds ago is reported <code>ended</code> even though its database row still says <code>live</code>.</p>
+<p>That means <code>?status=live</code> filters after the rows come out of the database. A page can therefore come back with fewer items than <code>limit</code> while <code>has_more</code> is still <code>true</code>. This is correct, not a bug. Page until <code>has_more</code> is false; don&#39;t stop early because a page looked short.</p>
+<h2 id="draining-a-list"><a class="anchor" href="#draining-a-list" aria-hidden="true">#</a>Draining a list</h2>
+<div class="code">
+  <div class="bar"><span>js</span><button class="copy" type="button">Copy</button></div>
+  <pre><code class="language-js">async function* allAuctions(params = {}) {
   let cursor = null;
   do {
     const url = new URL(&quot;/v1/auctions&quot;, AUCTRA_URL);
@@ -239,107 +83,91 @@
     cursor = page.next_cursor;
   } while (cursor);
 }</code></pre>
-          </div>
-          <p>
-            At 100 rows per request against a 100 req/min limit, a full drain of
-            10,000 auctions takes about a minute. If you find yourself doing
-            that on a schedule, you want <a href="webhooks.html">webhooks</a> or
-            the <a href="api-reference.html#get-v1events">event log</a> instead.
-          </p>
-        </div>
-        <nav class="pager">
-          <a class="prev" href="idempotency.html"
-            ><span>Previous</span><b>Idempotency</b></a
-          >
-          <a class="next" href="rate-limits.html"
-            ><span>Next</span><b>Rate limits</b></a
-          >
-        </nav>
-      </main>
+</div><p>At 100 rows per request against a 100 req/min limit, a full drain of 10,000 auctions takes about a minute. If you find yourself doing that on a schedule, you want <a href="webhooks.html">webhooks</a> or the <a href="api-reference.html#get-v1events">event log</a> instead.</p>
+</div>
+      <nav class="pager">
+    <a class="prev" href="idempotency.html"><span>Previous</span><b>Idempotency</b></a>
+    <a class="next" href="rate-limits.html"><span>Next</span><b>Rate limits</b></a>
+  </nav>
+  </main>
 
-      <aside class="rail">
-        <h5>On this page</h5>
-        <a class="h2" href="#why-not-page2">Why not <code>?page=2</code></a
-        ><a class="h2" href="#filtering-status-is-a-special-case"
-          >Filtering <code>status</code> is a special case</a
-        ><a class="h2" href="#draining-a-list">Draining a list</a>
-      </aside>
-    </div>
+  <aside class="rail"><h5>On this page</h5><a class="h2" href="#why-not-page2">Why not <code>?page=2</code></a><a class="h2" href="#filtering-status-is-a-special-case">Filtering <code>status</code> is a special case</a><a class="h2" href="#draining-a-list">Draining a list</a></aside>
+</div>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
-    <script>
-      hljs.highlightAll();
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<script>
+  hljs.highlightAll();
 
-      // Copy buttons
-      document.querySelectorAll(".copy").forEach((btn) => {
-        btn.addEventListener("click", async () => {
-          const code = btn.closest(".code").querySelector("code").innerText;
-          await navigator.clipboard.writeText(code);
-          const was = btn.textContent;
-          btn.textContent = "Copied";
-          setTimeout(() => (btn.textContent = was), 1400);
-        });
-      });
+  // Copy buttons — copy the active language panel when there's a tab strip,
+  // otherwise the block's only <code>.
+  document.querySelectorAll(".copy").forEach((btn) => {
+    btn.addEventListener("click", async () => {
+      const block = btn.closest(".code");
+      const panel = block.querySelector(".lang-panel.active") ?? block;
+      const code = panel.querySelector("code").innerText;
+      await navigator.clipboard.writeText(code);
+      const was = btn.textContent;
+      btn.textContent = "Copied";
+      setTimeout(() => (btn.textContent = was), 1400);
+    });
+  });
 
-      // Theme
-      document.getElementById("theme-toggle").addEventListener("click", () => {
-        const next =
-          document.documentElement.dataset.theme === "dark" ? "light" : "dark";
-        document.documentElement.dataset.theme = next;
-        try {
-          localStorage.setItem("auctra-theme", next);
-        } catch {}
-      });
-
-      // Mobile nav
-      const sidebar = document.getElementById("sidebar");
-      const toggle = document.getElementById("menu-toggle");
-      toggle.addEventListener("click", () => {
-        const open = sidebar.dataset.open === "true";
-        sidebar.dataset.open = String(!open);
-        toggle.setAttribute("aria-expanded", String(!open));
-      });
-
-      // Filter the nav, rather than shipping a search index for fifteen pages.
-      const search = document.getElementById("search");
-      search.addEventListener("input", () => {
-        const q = search.value.toLowerCase().trim();
-        document.querySelectorAll(".sidebar a").forEach((a) => {
-          const hit = !q || (a.dataset.search ?? "").toLowerCase().includes(q);
-          a.style.display = hit ? "" : "none";
-        });
-        document.querySelectorAll(".sidebar h4").forEach((h) => {
-          let n = h.nextElementSibling,
-            any = false;
-          while (n && n.tagName === "A") {
-            if (n.style.display !== "none") any = true;
-            n = n.nextElementSibling;
-          }
-          h.style.display = any ? "" : "none";
-        });
-      });
-
-      // Highlight the rail entry for whatever section is on screen.
-      const links = [...document.querySelectorAll(".rail a")];
-      if (links.length) {
-        const seen = new Set();
-        const io = new IntersectionObserver(
-          (entries) => {
-            entries.forEach((e) =>
-              e.isIntersecting
-                ? seen.add(e.target.id)
-                : seen.delete(e.target.id),
-            );
-            links.forEach((l) =>
-              l.classList.toggle("active", seen.has(l.hash.slice(1))),
-            );
-          },
-          { rootMargin: "-80px 0px -70% 0px" },
+  // Language tabs on multi-sample code blocks
+  document.querySelectorAll(".lang-group").forEach((group) => {
+    const tabs = [...group.querySelectorAll(".lang-tab")];
+    const panels = [...group.querySelectorAll(".lang-panel")];
+    tabs.forEach((tab) => {
+      tab.addEventListener("click", () => {
+        const lang = tab.dataset.lang;
+        tabs.forEach((t) => t.classList.toggle("active", t === tab));
+        panels.forEach((p) =>
+          p.classList.toggle("active", p.dataset.lang === lang),
         );
-        document
-          .querySelectorAll("h2[id], h3[id]")
-          .forEach((h) => io.observe(h));
-      }
-    </script>
-  </body>
+      });
+    });
+  });
+
+  // Theme
+  document.getElementById("theme-toggle").addEventListener("click", () => {
+    const next = document.documentElement.dataset.theme === "dark" ? "light" : "dark";
+    document.documentElement.dataset.theme = next;
+    try { localStorage.setItem("auctra-theme", next); } catch {}
+  });
+
+  // Mobile nav
+  const sidebar = document.getElementById("sidebar");
+  const toggle = document.getElementById("menu-toggle");
+  toggle.addEventListener("click", () => {
+    const open = sidebar.dataset.open === "true";
+    sidebar.dataset.open = String(!open);
+    toggle.setAttribute("aria-expanded", String(!open));
+  });
+
+  // Filter the nav, rather than shipping a search index for fifteen pages.
+  const search = document.getElementById("search");
+  search.addEventListener("input", () => {
+    const q = search.value.toLowerCase().trim();
+    document.querySelectorAll(".sidebar a").forEach((a) => {
+      const hit = !q || (a.dataset.search ?? "").toLowerCase().includes(q);
+      a.style.display = hit ? "" : "none";
+    });
+    document.querySelectorAll(".sidebar h4").forEach((h) => {
+      let n = h.nextElementSibling, any = false;
+      while (n && n.tagName === "A") { if (n.style.display !== "none") any = true; n = n.nextElementSibling; }
+      h.style.display = any ? "" : "none";
+    });
+  });
+
+  // Highlight the rail entry for whatever section is on screen.
+  const links = [...document.querySelectorAll(".rail a")];
+  if (links.length) {
+    const seen = new Set();
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach((e) => e.isIntersecting ? seen.add(e.target.id) : seen.delete(e.target.id));
+      links.forEach((l) => l.classList.toggle("active", seen.has(l.hash.slice(1))));
+    }, { rootMargin: "-80px 0px -70% 0px" });
+    document.querySelectorAll("h2[id], h3[id]").forEach((h) => io.observe(h));
+  }
+</script>
+</body>
 </html>

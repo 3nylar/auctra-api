@@ -1,6 +1,8 @@
 ---
-meta-description: The shapes every Auctra response follows, stated once.
-title: Response format — Auctra API
+title: Response format
+description: The shapes every Auctra response follows, stated once.
+section: Build
+slug: response-format
 ---
 
 # Response format

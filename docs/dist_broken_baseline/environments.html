@@ -1,0 +1,352 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Environments — Auctra API</title>
+    <meta
+      name="description"
+      content="Sandbox and production are the same code against different chains."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+    <script>
+      // Applied before first paint so a dark-mode reader never sees a white flash.
+      try {
+        const t = localStorage.getItem("auctra-theme");
+        if (t) document.documentElement.dataset.theme = t;
+        else if (matchMedia("(prefers-color-scheme: dark)").matches)
+          document.documentElement.dataset.theme = "dark";
+      } catch {}
+    </script>
+  </head>
+  <body>
+    <header class="masthead">
+      <button
+        class="icon-btn"
+        id="menu-toggle"
+        aria-label="Toggle navigation"
+        aria-expanded="false"
+      >
+        ☰
+      </button>
+      <a class="wordmark" href="introduction.html"
+        ><b>Auctra</b><span>Docs</span></a
+      >
+      <nav>
+        <a class="hide-sm" href="api-reference.html">API reference</a>
+        <a class="hide-sm" href="changelog.html">Changelog</a>
+        <a class="hide-sm" href="https://github.com/3nylar/auctra-api"
+          >GitHub</a
+        >
+        <button
+          class="icon-btn"
+          id="theme-toggle"
+          aria-label="Toggle colour theme"
+        >
+          ◐
+        </button>
+      </nav>
+    </header>
+
+    <div class="shell">
+      <aside class="sidebar" id="sidebar">
+        <div class="search-wrap">
+          <input
+            id="search"
+            type="search"
+            placeholder="Search the docs"
+            autocomplete="off"
+          />
+        </div>
+        <h4>Get started</h4>
+        <a
+          href="introduction.html"
+          data-search="Introduction An auction house that settles on Ethereum, exposed as a JSON API."
+          >Introduction</a
+        ><a
+          href="quickstart.html"
+          data-search="Quickstart From zero to a live auction on Sepolia in four steps."
+          >Quickstart</a
+        ><a
+          href="authentication.html"
+          data-search="Authentication API keys, scopes, environments, and what to do when one leaks."
+          >Authentication</a
+        ><a
+          href="environments.html"
+          aria-current="page"
+          data-search="Environments Sandbox and production are the same code against different chains."
+          >Environments</a
+        >
+        <h4>Core concepts</h4>
+        <a
+          href="signing-model.html"
+          data-search="The signing model Why write endpoints return a transaction instead of doing the work."
+          >The signing model</a
+        ><a
+          href="auction-lifecycle.html"
+          data-search="Auction lifecycle Six states, one clock, and the two transitions nobody controls."
+          >Auction lifecycle</a
+        ><a
+          href="errors.html"
+          data-search="Errors One shape, stable codes, and a request id worth quoting."
+          >Errors</a
+        ><a
+          href="idempotency.html"
+          data-search="Idempotency Retry a POST safely, even when you never saw the response."
+          >Idempotency</a
+        ><a
+          href="pagination.html"
+          data-search="Pagination Cursors, not page numbers, and why that isn't pedantry."
+          >Pagination</a
+        ><a
+          href="rate-limits.html"
+          data-search="Rate limits 100 requests a minute, per key, and how to not need them."
+          >Rate limits</a
+        ><a
+          href="webhooks.html"
+          data-search="Webhooks Signed, retried, replayable — and how to verify one before you trust it."
+          >Webhooks</a
+        >
+        <h4>Guides</h4>
+        <a
+          href="guide-list-an-item.html"
+          data-search="Guide: list an item Approve, create, confirm — the full seller flow, end to end."
+          >Guide: list an item</a
+        ><a
+          href="guide-place-a-bid.html"
+          data-search="Guide: place a bid Read the minimum, prepare, sign, and handle being outbid."
+          >Guide: place a bid</a
+        ><a
+          href="guide-settle.html"
+          data-search="Guide: settle and pay out The clock runs out. Now someone has to close the loop."
+          >Guide: settle and pay out</a
+        >
+        <h4>Reference</h4>
+        <a
+          href="api-reference.html"
+          data-search="API reference Every endpoint, parameter and response."
+          >API reference</a
+        ><a
+          href="changelog.html"
+          data-search="Changelog Versions are dated. Breaking changes get a new one."
+          >Changelog</a
+        >
+      </aside>
+
+      <main class="content">
+        <p class="eyebrow">Get started</p>
+        <h1>Environments</h1>
+        <p class="lede">
+          Sandbox and production are the same code against different chains.
+        </p>
+
+        <div class="prose">
+          <table>
+            <thead>
+              <tr>
+                <th></th>
+                <th>Sandbox</th>
+                <th>Production</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Base URL</td>
+                <td>
+                  <code>https://auctra-api-production.up.railway.app</code>
+                </td>
+                <td><code>https://auctra-api.vercel.app</code></td>
+              </tr>
+              <tr>
+                <td>Key prefix</td>
+                <td><code>sk_test_</code></td>
+                <td><code>sk_live_</code></td>
+              </tr>
+              <tr>
+                <td>Chain</td>
+                <td>Sepolia (<code>11155111</code>)</td>
+                <td>Ethereum mainnet (<code>1</code>)</td>
+              </tr>
+              <tr>
+                <td>ETH</td>
+                <td>
+                  Worthless. <a href="https://sepoliafaucet.com">Faucet</a>
+                </td>
+                <td>Real</td>
+              </tr>
+              <tr>
+                <td>Block time</td>
+                <td>~12s</td>
+                <td>~12s</td>
+              </tr>
+              <tr>
+                <td>Data retention</td>
+                <td>Reset periodically</td>
+                <td>Permanent</td>
+              </tr>
+            </tbody>
+          </table>
+          <p>
+            The only differences are the chain and the key prefix. Sandbox is
+            not a mock: transactions are really signed, really broadcast, really
+            mined, and really reverted when they&#39;re wrong. Reorgs happen.
+            Gas estimation fails. RPC nodes go down. This is on purpose — a
+            sandbox that always succeeds teaches you nothing about the failure
+            paths you&#39;ll meet on a Tuesday afternoon in production.
+          </p>
+          <h2 id="going-live">
+            <a class="anchor" href="#going-live" aria-hidden="true">#</a>Going
+            live
+          </h2>
+          <div class="code">
+            <div class="bar">
+              <span>diff</span><button class="copy" type="button">Copy</button>
+            </div>
+            <pre><code class="language-diff">- export AUCTRA_URL=&quot;https://auctra-api-production.up.railway.app&quot;
+- export AUCTRA_KEY=&quot;sk_test_...&quot;
++ export AUCTRA_URL=&quot;https://auctra-api.vercel.app&quot;
++ export AUCTRA_KEY=&quot;sk_live_...&quot;</code></pre>
+          </div>
+          <p>
+            That&#39;s the whole migration. Same paths, same payloads, same
+            webhook shapes.
+          </p>
+          <p>Before you flip it, three things that only bite on mainnet:</p>
+          <p>
+            <strong>Gas is a real cost, and someone pays it.</strong>
+            <code>createAuction</code> runs roughly 185,000 gas;
+            <code>bid</code> around 62,000. At 30 gwei that&#39;s about $0.02
+            and $0.007 per call respectively, but mainnet has spent whole
+            afternoons above 200 gwei. If your product absorbs seller gas, put a
+            ceiling on it. The <code>gas_limit</code> we return already carries
+            20% headroom over the estimate.
+          </p>
+          <p>
+            <strong>Confirmations are a product decision.</strong> We index at
+            two confirmations, which is fine for a $50 lot and thin for a
+            $500,000 one. Nothing stops you from waiting for twelve before you
+            tell the winner they&#39;ve won.
+          </p>
+          <p>
+            <strong>Test ETH habits don&#39;t transfer.</strong> In sandbox
+            you&#39;ll happily let a bidder&#39;s wallet sit at zero and top it
+            up. In production, a bid that reverts for insufficient funds has
+            still burned the bidder&#39;s gas, and they will email you about it.
+            Check the balance before you prepare the transaction.
+          </p>
+          <h2 id="sandbox-helpers">
+            <a class="anchor" href="#sandbox-helpers" aria-hidden="true">#</a
+            >Sandbox helpers
+          </h2>
+          <p>
+            Sandbox exposes a freely mintable ERC-721 at the
+            <code>COLLECTIBLE_ADDRESS</code> returned by
+            <code>GET /v1/health</code>, so you never have to source a real NFT
+            to test a listing flow.
+          </p>
+          <p>
+            Sepolia data resets when the network does. Don&#39;t build a fixture
+            suite that assumes an auction created in March is still there in
+            July.
+          </p>
+        </div>
+        <nav class="pager">
+          <a class="prev" href="authentication.html"
+            ><span>Previous</span><b>Authentication</b></a
+          >
+          <a class="next" href="signing-model.html"
+            ><span>Next</span><b>The signing model</b></a
+          >
+        </nav>
+      </main>
+
+      <aside class="rail">
+        <h5>On this page</h5>
+        <a class="h2" href="#going-live">Going live</a
+        ><a class="h2" href="#sandbox-helpers">Sandbox helpers</a>
+      </aside>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script>
+      hljs.highlightAll();
+
+      // Copy buttons
+      document.querySelectorAll(".copy").forEach((btn) => {
+        btn.addEventListener("click", async () => {
+          const code = btn.closest(".code").querySelector("code").innerText;
+          await navigator.clipboard.writeText(code);
+          const was = btn.textContent;
+          btn.textContent = "Copied";
+          setTimeout(() => (btn.textContent = was), 1400);
+        });
+      });
+
+      // Theme
+      document.getElementById("theme-toggle").addEventListener("click", () => {
+        const next =
+          document.documentElement.dataset.theme === "dark" ? "light" : "dark";
+        document.documentElement.dataset.theme = next;
+        try {
+          localStorage.setItem("auctra-theme", next);
+        } catch {}
+      });
+
+      // Mobile nav
+      const sidebar = document.getElementById("sidebar");
+      const toggle = document.getElementById("menu-toggle");
+      toggle.addEventListener("click", () => {
+        const open = sidebar.dataset.open === "true";
+        sidebar.dataset.open = String(!open);
+        toggle.setAttribute("aria-expanded", String(!open));
+      });
+
+      // Filter the nav, rather than shipping a search index for fifteen pages.
+      const search = document.getElementById("search");
+      search.addEventListener("input", () => {
+        const q = search.value.toLowerCase().trim();
+        document.querySelectorAll(".sidebar a").forEach((a) => {
+          const hit = !q || (a.dataset.search ?? "").toLowerCase().includes(q);
+          a.style.display = hit ? "" : "none";
+        });
+        document.querySelectorAll(".sidebar h4").forEach((h) => {
+          let n = h.nextElementSibling,
+            any = false;
+          while (n && n.tagName === "A") {
+            if (n.style.display !== "none") any = true;
+            n = n.nextElementSibling;
+          }
+          h.style.display = any ? "" : "none";
+        });
+      });
+
+      // Highlight the rail entry for whatever section is on screen.
+      const links = [...document.querySelectorAll(".rail a")];
+      if (links.length) {
+        const seen = new Set();
+        const io = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((e) =>
+              e.isIntersecting
+                ? seen.add(e.target.id)
+                : seen.delete(e.target.id),
+            );
+            links.forEach((l) =>
+              l.classList.toggle("active", seen.has(l.hash.slice(1))),
+            );
+          },
+          { rootMargin: "-80px 0px -70% 0px" },
+        );
+        document
+          .querySelectorAll("h2[id], h3[id]")
+          .forEach((h) => io.observe(h));
+      }
+    </script>
+  </body>
+</html>

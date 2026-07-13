@@ -1,7 +1,7 @@
 ---
 title: 'Guide: list an item'
 description: Approve, create, confirm — the full seller flow, end to end.
-section: Guides
+section: Build
 slug: guide-list-an-item
 ---
 

@@ -1,7 +1,7 @@
 ---
 title: Errors
 description: One shape, stable codes, and a request id worth quoting.
-section: Core concepts
+section: Reference
 slug: errors
 ---
 

@@ -1,217 +1,68 @@
 <!doctype html>
 <html lang="en" data-theme="light">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Introduction — Auctra API</title>
-    <meta
-      name="description"
-      content="An auction house that settles on Ethereum, exposed as a JSON API."
-    />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap"
-      rel="stylesheet"
-    />
-    <link rel="stylesheet" href="styles.css" />
-    <script>
-      // Applied before first paint so a dark-mode reader never sees a white flash.
-      try {
-        const t = localStorage.getItem("auctra-theme");
-        if (t) document.documentElement.dataset.theme = t;
-        else if (matchMedia("(prefers-color-scheme: dark)").matches)
-          document.documentElement.dataset.theme = "dark";
-      } catch {}
-    </script>
-  </head>
-  <body>
-    <header class="masthead">
-      <button
-        class="icon-btn"
-        id="menu-toggle"
-        aria-label="Toggle navigation"
-        aria-expanded="false"
-      >
-        ☰
-      </button>
-      <a class="wordmark" href="introduction.html"
-        ><b>Auctra</b><span>Docs</span></a
-      >
-      <nav>
-        <a class="hide-sm" href="api-reference.html">API reference</a>
-        <a class="hide-sm" href="changelog.html">Changelog</a>
-        <a class="hide-sm" href="https://github.com/3nylar/auctra-api"
-          >GitHub</a
-        >
-        <button
-          class="icon-btn"
-          id="theme-toggle"
-          aria-label="Toggle colour theme"
-        >
-          ◐
-        </button>
-      </nav>
-    </header>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Introduction — Auctra API</title>
+<meta name="description" content="An auction house that settles on Ethereum, exposed as a JSON API.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<script>
+  // Applied before first paint so a dark-mode reader never sees a white flash.
+  try {
+    const t = localStorage.getItem("auctra-theme");
+    if (t) document.documentElement.dataset.theme = t;
+    else if (matchMedia("(prefers-color-scheme: dark)").matches)
+      document.documentElement.dataset.theme = "dark";
+  } catch {}
+</script>
+</head>
+<body>
 
-    <div class="shell">
-      <aside class="sidebar" id="sidebar">
-        <div class="search-wrap">
-          <input
-            id="search"
-            type="search"
-            placeholder="Search the docs"
-            autocomplete="off"
-          />
-        </div>
-        <h4>Get started</h4>
-        <a
-          href="introduction.html"
-          aria-current="page"
-          data-search="Introduction An auction house that settles on Ethereum, exposed as a JSON API."
-          >Introduction</a
-        ><a
-          href="quickstart.html"
-          data-search="Quickstart From zero to a live auction on Sepolia in four steps."
-          >Quickstart</a
-        ><a
-          href="authentication.html"
-          data-search="Authentication API keys, scopes, environments, and what to do when one leaks."
-          >Authentication</a
-        ><a
-          href="environments.html"
-          data-search="Environments Sandbox and production are the same code against different chains."
-          >Environments</a
-        >
-        <h4>Core concepts</h4>
-        <a
-          href="signing-model.html"
-          data-search="The signing model Why write endpoints return a transaction instead of doing the work."
-          >The signing model</a
-        ><a
-          href="auction-lifecycle.html"
-          data-search="Auction lifecycle Six states, one clock, and the two transitions nobody controls."
-          >Auction lifecycle</a
-        ><a
-          href="errors.html"
-          data-search="Errors One shape, stable codes, and a request id worth quoting."
-          >Errors</a
-        ><a
-          href="idempotency.html"
-          data-search="Idempotency Retry a POST safely, even when you never saw the response."
-          >Idempotency</a
-        ><a
-          href="pagination.html"
-          data-search="Pagination Cursors, not page numbers, and why that isn't pedantry."
-          >Pagination</a
-        ><a
-          href="rate-limits.html"
-          data-search="Rate limits 100 requests a minute, per key, and how to not need them."
-          >Rate limits</a
-        ><a
-          href="webhooks.html"
-          data-search="Webhooks Signed, retried, replayable — and how to verify one before you trust it."
-          >Webhooks</a
-        >
-        <h4>Guides</h4>
-        <a
-          href="guide-list-an-item.html"
-          data-search="Guide: list an item Approve, create, confirm — the full seller flow, end to end."
-          >Guide: list an item</a
-        ><a
-          href="guide-place-a-bid.html"
-          data-search="Guide: place a bid Read the minimum, prepare, sign, and handle being outbid."
-          >Guide: place a bid</a
-        ><a
-          href="guide-settle.html"
-          data-search="Guide: settle and pay out The clock runs out. Now someone has to close the loop."
-          >Guide: settle and pay out</a
-        >
-        <h4>Reference</h4>
-        <a
-          href="api-reference.html"
-          data-search="API reference Every endpoint, parameter and response."
-          >API reference</a
-        ><a
-          href="changelog.html"
-          data-search="Changelog Versions are dated. Breaking changes get a new one."
-          >Changelog</a
-        >
-      </aside>
+<header class="masthead">
+  <button class="icon-btn" id="menu-toggle" aria-label="Toggle navigation" aria-expanded="false">☰</button>
+  <a class="wordmark" href="introduction.html"><b>Auctra</b><span>Docs</span></a>
+  <nav>
+    <a class="hide-sm" href="api-reference.html">API reference</a>
+    <a class="hide-sm" href="changelog.html">Changelog</a>
+    <a class="hide-sm" href="https://github.com/3nylar/auctra-api">GitHub</a>
+    <button class="icon-btn" id="theme-toggle" aria-label="Toggle colour theme">◐</button>
+  </nav>
+</header>
 
-      <main class="content">
-        <p class="eyebrow">Get started</p>
-        <h1>Introduction</h1>
-        <p class="lede">
-          An auction house that settles on Ethereum, exposed as a JSON API.
-        </p>
-        <div class="ticket">
-          <p class="stub">Lot 117 · Live</p>
-          <div class="row">
-            <dt>Reserve</dt>
-            <dd>1.0000 ETH</dd>
-          </div>
-          <div class="row">
-            <dt>Standing bid</dt>
-            <dd>1.0500 ETH</dd>
-          </div>
-          <div class="row">
-            <dt>Minimum next</dt>
-            <dd>1.1025 ETH</dd>
-          </div>
-          <div class="clock" aria-hidden="true">
-            <div class="track"><div class="fill"></div></div>
-            <div class="legend">
-              <span>Clock</span><span><b>Late bid</b> · extended ×1</span>
-            </div>
-          </div>
-        </div>
-        <div class="prose">
-          <p>
-            Auctra runs English auctions — open bidding, ascending price, a
-            clock — and settles them on Ethereum. This API gives you the auction
-            house without the blockchain plumbing: list an item, watch bids
-            arrive over webhooks, settle, pay out. In JSON.
-          </p>
-          <p>
-            Everything that a bidder trusts is enforced by a contract, not by
-            us. Outbid bidders are refunded without anyone pressing a button. A
-            bid in the final five minutes pushes the clock back, so a sniper
-            cannot win by being fast. Once a single bid lands, nobody can pull
-            the lot — not the seller, not the contract&#39;s deployer, not
-            Auctra.
-          </p>
-          <h2 id="the-one-rule-that-shapes-this-api">
-            <a
-              class="anchor"
-              href="#the-one-rule-that-shapes-this-api"
-              aria-hidden="true"
-              >#</a
-            >The one rule that shapes this API
-          </h2>
-          <p>
-            A bid moves the bidder&#39;s own ETH. Only the bidder&#39;s private
-            key can authorise that.
-          </p>
-          <p>
-            We could have hidden this. An API that accepted
-            <code>POST /bids</code> and moved someone&#39;s money would need to
-            hold their key, which would make Auctra a custodian — the precise
-            thing the contract was written to avoid. So instead of pretending
-            the key doesn&#39;t exist, we hand it back to you:
-          </p>
-          <p>
-            <strong>Write endpoints return an unsigned transaction.</strong> You
-            sign it with the user&#39;s wallet and broadcast it, either yourself
-            or through <code>POST /v1/transactions</code>. Auctra never sees a
-            private key, and there is nothing we could be compelled to hand
-            over.
-          </p>
-          <div class="code">
-            <div class="bar">
-              <span>json</span><button class="copy" type="button">Copy</button>
-            </div>
-            <pre><code class="language-json">{
+<div class="shell">
+  <aside class="sidebar" id="sidebar">
+    <div class="search-wrap">
+      <input id="search" type="search" placeholder="Search the docs" autocomplete="off">
+    </div>
+    <h4>Get started</h4><a href="introduction.html" aria-current="page" data-search="Introduction An auction house that settles on Ethereum, exposed as a JSON API.">Introduction</a><a href="quickstart.html" data-search="Quickstart From zero to a live auction on Sepolia in four steps.">Quickstart</a><a href="authentication.html" data-search="Authentication API keys, scopes, environments, and what to do when one leaks.">Authentication</a><a href="environments.html" data-search="Environments Sandbox and production are the same code against different chains.">Environments</a><h4>Build</h4><a href="signing-model.html" data-search="The signing model Why write endpoints return a transaction instead of doing the work.">The signing model</a><a href="auction-lifecycle.html" data-search="Auction lifecycle Six states, one clock, and the two transitions nobody controls.">Auction lifecycle</a><a href="response-format.html" data-search="Response format The shapes every Auctra response follows, stated once.">Response format</a><a href="idempotency.html" data-search="Idempotency Retry a POST safely, even when you never saw the response.">Idempotency</a><a href="pagination.html" data-search="Pagination Cursors, not page numbers, and why that isn't pedantry.">Pagination</a><a href="rate-limits.html" data-search="Rate limits 100 requests a minute, per key, and how to not need them.">Rate limits</a><a href="webhooks.html" data-search="Webhooks Signed, retried, replayable — and how to verify one before you trust it.">Webhooks</a><a href="guide-list-an-item.html" data-search="Guide: list an item Approve, create, confirm — the full seller flow, end to end.">Guide: list an item</a><a href="guide-place-a-bid.html" data-search="Guide: place a bid Read the minimum, prepare, sign, and handle being outbid.">Guide: place a bid</a><a href="guide-settle.html" data-search="Guide: settle and pay out The clock runs out. Now someone has to close the loop.">Guide: settle and pay out</a><h4>Reference</h4><a href="errors.html" data-search="Errors One shape, stable codes, and a request id worth quoting.">Errors</a><a href="api-reference.html" data-search="API reference Every endpoint, parameter and response.">API reference</a><a href="changelog.html" data-search="Changelog Versions are dated. Breaking changes get a new one.">Changelog</a>
+  </aside>
+
+  <main class="content">
+    <p class="eyebrow">Get started</p>
+    <h1>Introduction</h1>
+      <p class="lede">An auction house that settles on Ethereum, exposed as a JSON API.</p>
+      <div class="ticket">
+  <p class="stub">Lot 117 · Live</p>
+  <div class="row"><dt>Reserve</dt><dd>1.0000 ETH</dd></div>
+  <div class="row"><dt>Standing bid</dt><dd>1.0500 ETH</dd></div>
+  <div class="row"><dt>Minimum next</dt><dd>1.1025 ETH</dd></div>
+  <div class="clock" aria-hidden="true">
+    <div class="track"><div class="fill"></div></div>
+    <div class="legend"><span>Clock</span><span><b>Late bid</b> · extended ×1</span></div>
+  </div>
+</div>
+      <div class="prose"><p>Auctra runs English auctions — open bidding, ascending price, a clock — and settles them on Ethereum. This API gives you the auction house without the blockchain plumbing: list an item, watch bids arrive over webhooks, settle, pay out. In JSON.</p>
+<p>Everything that a bidder trusts is enforced by a contract, not by us. Outbid bidders are refunded without anyone pressing a button. A bid in the final five minutes pushes the clock back, so a sniper cannot win by being fast. Once a single bid lands, nobody can pull the lot — not the seller, not the contract&#39;s deployer, not Auctra.</p>
+<h2 id="the-one-rule-that-shapes-this-api"><a class="anchor" href="#the-one-rule-that-shapes-this-api" aria-hidden="true">#</a>The one rule that shapes this API</h2>
+<p>A bid moves the bidder&#39;s own ETH. Only the bidder&#39;s private key can authorise that.</p>
+<p>We could have hidden this. An API that accepted <code>POST /bids</code> and moved someone&#39;s money would need to hold their key, which would make Auctra a custodian — the precise thing the contract was written to avoid. So instead of pretending the key doesn&#39;t exist, we hand it back to you:</p>
+<p><strong>Write endpoints return an unsigned transaction.</strong> You sign it with the user&#39;s wallet and broadcast it, either yourself or through <code>POST /v1/transactions</code>. Auctra never sees a private key, and there is nothing we could be compelled to hand over.</p>
+<div class="code">
+  <div class="bar"><span>json</span><button class="copy" type="button">Copy</button></div>
+  <pre><code class="language-json">{
   &quot;object&quot;: &quot;bid_intent&quot;,
   &quot;auction&quot;: &quot;auc_3f9a2c7b1d4e&quot;,
   &quot;amount_wei&quot;: &quot;1050000000000000000&quot;,
@@ -222,173 +73,104 @@
     &quot;chain_id&quot;: 11155111
   }
 }</code></pre>
-          </div>
-          <p>
-            For operations on a wallet <strong>your organisation owns</strong> —
-            listing your own inventory, settling your own auctions — you can
-            configure a signer and pass <code>mode: &quot;managed&quot;</code>,
-            and we&#39;ll broadcast for you. That option is never available for
-            bidding.
-          </p>
-          <h2 id="what-you-get">
-            <a class="anchor" href="#what-you-get" aria-hidden="true">#</a>What
-            you get
-          </h2>
-          <ul>
-            <li>
-              <strong>Auctions</strong> you create, browse, settle and cancel.
-            </li>
-            <li>
-              <strong>Bids</strong>, validated against the live minimum and
-              simulated before they cost anyone gas.
-            </li>
-            <li>
-              <strong>Refunds</strong> for outbid bidders, tracked as a
-              queryable balance rather than something a user has to know to go
-              find.
-            </li>
-            <li>
-              <strong>Webhooks</strong> signed with HMAC and retried with
-              backoff for 24 hours, backed by an event log you can replay
-              yourself.
-            </li>
-            <li>
-              <strong>A sandbox</strong> on Sepolia that exercises every code
-              path in production, with worthless ETH.
-            </li>
-          </ul>
-          <h2 id="two-conventions-worth-reading-before-you-write-code">
-            <a
-              class="anchor"
-              href="#two-conventions-worth-reading-before-you-write-code"
-              aria-hidden="true"
-              >#</a
-            >Two conventions worth reading before you write code
-          </h2>
-          <p>
-            <strong>Amounts are strings.</strong>
-            <code>&quot;1050000000000000000&quot;</code>, not
-            <code>1.05e18</code>. One ETH is 10<sup>18</sup> wei, and JSON
-            numbers are doubles, which lose integer precision above
-            2<sup>53</sup>. A naive <code>JSON.parse</code> silently turns
-            <code>&quot;1000000000000000001&quot;</code> into
-            <code>1000000000000000000</code> — one wei gone, and a bid that was
-            supposed to be the highest quietly isn&#39;t. Every response also
-            carries a lossy <code>*_display</code> field in ETH. It&#39;s for
-            showing to humans. Never do arithmetic on it.
-          </p>
-          <p>
-            <strong><code>end_time</code> moves.</strong> A bid inside the
-            anti-snipe window extends the auction. Read the new end time from
-            the <code>auction.extended</code> webhook; a countdown that caches
-            <code>end_time</code> at page load will tell your users the auction
-            is over while it is still taking bids.
-          </p>
-          <h2 id="start-here">
-            <a class="anchor" href="#start-here" aria-hidden="true">#</a>Start
-            here
-          </h2>
-          <p>
-            Get a key, make a call, and see an auction confirm on-chain in about
-            four minutes:
-            <strong><a href="quickstart.html">Quickstart →</a></strong>
-          </p>
-        </div>
-        <nav class="pager">
-          <div></div>
-          <a class="next" href="quickstart.html"
-            ><span>Next</span><b>Quickstart</b></a
-          >
-        </nav>
-      </main>
+</div><p>For operations on a wallet <strong>your organisation owns</strong> — listing your own inventory, settling your own auctions — you can configure a signer and pass <code>mode: &quot;managed&quot;</code>, and we&#39;ll broadcast for you. That option is never available for bidding.</p>
+<h2 id="what-you-get"><a class="anchor" href="#what-you-get" aria-hidden="true">#</a>What you get</h2>
+<ul>
+<li><strong>Auctions</strong> you create, browse, settle and cancel.</li>
+<li><strong>Bids</strong>, validated against the live minimum and simulated before they cost anyone gas.</li>
+<li><strong>Refunds</strong> for outbid bidders, tracked as a queryable balance rather than something a user has to know to go find.</li>
+<li><strong>Webhooks</strong> signed with HMAC and retried with backoff for 24 hours, backed by an event log you can replay yourself.</li>
+<li><strong>A sandbox</strong> on Sepolia that exercises every code path in production, with worthless ETH.</li>
+</ul>
+<h2 id="two-conventions-worth-reading-before-you-write-code"><a class="anchor" href="#two-conventions-worth-reading-before-you-write-code" aria-hidden="true">#</a>Two conventions worth reading before you write code</h2>
+<p><strong>Amounts are strings.</strong> <code>&quot;1050000000000000000&quot;</code>, not <code>1.05e18</code>. One ETH is 10<sup>18</sup> wei, and JSON numbers are doubles, which lose integer precision above 2<sup>53</sup>. A naive <code>JSON.parse</code> silently turns <code>&quot;1000000000000000001&quot;</code> into <code>1000000000000000000</code> — one wei gone, and a bid that was supposed to be the highest quietly isn&#39;t. Every response also carries a lossy <code>*_display</code> field in ETH. It&#39;s for showing to humans. Never do arithmetic on it.</p>
+<p><strong><code>end_time</code> moves.</strong> A bid inside the anti-snipe window extends the auction. Read the new end time from the <code>auction.extended</code> webhook; a countdown that caches <code>end_time</code> at page load will tell your users the auction is over while it is still taking bids.</p>
+<h2 id="start-here"><a class="anchor" href="#start-here" aria-hidden="true">#</a>Start here</h2>
+<p>Get a key, make a call, and see an auction confirm on-chain in about four minutes: <strong><a href="quickstart.html">Quickstart →</a></strong></p>
+</div>
+      <nav class="pager">
+    <div></div>
+    <a class="next" href="quickstart.html"><span>Next</span><b>Quickstart</b></a>
+  </nav>
+  </main>
 
-      <aside class="rail">
-        <h5>On this page</h5>
-        <a class="h2" href="#the-one-rule-that-shapes-this-api"
-          >The one rule that shapes this API</a
-        ><a class="h2" href="#what-you-get">What you get</a
-        ><a
-          class="h2"
-          href="#two-conventions-worth-reading-before-you-write-code"
-          >Two conventions worth reading before you write code</a
-        ><a class="h2" href="#start-here">Start here</a>
-      </aside>
-    </div>
+  <aside class="rail"><h5>On this page</h5><a class="h2" href="#the-one-rule-that-shapes-this-api">The one rule that shapes this API</a><a class="h2" href="#what-you-get">What you get</a><a class="h2" href="#two-conventions-worth-reading-before-you-write-code">Two conventions worth reading before you write code</a><a class="h2" href="#start-here">Start here</a></aside>
+</div>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
-    <script>
-      hljs.highlightAll();
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<script>
+  hljs.highlightAll();
 
-      // Copy buttons
-      document.querySelectorAll(".copy").forEach((btn) => {
-        btn.addEventListener("click", async () => {
-          const code = btn.closest(".code").querySelector("code").innerText;
-          await navigator.clipboard.writeText(code);
-          const was = btn.textContent;
-          btn.textContent = "Copied";
-          setTimeout(() => (btn.textContent = was), 1400);
-        });
-      });
+  // Copy buttons — copy the active language panel when there's a tab strip,
+  // otherwise the block's only <code>.
+  document.querySelectorAll(".copy").forEach((btn) => {
+    btn.addEventListener("click", async () => {
+      const block = btn.closest(".code");
+      const panel = block.querySelector(".lang-panel.active") ?? block;
+      const code = panel.querySelector("code").innerText;
+      await navigator.clipboard.writeText(code);
+      const was = btn.textContent;
+      btn.textContent = "Copied";
+      setTimeout(() => (btn.textContent = was), 1400);
+    });
+  });
 
-      // Theme
-      document.getElementById("theme-toggle").addEventListener("click", () => {
-        const next =
-          document.documentElement.dataset.theme === "dark" ? "light" : "dark";
-        document.documentElement.dataset.theme = next;
-        try {
-          localStorage.setItem("auctra-theme", next);
-        } catch {}
-      });
-
-      // Mobile nav
-      const sidebar = document.getElementById("sidebar");
-      const toggle = document.getElementById("menu-toggle");
-      toggle.addEventListener("click", () => {
-        const open = sidebar.dataset.open === "true";
-        sidebar.dataset.open = String(!open);
-        toggle.setAttribute("aria-expanded", String(!open));
-      });
-
-      // Filter the nav, rather than shipping a search index for fifteen pages.
-      const search = document.getElementById("search");
-      search.addEventListener("input", () => {
-        const q = search.value.toLowerCase().trim();
-        document.querySelectorAll(".sidebar a").forEach((a) => {
-          const hit = !q || (a.dataset.search ?? "").toLowerCase().includes(q);
-          a.style.display = hit ? "" : "none";
-        });
-        document.querySelectorAll(".sidebar h4").forEach((h) => {
-          let n = h.nextElementSibling,
-            any = false;
-          while (n && n.tagName === "A") {
-            if (n.style.display !== "none") any = true;
-            n = n.nextElementSibling;
-          }
-          h.style.display = any ? "" : "none";
-        });
-      });
-
-      // Highlight the rail entry for whatever section is on screen.
-      const links = [...document.querySelectorAll(".rail a")];
-      if (links.length) {
-        const seen = new Set();
-        const io = new IntersectionObserver(
-          (entries) => {
-            entries.forEach((e) =>
-              e.isIntersecting
-                ? seen.add(e.target.id)
-                : seen.delete(e.target.id),
-            );
-            links.forEach((l) =>
-              l.classList.toggle("active", seen.has(l.hash.slice(1))),
-            );
-          },
-          { rootMargin: "-80px 0px -70% 0px" },
+  // Language tabs on multi-sample code blocks
+  document.querySelectorAll(".lang-group").forEach((group) => {
+    const tabs = [...group.querySelectorAll(".lang-tab")];
+    const panels = [...group.querySelectorAll(".lang-panel")];
+    tabs.forEach((tab) => {
+      tab.addEventListener("click", () => {
+        const lang = tab.dataset.lang;
+        tabs.forEach((t) => t.classList.toggle("active", t === tab));
+        panels.forEach((p) =>
+          p.classList.toggle("active", p.dataset.lang === lang),
         );
-        document
-          .querySelectorAll("h2[id], h3[id]")
-          .forEach((h) => io.observe(h));
-      }
-    </script>
-  </body>
+      });
+    });
+  });
+
+  // Theme
+  document.getElementById("theme-toggle").addEventListener("click", () => {
+    const next = document.documentElement.dataset.theme === "dark" ? "light" : "dark";
+    document.documentElement.dataset.theme = next;
+    try { localStorage.setItem("auctra-theme", next); } catch {}
+  });
+
+  // Mobile nav
+  const sidebar = document.getElementById("sidebar");
+  const toggle = document.getElementById("menu-toggle");
+  toggle.addEventListener("click", () => {
+    const open = sidebar.dataset.open === "true";
+    sidebar.dataset.open = String(!open);
+    toggle.setAttribute("aria-expanded", String(!open));
+  });
+
+  // Filter the nav, rather than shipping a search index for fifteen pages.
+  const search = document.getElementById("search");
+  search.addEventListener("input", () => {
+    const q = search.value.toLowerCase().trim();
+    document.querySelectorAll(".sidebar a").forEach((a) => {
+      const hit = !q || (a.dataset.search ?? "").toLowerCase().includes(q);
+      a.style.display = hit ? "" : "none";
+    });
+    document.querySelectorAll(".sidebar h4").forEach((h) => {
+      let n = h.nextElementSibling, any = false;
+      while (n && n.tagName === "A") { if (n.style.display !== "none") any = true; n = n.nextElementSibling; }
+      h.style.display = any ? "" : "none";
+    });
+  });
+
+  // Highlight the rail entry for whatever section is on screen.
+  const links = [...document.querySelectorAll(".rail a")];
+  if (links.length) {
+    const seen = new Set();
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach((e) => e.isIntersecting ? seen.add(e.target.id) : seen.delete(e.target.id));
+      links.forEach((l) => l.classList.toggle("active", seen.has(l.hash.slice(1))));
+    }, { rootMargin: "-80px 0px -70% 0px" });
+    document.querySelectorAll("h2[id], h3[id]").forEach((h) => io.observe(h));
+  }
+</script>
+</body>
 </html>

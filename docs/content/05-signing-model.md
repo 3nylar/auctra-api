@@ -1,7 +1,7 @@
 ---
 title: The signing model
 description: Why write endpoints return a transaction instead of doing the work.
-section: Core concepts
+section: Build
 slug: signing-model
 ---
 

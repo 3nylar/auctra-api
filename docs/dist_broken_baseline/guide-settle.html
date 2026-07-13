@@ -1,0 +1,394 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Guide: settle and pay out — Auctra API</title>
+    <meta
+      name="description"
+      content="The clock runs out. Now someone has to close the loop."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+    <script>
+      // Applied before first paint so a dark-mode reader never sees a white flash.
+      try {
+        const t = localStorage.getItem("auctra-theme");
+        if (t) document.documentElement.dataset.theme = t;
+        else if (matchMedia("(prefers-color-scheme: dark)").matches)
+          document.documentElement.dataset.theme = "dark";
+      } catch {}
+    </script>
+  </head>
+  <body>
+    <header class="masthead">
+      <button
+        class="icon-btn"
+        id="menu-toggle"
+        aria-label="Toggle navigation"
+        aria-expanded="false"
+      >
+        ☰
+      </button>
+      <a class="wordmark" href="introduction.html"
+        ><b>Auctra</b><span>Docs</span></a
+      >
+      <nav>
+        <a class="hide-sm" href="api-reference.html">API reference</a>
+        <a class="hide-sm" href="changelog.html">Changelog</a>
+        <a class="hide-sm" href="https://github.com/3nylar/auctra-api"
+          >GitHub</a
+        >
+        <button
+          class="icon-btn"
+          id="theme-toggle"
+          aria-label="Toggle colour theme"
+        >
+          ◐
+        </button>
+      </nav>
+    </header>
+
+    <div class="shell">
+      <aside class="sidebar" id="sidebar">
+        <div class="search-wrap">
+          <input
+            id="search"
+            type="search"
+            placeholder="Search the docs"
+            autocomplete="off"
+          />
+        </div>
+        <h4>Get started</h4>
+        <a
+          href="introduction.html"
+          data-search="Introduction An auction house that settles on Ethereum, exposed as a JSON API."
+          >Introduction</a
+        ><a
+          href="quickstart.html"
+          data-search="Quickstart From zero to a live auction on Sepolia in four steps."
+          >Quickstart</a
+        ><a
+          href="authentication.html"
+          data-search="Authentication API keys, scopes, environments, and what to do when one leaks."
+          >Authentication</a
+        ><a
+          href="environments.html"
+          data-search="Environments Sandbox and production are the same code against different chains."
+          >Environments</a
+        >
+        <h4>Core concepts</h4>
+        <a
+          href="signing-model.html"
+          data-search="The signing model Why write endpoints return a transaction instead of doing the work."
+          >The signing model</a
+        ><a
+          href="auction-lifecycle.html"
+          data-search="Auction lifecycle Six states, one clock, and the two transitions nobody controls."
+          >Auction lifecycle</a
+        ><a
+          href="errors.html"
+          data-search="Errors One shape, stable codes, and a request id worth quoting."
+          >Errors</a
+        ><a
+          href="idempotency.html"
+          data-search="Idempotency Retry a POST safely, even when you never saw the response."
+          >Idempotency</a
+        ><a
+          href="pagination.html"
+          data-search="Pagination Cursors, not page numbers, and why that isn't pedantry."
+          >Pagination</a
+        ><a
+          href="rate-limits.html"
+          data-search="Rate limits 100 requests a minute, per key, and how to not need them."
+          >Rate limits</a
+        ><a
+          href="webhooks.html"
+          data-search="Webhooks Signed, retried, replayable — and how to verify one before you trust it."
+          >Webhooks</a
+        >
+        <h4>Guides</h4>
+        <a
+          href="guide-list-an-item.html"
+          data-search="Guide: list an item Approve, create, confirm — the full seller flow, end to end."
+          >Guide: list an item</a
+        ><a
+          href="guide-place-a-bid.html"
+          data-search="Guide: place a bid Read the minimum, prepare, sign, and handle being outbid."
+          >Guide: place a bid</a
+        ><a
+          href="guide-settle.html"
+          aria-current="page"
+          data-search="Guide: settle and pay out The clock runs out. Now someone has to close the loop."
+          >Guide: settle and pay out</a
+        >
+        <h4>Reference</h4>
+        <a
+          href="api-reference.html"
+          data-search="API reference Every endpoint, parameter and response."
+          >API reference</a
+        ><a
+          href="changelog.html"
+          data-search="Changelog Versions are dated. Breaking changes get a new one."
+          >Changelog</a
+        >
+      </aside>
+
+      <main class="content">
+        <p class="eyebrow">Guides</p>
+        <h1>Guide: settle and pay out</h1>
+        <p class="lede">
+          The clock runs out. Now someone has to close the loop.
+        </p>
+
+        <div class="prose">
+          <p>
+            An auction that has ended is not an auction that has settled. The
+            item and the ETH are both still sitting in the contract.
+          </p>
+          <h2 id="what-settlement-does">
+            <a class="anchor" href="#what-settlement-does" aria-hidden="true"
+              >#</a
+            >What settlement does
+          </h2>
+          <p>
+            <code>settle</code> moves the item to the winner and credits the
+            proceeds to the seller. One transaction, both sides. If there were
+            no bids, it returns the item to the seller instead.
+          </p>
+          <p>
+            Anyone can call it. Not the seller, not the winner —
+            <em>anyone</em>, once <code>end_time</code> has passed. This is
+            deliberate: if settlement were the seller&#39;s privilege, a seller
+            with second thoughts could simply refuse, and the winner&#39;s ETH
+            would sit in escrow forever. Making it public means the winner can
+            always close their own auction.
+          </p>
+          <p>
+            For your integration, that&#39;s a floor, not a plan.
+            <strong>Settle your own auctions.</strong>
+          </p>
+          <h2 id="settle-on-the-auctionended-event">
+            <a
+              class="anchor"
+              href="#settle-on-the-auctionended-event"
+              aria-hidden="true"
+              >#</a
+            >Settle on the <code>auction.ended</code> event
+          </h2>
+          <div class="code">
+            <div class="bar">
+              <span>js</span><button class="copy" type="button">Copy</button>
+            </div>
+            <pre><code class="language-js">app.post(&quot;/hooks/auctra&quot;, async (req, res) =&gt; {
+  if (!verify(req.rawBody, req.headers[&quot;auctra-signature&quot;], SECRET)) return res.sendStatus(400);
+  res.sendStatus(200);
+
+  const event = JSON.parse(req.rawBody);
+  if (event.type !== &quot;auction.ended&quot;) return;
+
+  await queue.add(&quot;settle&quot;, { auctionId: event.data.object.id }, {
+    attempts: 5,
+    backoff: { type: &quot;exponential&quot;, delay: 30_000 },
+  });
+});</code></pre>
+          </div>
+          <p>
+            On a queue, not in the handler. Settlement is a chain transaction:
+            it can take a minute, or fail because gas spiked, and neither
+            belongs inside a ten-second webhook timeout.
+          </p>
+          <h2 id="settling-with-a-managed-signer">
+            <a
+              class="anchor"
+              href="#settling-with-a-managed-signer"
+              aria-hidden="true"
+              >#</a
+            >Settling with a managed signer
+          </h2>
+          <p>
+            This is one of the operations where the wallet is <em>yours</em>, so
+            you can hand us the key and stop thinking about it.
+          </p>
+          <div class="code">
+            <div class="bar">
+              <span>js</span><button class="copy" type="button">Copy</button>
+            </div>
+            <pre><code class="language-js">const settled = await post(`/v1/auctions/${auctionId}/settle`, { mode: &quot;managed&quot; });
+// { &quot;status&quot;: &quot;ended&quot;, &quot;transaction_hash&quot;: &quot;0x4c1d…&quot; }</code></pre>
+          </div>
+          <p>
+            We broadcast from your configured signer and return the hash.
+            <code>status</code> is still <code>ended</code> — it becomes
+            <code>settled</code> when the log confirms and
+            <code>auction.settled</code> fires.
+          </p>
+          <p>
+            Keep that wallet funded. A settlement that fails on gas is a winner
+            who can&#39;t collect.
+          </p>
+          <p>
+            Without a managed signer, <code>mode</code> defaults to
+            <code>prepared</code> and you get a transaction to sign, exactly
+            like everywhere else.
+          </p>
+          <h2 id="confirm">
+            <a class="anchor" href="#confirm" aria-hidden="true">#</a>Confirm
+          </h2>
+          <div class="code">
+            <div class="bar">
+              <span>js</span><button class="copy" type="button">Copy</button>
+            </div>
+            <pre><code class="language-js">socket.on(&quot;auction.settled&quot;, ({ data }) =&gt; {
+  const { winner, winning_bid_wei, transactions } = data.object;
+  // Item is with the winner. Proceeds are credited to the seller.
+});</code></pre>
+          </div>
+          <p>
+            The seller&#39;s proceeds are <strong>credited</strong>, not sent —
+            same pull-payment rule that protects outbid bidders. The seller
+            collects with the same <code>POST /v1/refunds/withdraw</code> call a
+            bidder uses.
+          </p>
+          <h2 id="when-nobody-bid">
+            <a class="anchor" href="#when-nobody-bid" aria-hidden="true">#</a
+            >When nobody bid
+          </h2>
+          <p>
+            Settlement of a bidless auction returns the item to the seller and
+            credits nobody. <code>winner</code> is the zero address,
+            <code>winning_bid_wei</code> is <code>&quot;0&quot;</code>.
+          </p>
+          <p>
+            Watch for this in your handler. <code>if (!winner)</code> is not the
+            check you want — <code>&quot;0x0000…0000&quot;</code> is truthy.
+          </p>
+          <div class="code">
+            <div class="bar">
+              <span>js</span><button class="copy" type="button">Copy</button>
+            </div>
+            <pre><code class="language-js">const ZERO = &quot;0x0000000000000000000000000000000000000000&quot;;
+if (data.object.winner === ZERO) return handleNoSale(data.object.id);</code></pre>
+          </div>
+          <h2 id="the-claim-path">
+            <a class="anchor" href="#the-claim-path" aria-hidden="true">#</a>The
+            claim path
+          </h2>
+          <p>
+            <code>settle</code> transfers the item automatically.
+            <code>claimItem</code> exists for the edge case where that transfer
+            failed — a winner bidding from a contract that can&#39;t receive
+            ERC-721s, most often — and lets the winner pull the item themselves
+            once they&#39;ve fixed their end.
+          </p>
+          <p>
+            Most integrations never call it. Expose it anyway, on the auction
+            detail page for a winner whose item hasn&#39;t arrived. The
+            alternative is a support ticket you can&#39;t resolve.
+          </p>
+        </div>
+        <nav class="pager">
+          <a class="prev" href="guide-place-a-bid.html"
+            ><span>Previous</span><b>Guide: place a bid</b></a
+          >
+          <a class="next" href="api-reference.html"
+            ><span>Next</span><b>API reference</b></a
+          >
+        </nav>
+      </main>
+
+      <aside class="rail">
+        <h5>On this page</h5>
+        <a class="h2" href="#what-settlement-does">What settlement does</a
+        ><a class="h2" href="#settle-on-the-auctionended-event"
+          >Settle on the <code>auction.ended</code> event</a
+        ><a class="h2" href="#settling-with-a-managed-signer"
+          >Settling with a managed signer</a
+        ><a class="h2" href="#confirm">Confirm</a
+        ><a class="h2" href="#when-nobody-bid">When nobody bid</a
+        ><a class="h2" href="#the-claim-path">The claim path</a>
+      </aside>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script>
+      hljs.highlightAll();
+
+      // Copy buttons
+      document.querySelectorAll(".copy").forEach((btn) => {
+        btn.addEventListener("click", async () => {
+          const code = btn.closest(".code").querySelector("code").innerText;
+          await navigator.clipboard.writeText(code);
+          const was = btn.textContent;
+          btn.textContent = "Copied";
+          setTimeout(() => (btn.textContent = was), 1400);
+        });
+      });
+
+      // Theme
+      document.getElementById("theme-toggle").addEventListener("click", () => {
+        const next =
+          document.documentElement.dataset.theme === "dark" ? "light" : "dark";
+        document.documentElement.dataset.theme = next;
+        try {
+          localStorage.setItem("auctra-theme", next);
+        } catch {}
+      });
+
+      // Mobile nav
+      const sidebar = document.getElementById("sidebar");
+      const toggle = document.getElementById("menu-toggle");
+      toggle.addEventListener("click", () => {
+        const open = sidebar.dataset.open === "true";
+        sidebar.dataset.open = String(!open);
+        toggle.setAttribute("aria-expanded", String(!open));
+      });
+
+      // Filter the nav, rather than shipping a search index for fifteen pages.
+      const search = document.getElementById("search");
+      search.addEventListener("input", () => {
+        const q = search.value.toLowerCase().trim();
+        document.querySelectorAll(".sidebar a").forEach((a) => {
+          const hit = !q || (a.dataset.search ?? "").toLowerCase().includes(q);
+          a.style.display = hit ? "" : "none";
+        });
+        document.querySelectorAll(".sidebar h4").forEach((h) => {
+          let n = h.nextElementSibling,
+            any = false;
+          while (n && n.tagName === "A") {
+            if (n.style.display !== "none") any = true;
+            n = n.nextElementSibling;
+          }
+          h.style.display = any ? "" : "none";
+        });
+      });
+
+      // Highlight the rail entry for whatever section is on screen.
+      const links = [...document.querySelectorAll(".rail a")];
+      if (links.length) {
+        const seen = new Set();
+        const io = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((e) =>
+              e.isIntersecting
+                ? seen.add(e.target.id)
+                : seen.delete(e.target.id),
+            );
+            links.forEach((l) =>
+              l.classList.toggle("active", seen.has(l.hash.slice(1))),
+            );
+          },
+          { rootMargin: "-80px 0px -70% 0px" },
+        );
+        document
+          .querySelectorAll("h2[id], h3[id]")
+          .forEach((h) => io.observe(h));
+      }
+    </script>
+  </body>
+</html>

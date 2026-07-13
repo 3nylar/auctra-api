@@ -1,11 +1,11 @@
 {
-  "name": "@auctra/docs",
+  "name": "auctra-docs",
   "private": true,
   "type": "module",
   "scripts": {
-    "build": "node scripts/build.mjs",
-    "serve": "node scripts/build.mjs && python3 -m http.server 4000 --directory dist",
-    "dev": "node scripts/build.mjs && echo 'open docs/dist/index.html'"
+    "build": "node scripts/build.mjs"
   },
-  "dependencies": { "marked": "^14.1.4" }
+  "dependencies": {
+    "marked": "^18.0.6"
+  }
 }

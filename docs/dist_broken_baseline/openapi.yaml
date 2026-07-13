@@ -1,0 +1,926 @@
+openapi: 3.1.0
+
+info:
+  title: Auctra API
+  version: "2026-07-01"
+  summary: On-chain English auctions, over HTTP.
+  description: |
+    Auctra runs sealed-clock English auctions that settle on Ethereum. This API
+    gives you the auction house without the blockchain plumbing: list an item,
+    watch bids arrive over webhooks, settle, and pay out — in JSON.
+
+    **The one rule that shapes everything.** A bid moves the bidder's own ETH,
+    so only the bidder's private key can authorise it. Auctra never holds that
+    key. Write endpoints return an unsigned `transaction_request`; you sign it
+    with the user's wallet and broadcast it, either yourself or through
+    `POST /v1/transactions`.
+
+    Amounts are decimal strings of wei. Never JSON numbers — 1 ETH is 10^18 wei,
+    and a double loses integer precision above 2^53.
+  termsOfService: https://auctra.dev/terms
+  contact:
+    name: Auctra developer support
+    url: https://docs.auctra.dev
+    email: developers@auctra.dev
+  license:
+    name: MIT
+    identifier: MIT
+
+servers:
+  - url: https://auctra-api-production.up.railway.app
+    description: Sandbox — Sepolia testnet. Test ETH, real code paths.
+    
+security:
+  - bearerAuth: []
+
+tags:
+  - name: Auctions
+    description: Create, browse, settle and cancel auctions.
+  - name: Bids
+    description: Place bids and read the bid history of an auction.
+  - name: Refunds
+    description: Credited balances for outbid bidders, and how to withdraw them.
+  - name: Transactions
+    description: Broadcast signed transactions and poll for confirmation.
+  - name: Webhooks
+    description: Subscribe to auction events and replay the event log.
+  - name: Health
+    description: Liveness and dependency status. No authentication required.
+
+paths:
+  /v1/health:
+    get:
+      tags: [Health]
+      summary: Check API health
+      security: []
+      description: |
+        Reports the two dependencies that can take the API down: the database
+        and the RPC node. Use `head_block` to tell whether the indexer is
+        keeping up with the chain.
+      responses:
+        "200":
+          description: Health report.
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Health" }
+              example:
+                object: health
+                status: ok
+                environment: sandbox
+                chain_id: 11155111
+                head_block: 6142398
+                database: ok
+                rpc: ok
+                managed_signer: disabled
+
+  /v1/auctions:
+    get:
+      tags: [Auctions]
+      summary: List auctions
+      parameters:
+        - $ref: "#/components/parameters/Limit"
+        - $ref: "#/components/parameters/StartingAfter"
+        - name: status
+          in: query
+          description: |
+            Filter by lifecycle status. Note this is derived from the chain
+            clock at read time, so an auction whose `end_time` just passed is
+            reported `ended` even if the settlement transaction hasn't been
+            sent yet.
+          schema:
+            type: string
+            enum: [pending, live, ending, ended, settled, cancelled]
+        - name: seller
+          in: query
+          schema: { $ref: "#/components/schemas/Address" }
+        - name: token_contract
+          in: query
+          schema: { $ref: "#/components/schemas/Address" }
+      responses:
+        "200":
+          description: A paginated list of auctions.
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/List"
+                  - type: object
+                    properties:
+                      data:
+                        type: array
+                        items: { $ref: "#/components/schemas/Auction" }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "429": { $ref: "#/components/responses/RateLimited" }
+
+    post:
+      tags: [Auctions]
+      summary: Create an auction
+      description: |
+        Escrows the item and opens the clock. Returns `201` with a
+        `transaction_request` you must sign as the seller.
+
+        The auction is `pending` until the `AuctionCreated` log confirms — a
+        broadcast is not a confirmation. Wait for the `auction.created` webhook
+        before showing it to bidders.
+
+        Creating an auction requires the AuctionHouse contract to already be
+        approved to transfer the token. Call `approve()` or `setApprovalForAll()`
+        on the token contract first, or the transaction will revert with
+        `NotApprovedForTransfer`.
+      parameters:
+        - $ref: "#/components/parameters/IdempotencyKey"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/CreateAuctionRequest" }
+            example:
+              mode: prepared
+              seller: "0x7a3f1c8b9d2e4f6a0b1c2d3e4f5a6b7c8d9e0f1a"
+              token_contract: "0x2b1d4e6f8a0c2e4f6a8b0d2f4a6c8e0b2d4f6a8c"
+              token_id: "42"
+              reserve_price_wei: "1000000000000000000"
+              duration_seconds: 86400
+              min_increment_bps: 500
+              metadata:
+                lot_number: "L-0117"
+                catalogue: spring-2026
+      responses:
+        "201":
+          description: Auction created, awaiting signature and confirmation.
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/Auction"
+                  - type: object
+                    properties:
+                      transaction_request: { $ref: "#/components/schemas/TransactionRequest" }
+                      next_step: { type: string }
+        "400": { $ref: "#/components/responses/BadRequest" }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "409": { $ref: "#/components/responses/IdempotencyConflict" }
+        "422": { $ref: "#/components/responses/ChainError" }
+
+  /v1/auctions/{id}:
+    get:
+      tags: [Auctions]
+      summary: Retrieve an auction
+      parameters:
+        - $ref: "#/components/parameters/AuctionId"
+      responses:
+        "200":
+          description: The auction.
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Auction" }
+        "404": { $ref: "#/components/responses/NotFound" }
+
+  /v1/auctions/{id}/bids:
+    get:
+      tags: [Bids]
+      summary: List bids on an auction
+      parameters:
+        - $ref: "#/components/parameters/AuctionId"
+        - $ref: "#/components/parameters/Limit"
+        - $ref: "#/components/parameters/StartingAfter"
+      responses:
+        "200":
+          description: Bid history, newest first.
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/List"
+                  - type: object
+                    properties:
+                      data:
+                        type: array
+                        items: { $ref: "#/components/schemas/Bid" }
+        "404": { $ref: "#/components/responses/NotFound" }
+
+    post:
+      tags: [Bids]
+      summary: Place a bid
+      description: |
+        Validates the bid against the live minimum, simulates it against the
+        bidder's address, and returns an unsigned transaction. Nothing is
+        committed until the bidder signs and the transaction confirms.
+
+        There is no `managed` mode here. Bidding spends the bidder's balance;
+        no configuration makes it appropriate for Auctra to do that on their
+        behalf.
+
+        A bid landing inside the final `extension_window_seconds` pushes the
+        end time back, up to `max_extensions` times. Your countdown must read
+        `end_time` from the `auction.extended` webhook, not cache it.
+      parameters:
+        - $ref: "#/components/parameters/AuctionId"
+        - $ref: "#/components/parameters/IdempotencyKey"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [bidder, amount_wei]
+              properties:
+                bidder: { $ref: "#/components/schemas/Address" }
+                amount_wei: { $ref: "#/components/schemas/Wei" }
+            example:
+              bidder: "0x9c8b7a6f5e4d3c2b1a0f9e8d7c6b5a4f3e2d1c0b"
+              amount_wei: "1050000000000000000"
+      responses:
+        "200":
+          description: A bid intent with a transaction to sign.
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/BidIntent" }
+        "400":
+          description: |
+            The bid was rejected before it cost anyone gas. `bid_below_minimum`
+            carries the current floor in `detail.minimum_bid_wei`.
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Error" }
+              example:
+                error:
+                  type: invalid_request_error
+                  code: bid_below_minimum
+                  message: Bid does not clear the current minimum.
+                  param: amount_wei
+                  detail:
+                    minimum_bid_wei: "1102500000000000000"
+                  request_id: req_9f2ac71b3d8e4a05
+                  docs_url: https://docs.auctra.dev/errors#bid_below_minimum
+        "404": { $ref: "#/components/responses/NotFound" }
+
+  /v1/auctions/{id}/settle:
+    post:
+      tags: [Auctions]
+      summary: Settle an ended auction
+      description: |
+        Transfers the item to the winner and credits the proceeds to the seller.
+        Callable by anyone once `end_time` has passed — settlement is a public
+        good, not a privilege. Set `mode: "managed"` to have Auctra broadcast
+        it from your configured signer.
+      parameters:
+        - $ref: "#/components/parameters/AuctionId"
+        - $ref: "#/components/parameters/IdempotencyKey"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                mode:
+                  type: string
+                  enum: [prepared, managed]
+                  default: prepared
+      responses:
+        "200":
+          description: Settlement transaction prepared or broadcast.
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Auction" }
+        "400":
+          description: The auction has not ended yet (`auction_not_ended`).
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Error" }
+
+  /v1/auctions/{id}/cancel:
+    post:
+      tags: [Auctions]
+      summary: Cancel an auction
+      description: |
+        Only possible while the auction has zero bids. Once someone has
+        committed ETH, no one — not the seller, not the contract deployer, not
+        Auctra — can pull the lot.
+      parameters:
+        - $ref: "#/components/parameters/AuctionId"
+        - $ref: "#/components/parameters/IdempotencyKey"
+      responses:
+        "200":
+          description: Cancellation transaction prepared.
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Auction" }
+        "400":
+          description: The auction already has bids (`auction_has_bids`).
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Error" }
+
+  /v1/auctions/{id}/claim:
+    post:
+      tags: [Auctions]
+      summary: Claim a won item
+      description: Prepares `claimItem()` for the winning bidder.
+      parameters:
+        - $ref: "#/components/parameters/AuctionId"
+        - $ref: "#/components/parameters/IdempotencyKey"
+      responses:
+        "200":
+          description: Claim transaction prepared.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  object: { type: string, const: claim_intent }
+                  auction: { type: string }
+                  transaction_request: { $ref: "#/components/schemas/TransactionRequest" }
+
+  /v1/refunds:
+    get:
+      tags: [Refunds]
+      summary: List refund credits
+      description: |
+        When a bidder is outbid, the contract credits them rather than sending
+        ETH back. Pushing a refund would let a malicious contract revert on
+        receive and freeze the auction for everyone. Refunds are pulled.
+      parameters:
+        - $ref: "#/components/parameters/Limit"
+        - $ref: "#/components/parameters/StartingAfter"
+        - name: bidder
+          in: query
+          schema: { $ref: "#/components/schemas/Address" }
+        - name: withdrawn
+          in: query
+          schema: { type: boolean }
+      responses:
+        "200":
+          description: A paginated list of refund credits.
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/List"
+                  - type: object
+                    properties:
+                      data:
+                        type: array
+                        items: { $ref: "#/components/schemas/Refund" }
+
+  /v1/refunds/balance:
+    get:
+      tags: [Refunds]
+      summary: Read a withdrawable balance
+      description: Reads `pendingReturns()` straight from the chain, not the cache.
+      parameters:
+        - name: bidder
+          in: query
+          required: true
+          schema: { $ref: "#/components/schemas/Address" }
+      responses:
+        "200":
+          description: The live withdrawable balance.
+          content:
+            application/json:
+              example:
+                object: refund_balance
+                bidder: "0x9c8b7a6f5e4d3c2b1a0f9e8d7c6b5a4f3e2d1c0b"
+                withdrawable_wei: "1050000000000000000"
+                withdrawable_display: "1.05"
+                source: chain
+
+  /v1/refunds/withdraw:
+    post:
+      tags: [Refunds]
+      summary: Withdraw a refund balance
+      description: |
+        Prepares `withdraw()`, which sweeps the bidder's entire credited
+        balance across all auctions in a single transaction.
+      parameters:
+        - $ref: "#/components/parameters/IdempotencyKey"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [bidder]
+              properties:
+                bidder: { $ref: "#/components/schemas/Address" }
+      responses:
+        "200":
+          description: Withdrawal transaction prepared.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  object: { type: string, const: withdrawal_intent }
+                  bidder: { $ref: "#/components/schemas/Address" }
+                  transaction_request: { $ref: "#/components/schemas/TransactionRequest" }
+
+  /v1/transactions:
+    post:
+      tags: [Transactions]
+      summary: Broadcast a signed transaction
+      description: |
+        Optional. You can send a signed transaction to any node; this endpoint
+        exists so an integration needs one network dependency instead of two.
+
+        Returns `202 Accepted`, not `200`. The chain decides whether a
+        transaction succeeds, and it has not decided yet.
+      parameters:
+        - $ref: "#/components/parameters/IdempotencyKey"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [signed_transaction]
+              properties:
+                signed_transaction:
+                  type: string
+                  pattern: "^0x[a-fA-F0-9]+$"
+      responses:
+        "202":
+          description: Accepted into the mempool.
+          content:
+            application/json:
+              example:
+                object: transaction
+                hash: "0x4c1d7a90f3b2e5c8a1d4f7b0e3c6a9d2f5b8e1c4a7d0f3b6e9c2a5d8f1b4e7c0"
+                status: pending
+                confirmations: 0
+                poll: /v1/transactions/0x4c1d...
+        "422": { $ref: "#/components/responses/ChainError" }
+
+  /v1/transactions/{hash}:
+    get:
+      tags: [Transactions]
+      summary: Retrieve a transaction
+      parameters:
+        - name: hash
+          in: path
+          required: true
+          schema: { type: string, pattern: "^0x[a-fA-F0-9]{64}$" }
+      responses:
+        "200":
+          description: |
+            `status` is `pending` until mined, then `confirmed` or `reverted`.
+            A `reverted` transaction still consumed gas.
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Transaction" }
+
+  /v1/webhook_endpoints:
+    get:
+      tags: [Webhooks]
+      summary: List webhook endpoints
+      responses:
+        "200":
+          description: Your endpoints. Secrets are never returned after creation.
+          content:
+            application/json:
+              example:
+                object: list
+                data:
+                  - object: webhook_endpoint
+                    id: whe_6b3d0f8a2c1e
+                    url: https://example.com/hooks/auctra
+                    enabled_events: [auction.bid_placed, auction.outbid, auction.settled]
+                    status: enabled
+                    created_at: "2026-07-01T08:14:22.417Z"
+                has_more: false
+                next_cursor: null
+    post:
+      tags: [Webhooks]
+      summary: Create a webhook endpoint
+      description: |
+        The response contains `secret` exactly once. Store it; every subsequent
+        request is signed with it, and you must verify that signature before
+        trusting the body.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [url, enabled_events]
+              properties:
+                url: { type: string, format: uri }
+                enabled_events:
+                  type: array
+                  items: { $ref: "#/components/schemas/EventType" }
+            example:
+              url: https://example.com/hooks/auctra
+              enabled_events: [auction.bid_placed, auction.outbid, auction.settled]
+      responses:
+        "201":
+          description: Endpoint created. `secret` is shown once.
+          content:
+            application/json:
+              example:
+                object: webhook_endpoint
+                id: whe_6b3d0f8a2c1e
+                url: https://example.com/hooks/auctra
+                enabled_events: [auction.bid_placed, auction.outbid, auction.settled]
+                secret: whsec_9d4f2a7c1b8e0356af914d2c7b0e5836a1f4c9d2
+                created_at: "2026-07-01T08:14:22.417Z"
+
+  /v1/webhook_endpoints/{id}:
+    delete:
+      tags: [Webhooks]
+      summary: Delete a webhook endpoint
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string }
+      responses:
+        "200":
+          description: Deleted.
+
+  /v1/events:
+    get:
+      tags: [Webhooks]
+      summary: List events
+      description: |
+        Every webhook we send is also a durable row here. If your listener was
+        down, don't ask us to redeliver — read the log and reconcile.
+      parameters:
+        - $ref: "#/components/parameters/Limit"
+        - $ref: "#/components/parameters/StartingAfter"
+        - name: type
+          in: query
+          schema: { $ref: "#/components/schemas/EventType" }
+      responses:
+        "200":
+          description: A paginated list of events.
+          content:
+            application/json:
+              example:
+                object: list
+                data:
+                  - object: event
+                    id: evt_7c2e9a1f4b6d
+                    type: auction.outbid
+                    created_at: "2026-07-09T10:31:04.882Z"
+                    data:
+                      object:
+                        auction: auc_3f9a2c7b1d4e
+                        outbid_bidder: "0x9c8b7a6f5e4d3c2b1a0f9e8d7c6b5a4f3e2d1c0b"
+                        refund_wei: "1050000000000000000"
+                has_more: true
+                next_cursor: evt_7c2e9a1f4b6d
+
+  /v1/events/{id}:
+    get:
+      tags: [Webhooks]
+      summary: Retrieve an event
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string }
+      responses:
+        "200":
+          description: The event.
+        "404": { $ref: "#/components/responses/NotFound" }
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      description: |
+        `Authorization: Bearer sk_test_...` in sandbox,
+        `Authorization: Bearer sk_live_...` in production.
+
+        A live key sent to the sandbox host fails with `environment_mismatch`,
+        not `invalid_api_key` — mixing environments is the most common
+        integration bug and the error should say so.
+
+        Keys are stored as salted hashes. We cannot recover a lost key; rotate it.
+
+  parameters:
+    AuctionId:
+      name: id
+      in: path
+      required: true
+      description: An auction id, e.g. `auc_3f9a2c7b1d4e`.
+      schema: { type: string }
+    Limit:
+      name: limit
+      in: query
+      description: Page size, 1–100.
+      schema: { type: integer, minimum: 1, maximum: 100, default: 25 }
+    StartingAfter:
+      name: starting_after
+      in: query
+      description: |
+        An object id to page after. Cursor, not offset: auctions are inserted
+        constantly, and `?page=2` would skip or duplicate rows whenever a new
+        one lands between requests.
+      schema: { type: string }
+    IdempotencyKey:
+      name: Idempotency-Key
+      in: header
+      description: |
+        A unique string, e.g. a UUID. Replaying the same key with the same body
+        returns the original response verbatim; with a different body it
+        returns `409 idempotency_key_reused`. Keys expire after 24 hours.
+      schema: { type: string, maxLength: 255 }
+
+  schemas:
+    Address:
+      type: string
+      pattern: "^0x[a-fA-F0-9]{40}$"
+      description: A 20-byte Ethereum address, lowercased in responses.
+      examples: ["0x7a3f1c8b9d2e4f6a0b1c2d3e4f5a6b7c8d9e0f1a"]
+
+    Wei:
+      type: string
+      pattern: "^[0-9]+$"
+      description: |
+        A decimal string of wei. Always a string: 1 ETH = 10^18 wei, and JSON
+        numbers are doubles, which lose integer precision above 2^53.
+      examples: ["1050000000000000000"]
+
+    EventType:
+      type: string
+      enum:
+        - auction.created
+        - auction.bid_placed
+        - auction.outbid
+        - auction.extended
+        - auction.ending_soon
+        - auction.ended
+        - auction.settled
+        - auction.cancelled
+        - refund.credited
+        - refund.withdrawn
+        - item.claimed
+
+    List:
+      type: object
+      properties:
+        object: { type: string, const: list }
+        has_more: { type: boolean }
+        next_cursor:
+          type: [string, "null"]
+          description: Pass as `starting_after` to fetch the next page. `null` on the last page.
+
+    TransactionRequest:
+      type: object
+      description: |
+        An unsigned transaction. Sign it with the user's wallet — Auctra never
+        sees a private key. `gas_limit` already includes 20% headroom.
+      properties:
+        object: { type: string, const: transaction_request }
+        chain_id: { type: integer }
+        to: { $ref: "#/components/schemas/Address" }
+        data: { type: string }
+        value: { $ref: "#/components/schemas/Wei" }
+        gas_limit: { type: [string, "null"] }
+        max_fee_per_gas: { type: [string, "null"] }
+        max_priority_fee_per_gas: { type: [string, "null"] }
+        nonce_hint: { type: [integer, "null"] }
+
+    Auction:
+      type: object
+      properties:
+        object: { type: string, const: auction }
+        id: { type: string, examples: ["auc_3f9a2c7b1d4e"] }
+        status:
+          type: string
+          enum: [pending, live, ending, ended, settled, cancelled]
+          description: |
+            `pending` — transaction sent, not yet confirmed.
+            `live` — accepting bids.
+            `ending` — inside the anti-snipe window; a bid now extends the clock.
+            `ended` — clock expired, settlement not yet on chain.
+            `settled` — item transferred, proceeds credited.
+            `cancelled` — withdrawn before any bid.
+        chain_id: { type: integer }
+        contract: { $ref: "#/components/schemas/Address" }
+        onchain_id: { type: [integer, "null"] }
+        seller: { $ref: "#/components/schemas/Address" }
+        item:
+          type: object
+          properties:
+            token_contract: { $ref: "#/components/schemas/Address" }
+            token_id: { type: string }
+        reserve_price_wei: { $ref: "#/components/schemas/Wei" }
+        reserve_price_display: { type: string }
+        min_increment_bps:
+          type: integer
+          description: Basis points a new bid must clear the current high by. 500 = 5%.
+        minimum_bid_wei: { $ref: "#/components/schemas/Wei" }
+        highest_bid_wei: { $ref: "#/components/schemas/Wei" }
+        highest_bidder: { type: [string, "null"] }
+        start_time: { type: string, format: date-time }
+        end_time:
+          type: string
+          format: date-time
+          description: Moves forward when a late bid triggers an extension. Never cache it.
+        anti_snipe:
+          type: object
+          properties:
+            extension_window_seconds: { type: integer }
+            extensions_used: { type: integer }
+            max_extensions: { type: integer }
+        transactions:
+          type: object
+          properties:
+            created: { type: [string, "null"] }
+            settled: { type: [string, "null"] }
+        metadata:
+          type: object
+          description: Up to 8KB of your own keys. Auctra never reads these.
+        created_at: { type: string, format: date-time }
+        updated_at: { type: string, format: date-time }
+      examples:
+        - object: auction
+          id: auc_3f9a2c7b1d4e
+          status: live
+          chain_id: 11155111
+          contract: "0x5c9d3f1a7b2e4c6d8f0a2b4c6d8e0f2a4b6c8d0e"
+          onchain_id: 117
+          seller: "0x7a3f1c8b9d2e4f6a0b1c2d3e4f5a6b7c8d9e0f1a"
+          item:
+            token_contract: "0x2b1d4e6f8a0c2e4f6a8b0d2f4a6c8e0b2d4f6a8c"
+            token_id: "42"
+          reserve_price_wei: "1000000000000000000"
+          reserve_price_display: "1"
+          min_increment_bps: 500
+          minimum_bid_wei: "1102500000000000000"
+          highest_bid_wei: "1050000000000000000"
+          highest_bidder: "0x9c8b7a6f5e4d3c2b1a0f9e8d7c6b5a4f3e2d1c0b"
+          start_time: "2026-07-08T10:00:00.000Z"
+          end_time: "2026-07-09T10:00:00.000Z"
+          anti_snipe:
+            extension_window_seconds: 300
+            extensions_used: 0
+            max_extensions: 10
+          transactions:
+            created: "0x4c1d7a90f3b2e5c8a1d4f7b0e3c6a9d2f5b8e1c4a7d0f3b6e9c2a5d8f1b4e7c0"
+            settled: null
+          metadata:
+            lot_number: L-0117
+          created_at: "2026-07-08T09:59:41.204Z"
+          updated_at: "2026-07-08T14:22:07.881Z"
+
+    Bid:
+      type: object
+      properties:
+        object: { type: string, const: bid }
+        id: { type: string, examples: ["bid_8d2f4a6c1e3b"] }
+        auction: { type: string }
+        bidder: { $ref: "#/components/schemas/Address" }
+        amount_wei: { $ref: "#/components/schemas/Wei" }
+        amount_display: { type: string }
+        status:
+          type: string
+          enum: [pending, confirmed, outbid, winning, won, failed]
+        transaction_hash: { type: [string, "null"] }
+        block_number: { type: [integer, "null"] }
+        placed_at: { type: string, format: date-time }
+      examples:
+        - object: bid
+          id: bid_8d2f4a6c1e3b
+          auction: auc_3f9a2c7b1d4e
+          bidder: "0x9c8b7a6f5e4d3c2b1a0f9e8d7c6b5a4f3e2d1c0b"
+          amount_wei: "1050000000000000000"
+          amount_display: "1.05"
+          status: winning
+          transaction_hash: "0x8e1c4a7d0f3b6e9c2a5d8f1b4e7c04c1d7a90f3b2e5c8a1d4f7b0e3c6a9d2f5b"
+          block_number: 6142301
+          placed_at: "2026-07-08T14:22:07.881Z"
+
+    BidIntent:
+      type: object
+      description: |
+        Not a bid — a bid you are about to make. Nothing is committed until the
+        bidder signs `transaction_request` and it confirms on chain.
+      properties:
+        object: { type: string, const: bid_intent }
+        auction: { type: string }
+        bidder: { $ref: "#/components/schemas/Address" }
+        amount_wei: { $ref: "#/components/schemas/Wei" }
+        minimum_bid_wei: { $ref: "#/components/schemas/Wei" }
+        transaction_request: { $ref: "#/components/schemas/TransactionRequest" }
+        expires_at:
+          type: string
+          format: date-time
+          description: The auction's current end time. Signing after this reverts.
+        next_step: { type: string }
+
+    Refund:
+      type: object
+      properties:
+        object: { type: string, const: refund }
+        id: { type: string }
+        bidder: { $ref: "#/components/schemas/Address" }
+        amount_wei: { $ref: "#/components/schemas/Wei" }
+        amount_display: { type: string }
+        withdrawn: { type: boolean }
+        withdrawal_transaction: { type: [string, "null"] }
+        chain_id: { type: integer }
+        created_at: { type: string, format: date-time }
+      examples:
+        - object: refund
+          id: ref_1e5a8c3f7b2d
+          bidder: "0x9c8b7a6f5e4d3c2b1a0f9e8d7c6b5a4f3e2d1c0b"
+          amount_wei: "1050000000000000000"
+          amount_display: "1.05"
+          withdrawn: false
+          withdrawal_transaction: null
+          chain_id: 11155111
+          created_at: "2026-07-08T14:31:52.006Z"
+
+    Transaction:
+      type: object
+      properties:
+        object: { type: string, const: transaction }
+        hash: { type: string }
+        status: { type: string, enum: [pending, confirmed, reverted] }
+        block_number: { type: [integer, "null"] }
+        confirmations: { type: integer }
+        gas_used: { type: [string, "null"] }
+        effective_gas_price: { type: [string, "null"] }
+
+    Health:
+      type: object
+      properties:
+        object: { type: string, const: health }
+        status: { type: string, enum: [ok, degraded] }
+        environment: { type: string, enum: [sandbox, production] }
+        chain_id: { type: integer }
+        head_block: { type: [integer, "null"] }
+        database: { type: string }
+        rpc: { type: string }
+        managed_signer: { type: string, enum: [enabled, disabled] }
+
+    Error:
+      type: object
+      properties:
+        error:
+          type: object
+          required: [type, code, message, request_id]
+          properties:
+            type:
+              type: string
+              enum:
+                - authentication_error
+                - permission_error
+                - invalid_request_error
+                - chain_error
+                - idempotency_error
+                - rate_limit_error
+                - api_error
+            code:
+              type: string
+              description: Switch on this. Messages change; codes don't.
+            message: { type: string }
+            param: { type: string }
+            detail: { type: object }
+            request_id:
+              type: string
+              description: Quote this in a support request. It's the only string we need.
+            docs_url: { type: string, format: uri }
+
+  responses:
+    BadRequest:
+      description: The request was malformed or violated an auction rule.
+      content:
+        application/json:
+          schema: { $ref: "#/components/schemas/Error" }
+    Unauthorized:
+      description: Missing, invalid, revoked, or wrong-environment API key.
+      content:
+        application/json:
+          schema: { $ref: "#/components/schemas/Error" }
+    NotFound:
+      description: No such object under this API key's organisation.
+      content:
+        application/json:
+          schema: { $ref: "#/components/schemas/Error" }
+    IdempotencyConflict:
+      description: The Idempotency-Key was reused with a different body, or is still in flight.
+      content:
+        application/json:
+          schema: { $ref: "#/components/schemas/Error" }
+    ChainError:
+      description: |
+        The chain rejected the transaction. `message` carries the decoded custom
+        error from AuctionHouse.sol, not "execution reverted".
+      content:
+        application/json:
+          schema: { $ref: "#/components/schemas/Error" }
+    RateLimited:
+      description: |
+        Too many requests. Limits are per API key, not per IP. `Retry-After`
+        tells you when to come back.
+      headers:
+        Retry-After: { schema: { type: integer } }
+        X-RateLimit-Remaining: { schema: { type: integer } }
+      content:
+        application/json:
+          schema: { $ref: "#/components/schemas/Error" }

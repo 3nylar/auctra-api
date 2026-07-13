@@ -1,7 +1,7 @@
 ---
 title: 'Guide: settle and pay out'
 description: The clock runs out. Now someone has to close the loop.
-section: Guides
+section: Build
 slug: guide-settle
 ---
 

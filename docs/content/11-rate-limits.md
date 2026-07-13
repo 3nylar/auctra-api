@@ -1,7 +1,7 @@
 ---
 title: Rate limits
 description: 100 requests a minute, per key, and how to not need them.
-section: Core concepts
+section: Build
 slug: rate-limits
 ---
 
