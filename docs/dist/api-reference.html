@@ -15,57 +15,8 @@
       rel="stylesheet"
     />
     <link rel="stylesheet" href="styles.css" />
-    <style>
-      /* Integrated baseline styles for new elements to prevent design regression */
-      .quick-index-table {
-        width: 100%;
-        border-collapse: collapse;
-        margin: 24px 0 var(--space-md);
-        font-family: var(--ui, sans-serif);
-        font-size: 13px;
-      }
-      .quick-index-table th {
-        text-align: left;
-        padding: 8px 12px;
-        background: var(--slate-0, #f8f9fa);
-        color: var(--slate-3, #6c757d);
-        font-size: 11px;
-        text-transform: uppercase;
-        letter-spacing: 0.05em;
-        border-bottom: 1px solid var(--border, #dee2e6);
-      }
-      .quick-index-table td {
-        padding: 10px 12px;
-        border-bottom: 1px solid var(--border, #dee2e6);
-        vertical-align: middle;
-      }
-      .quick-index-table code {
-        font-family: var(--mono);
-        font-size: 12px;
-      }
-      .scope-badge {
-        display: inline-flex;
-        align-items: center;
-        gap: 4px;
-        font-family: var(--mono, monospace);
-        font-size: 11px;
-        color: var(--slate-3, #495057);
-        background: var(--slate-1, #e9ecef);
-        padding: 2px 6px;
-        border-radius: 4px;
-        margin-top: 8px;
-        font-weight: 500;
-      }
-      .response-schema-title {
-        font-family: var(--ui);
-        font-size: 11px;
-        letter-spacing: 0.14em;
-        text-transform: uppercase;
-        color: var(--slate-2);
-        margin: 24px 0 12px;
-      }
-    </style>
     <script>
+      // Applied before first paint so a dark-mode reader never sees a white flash.
       try {
         const t = localStorage.getItem("auctra-theme");
         if (t) document.documentElement.dataset.theme = t;
@@ -130,10 +81,6 @@
           href="environments.html"
           data-search="Environments Sandbox and production are the same code against different chains."
           >Environments</a
-        ><a
-          href="rate-limits.html"
-          data-search="Rate limits 100 requests a minute, per key, and how to not need them."
-          >Rate limits</a
         >
         <h4>Core concepts</h4>
         <a
@@ -156,6 +103,10 @@
           href="pagination.html"
           data-search="Pagination Cursors, not page numbers, and why that isn't pedantry."
           >Pagination</a
+        ><a
+          href="rate-limits.html"
+          data-search="Rate limits 100 requests a minute, per key, and how to not need them."
+          >Rate limits</a
         ><a
           href="webhooks.html"
           data-search="Webhooks Signed, retried, replayable — and how to verify one before you trust it."
@@ -192,116 +143,16 @@
         <p class="eyebrow">Reference</p>
         <h1>API reference</h1>
         <p class="lede">
-          Base URL
-          <a href="https://auctra-api-production.up.railway.app">Auctra</a>.
+          Base URL <a href="https://auctra-api-production.up.railway.app">Auctra</a>.
           Every request needs <code>Authorization: Bearer sk_test_…</code>.
           Amounts are decimal strings of wei.
         </p>
-
         <h2 id="auctions">
           <a class="anchor" href="#auctions" aria-hidden="true">#</a>Auctions
         </h2>
         <div style="max-width: var(--measure)">
           <p>Create, browse, settle and cancel auctions.</p>
-
-          <table class="quick-index-table">
-            <thead>
-              <tr>
-                <th>Method</th>
-                <th>Endpoint</th>
-                <th>Operation</th>
-                <th>Required Scope</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>
-                  <span
-                    class="verb get"
-                    style="
-                      padding: 2px 6px;
-                      font-size: 10px;
-                      border-radius: 3px;
-                    "
-                    >GET</span
-                  >
-                </td>
-                <td><code>/v1/auctions</code></td>
-                <td><a href="#get-v1auctions">List auctions</a></td>
-                <td><code>auctions:read</code></td>
-              </tr>
-              <tr>
-                <td>
-                  <span
-                    class="verb post"
-                    style="
-                      padding: 2px 6px;
-                      font-size: 10px;
-                      border-radius: 3px;
-                    "
-                    >POST</span
-                  >
-                </td>
-                <td><code>/v1/auctions</code></td>
-                <td><a href="#post-v1auctions">Create an auction</a></td>
-                <td><code>auctions:write</code></td>
-              </tr>
-              <tr>
-                <td>
-                  <span
-                    class="verb get"
-                    style="
-                      padding: 2px 6px;
-                      font-size: 10px;
-                      border-radius: 3px;
-                    "
-                    >GET</span
-                  >
-                </td>
-                <td><code>/v1/auctions/{id}</code></td>
-                <td><a href="#get-v1auctionsid">Retrieve an auction</a></td>
-                <td><code>auctions:read</code></td>
-              </tr>
-              <tr>
-                <td>
-                  <span
-                    class="verb post"
-                    style="
-                      padding: 2px 6px;
-                      font-size: 10px;
-                      border-radius: 3px;
-                    "
-                    >POST</span
-                  >
-                </td>
-                <td><code>/v1/auctions/{id}/settle</code></td>
-                <td>
-                  <a href="#post-v1auctionsidsettle">Settle an ended auction</a>
-                </td>
-                <td><code>auctions:write</code></td>
-              </tr>
-              <tr>
-                <td>
-                  <span
-                    class="verb post"
-                    style="
-                      padding: 2px 6px;
-                      font-size: 10px;
-                      border-radius: 3px;
-                    "
-                    >POST</span
-                  >
-                </td>
-                <td><code>/v1/auctions/{id}/cancel</code></td>
-                <td>
-                  <a href="#post-v1auctionsidcancel">Cancel an auction</a>
-                </td>
-                <td><code>auctions:write</code></td>
-              </tr>
-            </tbody>
-          </table>
         </div>
-
         <section class="op" id="get-v1auctions">
           <div class="op-main">
             <h3>
@@ -310,9 +161,6 @@
             </h3>
             <div class="route">
               <span class="verb get">GET</span><span>/v1/auctions</span>
-            </div>
-            <div>
-              <span class="scope-badge">🔒 auth scope: auctions:read</span>
             </div>
 
             <h4
@@ -365,8 +213,8 @@
                     Filter by lifecycle status. Note this is derived from the
                     chain clock at read time, so an auction whose
                     <code>end_time</code> just passed is reported
-                    <code>ended</code> even if the settlement transaction hasn't
-                    been sent yet.
+                    <code>ended</code> even if the settlement transaction
+                    hasn&#39;t been sent yet.
                   </p>
                 </div>
               </div>
@@ -428,94 +276,50 @@
                 ><button class="copy" type="button">Copy</button>
               </div>
               <pre><code class="language-json">{
-  "object": "list",
-  "data": [
+  &quot;object&quot;: &quot;list&quot;,
+  &quot;data&quot;: [
     {
-      "object": "auction",
-      "id": "auc_3f9a2c7b1d4e",
-      "status": "live",
-      "chain_id": 11155111,
-      "contract": "0x5c9d3f1a7b2e4c6d8f0a2b4c6d8e0f2a4b6c8d0e",
-      "onchain_id": 117,
-      "seller": "0x7a3f1c8b9d2e4f6a0b1c2d3e4f5a6b7c8d9e0f1a",
-      "item": {
-        "token_contract": "0x2b1d4e6f8a0c2e4f6a8b0d2f4a6c8e0b2d4f6a8c",
-        "token_id": "42"
+      &quot;object&quot;: &quot;auction&quot;,
+      &quot;id&quot;: &quot;auc_3f9a2c7b1d4e&quot;,
+      &quot;status&quot;: &quot;live&quot;,
+      &quot;chain_id&quot;: 11155111,
+      &quot;contract&quot;: &quot;0x5c9d3f1a7b2e4c6d8f0a2b4c6d8e0f2a4b6c8d0e&quot;,
+      &quot;onchain_id&quot;: 117,
+      &quot;seller&quot;: &quot;0x7a3f1c8b9d2e4f6a0b1c2d3e4f5a6b7c8d9e0f1a&quot;,
+      &quot;item&quot;: {
+        &quot;token_contract&quot;: &quot;0x2b1d4e6f8a0c2e4f6a8b0d2f4a6c8e0b2d4f6a8c&quot;,
+        &quot;token_id&quot;: &quot;42&quot;
       },
-      "reserve_price_wei": "1000000000000000000",
-      "reserve_price_display": "1",
-      "min_increment_bps": 500,
-      "minimum_bid_wei": "1102500000000000000",
-      "highest_bid_wei": "1050000000000000000",
-      "highest_bidder": "0x9c8b7a6f5e4d3c2b1a0f9e8d7c6b5a4f3e2d1c0b",
-      "start_time": "2026-07-08T10:00:00.000Z",
-      "end_time": "2026-07-09T10:00:00.000Z",
-      "anti_snipe": {
-        "extension_window_seconds": 300,
-        "extensions_used": 0,
-        "max_extensions": 10
+      &quot;reserve_price_wei&quot;: &quot;1000000000000000000&quot;,
+      &quot;reserve_price_display&quot;: &quot;1&quot;,
+      &quot;min_increment_bps&quot;: 500,
+      &quot;minimum_bid_wei&quot;: &quot;1102500000000000000&quot;,
+      &quot;highest_bid_wei&quot;: &quot;1050000000000000000&quot;,
+      &quot;highest_bidder&quot;: &quot;0x9c8b7a6f5e4d3c2b1a0f9e8d7c6b5a4f3e2d1c0b&quot;,
+      &quot;start_time&quot;: &quot;2026-07-08T10:00:00.000Z&quot;,
+      &quot;end_time&quot;: &quot;2026-07-09T10:00:00.000Z&quot;,
+      &quot;anti_snipe&quot;: {
+        &quot;extension_window_seconds&quot;: 300,
+        &quot;extensions_used&quot;: 0,
+        &quot;max_extensions&quot;: 10
       },
-      "transactions": {
-        "created": "0x4c1d7a90f3b2e5c8a1d4f7b0e3c6a9d2f5b8e1c4a7d0f3b6e9c2a5d8f1b4e7c0",
-        "settled": null
+      &quot;transactions&quot;: {
+        &quot;created&quot;: &quot;0x4c1d7a90f3b2e5c8a1d4f7b0e3c6a9d2f5b8e1c4a7d0f3b6e9c2a5d8f1b4e7c0&quot;,
+        &quot;settled&quot;: null
       },
-      "metadata": {
-        "lot_number": "L-0117"
+      &quot;metadata&quot;: {
+        &quot;lot_number&quot;: &quot;L-0117&quot;
       },
-      "created_at": "2026-07-08T09:59:41.204Z",
-      "updated_at": "2026-07-08T14:22:07.881Z"
+      &quot;created_at&quot;: &quot;2026-07-08T09:59:41.204Z&quot;,
+      &quot;updated_at&quot;: &quot;2026-07-08T14:22:07.881Z&quot;
     }
   ],
-  "has_more": false,
-  "next_cursor": null
+  &quot;has_more&quot;: false,
+  &quot;next_cursor&quot;: null
 }</code></pre>
-            </div>
-
-            <h5 class="response-schema-title">Response Object Schema</h5>
-            <div
-              class="params"
-              style="
-                background: rgba(0, 0, 0, 0.02);
-                padding: 12px;
-                border-radius: 6px;
-              "
-            >
-              <div class="param">
-                <div class="param-head">
-                  <span class="name">object</span
-                  ><span class="type">string</span>
-                </div>
-                <div class="param-body">
-                  <p>Value is always <code>list</code>.</p>
-                </div>
-              </div>
-              <div class="param">
-                <div class="param-head">
-                  <span class="name">data</span><span class="type">array</span>
-                </div>
-                <div class="param-body">
-                  <p>
-                    A list of target
-                    <a href="#auction-object-schema">Auction objects</a>.
-                  </p>
-                </div>
-              </div>
-              <div class="param">
-                <div class="param-head">
-                  <span class="name">has_more</span
-                  ><span class="type">boolean</span>
-                </div>
-                <div class="param-body">
-                  <p>
-                    True if there are additional matching records available past
-                    the cursor.
-                  </p>
-                </div>
-              </div>
             </div>
           </div>
         </section>
-
         <section class="op" id="post-v1auctions">
           <div class="op-main">
             <h3>
@@ -524,9 +328,6 @@
             </h3>
             <div class="route">
               <span class="verb post">POST</span><span>/v1/auctions</span>
-            </div>
-            <div>
-              <span class="scope-badge">🔒 auth scope: auctions:write</span>
             </div>
             <p>
               Escrows the item and opens the clock. Returns
@@ -620,18 +421,18 @@
               <pre><code class="language-bash">curl -X POST &quot;$AUCTRA_URL/v1/auctions&quot; \
   -H &quot;Authorization: Bearer $AUCTRA_KEY&quot; \
   -H &quot;Content-Type: application/json&quot; \
-  -H "Idempotency-Key: $(uuidgen)" \
+  -H &quot;Idempotency-Key: $(uuidgen)&quot; \
   -d '{
-    "mode": "prepared",
-    "seller": "0x7a3f1c8b9d2e4f6a0b1c2d3e4f5a6b7c8d9e0f1a",
-    "token_contract": "0x2b1d4e6f8a0c2e4f6a8b0d2f4a6c8e0b2d4f6a8c",
-    "token_id": "42",
-    "reserve_price_wei": "1000000000000000000",
-    "duration_seconds": 86400,
-    "min_increment_bps": 500,
-    "metadata": {
-      "lot_number": "L-0117",
-      "catalogue": "spring-2026"
+    &quot;mode&quot;: &quot;prepared&quot;,
+    &quot;seller&quot;: &quot;0x7a3f1c8b9d2e4f6a0b1c2d3e4f5a6b7c8d9e0f1a&quot;,
+    &quot;token_contract&quot;: &quot;0x2b1d4e6f8a0c2e4f6a8b0d2f4a6c8e0b2d4f6a8c&quot;,
+    &quot;token_id&quot;: &quot;42&quot;,
+    &quot;reserve_price_wei&quot;: &quot;1000000000000000000&quot;,
+    &quot;duration_seconds&quot;: 86400,
+    &quot;min_increment_bps&quot;: 500,
+    &quot;metadata&quot;: {
+      &quot;lot_number&quot;: &quot;L-0117&quot;,
+      &quot;catalogue&quot;: &quot;spring-2026&quot;
     }
   }'</code></pre>
             </div>
@@ -641,105 +442,43 @@
                 ><button class="copy" type="button">Copy</button>
               </div>
               <pre><code class="language-json">{
-  "object": "auction",
-  "id": "auc_3f9a2c7b1d4e",
-  "status": "live",
-  "chain_id": 11155111,
-  "contract": "0x5c9d3f1a7b2e4c6d8f0a2b4c6d8e0f2a4b6c8d0e",
-  "onchain_id": 117,
-  "seller": "0x7a3f1c8b9d2e4f6a0b1c2d3e4f5a6b7c8d9e0f1a",
-  "item": {
-    "token_contract": "0x2b1d4e6f8a0c2e4f6a8b0d2f4a6c8e0b2d4f6a8c",
-    "token_id": "42"
+  &quot;object&quot;: &quot;auction&quot;,
+  &quot;id&quot;: &quot;auc_3f9a2c7b1d4e&quot;,
+  &quot;status&quot;: &quot;live&quot;,
+  &quot;chain_id&quot;: 11155111,
+  &quot;contract&quot;: &quot;0x5c9d3f1a7b2e4c6d8f0a2b4c6d8e0f2a4b6c8d0e&quot;,
+  &quot;onchain_id&quot;: 117,
+  &quot;seller&quot;: &quot;0x7a3f1c8b9d2e4f6a0b1c2d3e4f5a6b7c8d9e0f1a&quot;,
+  &quot;item&quot;: {
+    &quot;token_contract&quot;: &quot;0x2b1d4e6f8a0c2e4f6a8b0d2f4a6c8e0b2d4f6a8c&quot;,
+    &quot;token_id&quot;: &quot;42&quot;
   },
-  "reserve_price_wei": "1000000000000000000",
-  "reserve_price_display": "1",
-  "min_increment_bps": 500,
-  "minimum_bid_wei": "1102500000000000000",
-  "highest_bid_wei": "1050000000000000000",
-  "highest_bidder": "0x9c8b7a6f5e4d3c2b1a0f9e8d7c6b5a4f3e2d1c0b",
-  "start_time": "2026-07-08T10:00:00.000Z",
-  "end_time": "2026-07-09T10:00:00.000Z",
-  "anti_snipe": {
-    "extension_window_seconds": 300,
-    "extensions_used": 0,
-    "max_extensions": 10
+  &quot;reserve_price_wei&quot;: &quot;1000000000000000000&quot;,
+  &quot;reserve_price_display&quot;: &quot;1&quot;,
+  &quot;min_increment_bps&quot;: 500,
+  &quot;minimum_bid_wei&quot;: &quot;1102500000000000000&quot;,
+  &quot;highest_bid_wei&quot;: &quot;1050000000000000000&quot;,
+  &quot;highest_bidder&quot;: &quot;0x9c8b7a6f5e4d3c2b1a0f9e8d7c6b5a4f3e2d1c0b&quot;,
+  &quot;start_time&quot;: &quot;2026-07-08T10:00:00.000Z&quot;,
+  &quot;end_time&quot;: &quot;2026-07-09T10:00:00.000Z&quot;,
+  &quot;anti_snipe&quot;: {
+    &quot;extension_window_seconds&quot;: 300,
+    &quot;extensions_used&quot;: 0,
+    &quot;max_extensions&quot;: 10
   },
-  "transactions": {
-    "created": "0x4c1d7a90f3b2e5c8a1d4f7b0e3c6a9d2f5b8e1c4a7d0f3b6e9c2a5d8f1b4e7c0",
-    "settled": null
+  &quot;transactions&quot;: {
+    &quot;created&quot;: &quot;0x4c1d7a90f3b2e5c8a1d4f7b0e3c6a9d2f5b8e1c4a7d0f3b6e9c2a5d8f1b4e7c0&quot;,
+    &quot;settled&quot;: null
   },
-  "metadata": {
-    "lot_number": "L-0117"
+  &quot;metadata&quot;: {
+    &quot;lot_number&quot;: &quot;L-0117&quot;
   },
-  "created_at": "2026-07-08T09:59:41.204Z",
-  "updated_at": "2026-07-08T14:22:07.881Z"
+  &quot;created_at&quot;: &quot;2026-07-08T09:59:41.204Z&quot;,
+  &quot;updated_at&quot;: &quot;2026-07-08T14:22:07.881Z&quot;
 }</code></pre>
-            </div>
-
-            <h5 class="response-schema-title" id="auction-object-schema">
-              Auction Object Schema
-            </h5>
-            <div
-              class="params"
-              style="
-                background: rgba(0, 0, 0, 0.02);
-                padding: 12px;
-                border-radius: 6px;
-              "
-            >
-              <div class="param">
-                <div class="param-head">
-                  <span class="name">id</span><span class="type">string</span>
-                </div>
-                <div class="param-body">
-                  <p>
-                    Unique system tracking string matching prefix
-                    <code>auc_</code>.
-                  </p>
-                </div>
-              </div>
-              <div class="param">
-                <div class="param-head">
-                  <span class="name">status</span><span class="type">enum</span>
-                </div>
-                <div class="param-body">
-                  <p>
-                    <code
-                      >pending | live | ending | ended | settled |
-                      cancelled</code
-                    >
-                  </p>
-                </div>
-              </div>
-              <div class="param">
-                <div class="param-head">
-                  <span class="name">reserve_price_wei</span
-                  ><span class="type">string</span>
-                </div>
-                <div class="param-body">
-                  <p>
-                    Decimal format string representation of total wei units
-                    requested.
-                  </p>
-                </div>
-              </div>
-              <div class="param">
-                <div class="param-head">
-                  <span class="name">transactions</span
-                  ><span class="type">object</span>
-                </div>
-                <div class="param-body">
-                  <p>
-                    Hashes maps matching <code>created</code> and optional
-                    <code>settled</code> positions.
-                  </p>
-                </div>
-              </div>
             </div>
           </div>
         </section>
-
         <section class="op" id="get-v1auctionsid">
           <div class="op-main">
             <h3>
@@ -748,9 +487,6 @@
             </h3>
             <div class="route">
               <span class="verb get">GET</span><span>/v1/auctions/{id}</span>
-            </div>
-            <div>
-              <span class="scope-badge">🔒 auth scope: auctions:read</span>
             </div>
 
             <h4
@@ -815,11 +551,44 @@
                 <span>json</span
                 ><button class="copy" type="button">Copy</button>
               </div>
-              <pre><code class="language-json">// Returns a single unified Auction Object configuration payload. See properties structural details mapped above.</code></pre>
+              <pre><code class="language-json">{
+  &quot;object&quot;: &quot;auction&quot;,
+  &quot;id&quot;: &quot;auc_3f9a2c7b1d4e&quot;,
+  &quot;status&quot;: &quot;live&quot;,
+  &quot;chain_id&quot;: 11155111,
+  &quot;contract&quot;: &quot;0x5c9d3f1a7b2e4c6d8f0a2b4c6d8e0f2a4b6c8d0e&quot;,
+  &quot;onchain_id&quot;: 117,
+  &quot;seller&quot;: &quot;0x7a3f1c8b9d2e4f6a0b1c2d3e4f5a6b7c8d9e0f1a&quot;,
+  &quot;item&quot;: {
+    &quot;token_contract&quot;: &quot;0x2b1d4e6f8a0c2e4f6a8b0d2f4a6c8e0b2d4f6a8c&quot;,
+    &quot;token_id&quot;: &quot;42&quot;
+  },
+  &quot;reserve_price_wei&quot;: &quot;1000000000000000000&quot;,
+  &quot;reserve_price_display&quot;: &quot;1&quot;,
+  &quot;min_increment_bps&quot;: 500,
+  &quot;minimum_bid_wei&quot;: &quot;1102500000000000000&quot;,
+  &quot;highest_bid_wei&quot;: &quot;1050000000000000000&quot;,
+  &quot;highest_bidder&quot;: &quot;0x9c8b7a6f5e4d3c2b1a0f9e8d7c6b5a4f3e2d1c0b&quot;,
+  &quot;start_time&quot;: &quot;2026-07-08T10:00:00.000Z&quot;,
+  &quot;end_time&quot;: &quot;2026-07-09T10:00:00.000Z&quot;,
+  &quot;anti_snipe&quot;: {
+    &quot;extension_window_seconds&quot;: 300,
+    &quot;extensions_used&quot;: 0,
+    &quot;max_extensions&quot;: 10
+  },
+  &quot;transactions&quot;: {
+    &quot;created&quot;: &quot;0x4c1d7a90f3b2e5c8a1d4f7b0e3c6a9d2f5b8e1c4a7d0f3b6e9c2a5d8f1b4e7c0&quot;,
+    &quot;settled&quot;: null
+  },
+  &quot;metadata&quot;: {
+    &quot;lot_number&quot;: &quot;L-0117&quot;
+  },
+  &quot;created_at&quot;: &quot;2026-07-08T09:59:41.204Z&quot;,
+  &quot;updated_at&quot;: &quot;2026-07-08T14:22:07.881Z&quot;
+}</code></pre>
             </div>
           </div>
         </section>
-
         <section class="op" id="post-v1auctionsidsettle">
           <div class="op-main">
             <h3>
@@ -833,9 +602,6 @@
             <div class="route">
               <span class="verb post">POST</span
               ><span>/v1/auctions/{id}/settle</span>
-            </div>
-            <div>
-              <span class="scope-badge">🔒 auth scope: auctions:write</span>
             </div>
             <p>
               Transfers the item to the winner and credits the proceeds to the
@@ -949,14 +715,43 @@
                 ><button class="copy" type="button">Copy</button>
               </div>
               <pre><code class="language-json">{
-  "object": "auction",
-  "id": "auc_3f9a2c7b1d4e",
-  "status": "settled"
+  &quot;object&quot;: &quot;auction&quot;,
+  &quot;id&quot;: &quot;auc_3f9a2c7b1d4e&quot;,
+  &quot;status&quot;: &quot;live&quot;,
+  &quot;chain_id&quot;: 11155111,
+  &quot;contract&quot;: &quot;0x5c9d3f1a7b2e4c6d8f0a2b4c6d8e0f2a4b6c8d0e&quot;,
+  &quot;onchain_id&quot;: 117,
+  &quot;seller&quot;: &quot;0x7a3f1c8b9d2e4f6a0b1c2d3e4f5a6b7c8d9e0f1a&quot;,
+  &quot;item&quot;: {
+    &quot;token_contract&quot;: &quot;0x2b1d4e6f8a0c2e4f6a8b0d2f4a6c8e0b2d4f6a8c&quot;,
+    &quot;token_id&quot;: &quot;42&quot;
+  },
+  &quot;reserve_price_wei&quot;: &quot;1000000000000000000&quot;,
+  &quot;reserve_price_display&quot;: &quot;1&quot;,
+  &quot;min_increment_bps&quot;: 500,
+  &quot;minimum_bid_wei&quot;: &quot;1102500000000000000&quot;,
+  &quot;highest_bid_wei&quot;: &quot;1050000000000000000&quot;,
+  &quot;highest_bidder&quot;: &quot;0x9c8b7a6f5e4d3c2b1a0f9e8d7c6b5a4f3e2d1c0b&quot;,
+  &quot;start_time&quot;: &quot;2026-07-08T10:00:00.000Z&quot;,
+  &quot;end_time&quot;: &quot;2026-07-09T10:00:00.000Z&quot;,
+  &quot;anti_snipe&quot;: {
+    &quot;extension_window_seconds&quot;: 300,
+    &quot;extensions_used&quot;: 0,
+    &quot;max_extensions&quot;: 10
+  },
+  &quot;transactions&quot;: {
+    &quot;created&quot;: &quot;0x4c1d7a90f3b2e5c8a1d4f7b0e3c6a9d2f5b8e1c4a7d0f3b6e9c2a5d8f1b4e7c0&quot;,
+    &quot;settled&quot;: null
+  },
+  &quot;metadata&quot;: {
+    &quot;lot_number&quot;: &quot;L-0117&quot;
+  },
+  &quot;created_at&quot;: &quot;2026-07-08T09:59:41.204Z&quot;,
+  &quot;updated_at&quot;: &quot;2026-07-08T14:22:07.881Z&quot;
 }</code></pre>
             </div>
           </div>
         </section>
-
         <section class="op" id="post-v1auctionsidcancel">
           <div class="op-main">
             <h3>
@@ -970,9 +765,6 @@
             <div class="route">
               <span class="verb post">POST</span
               ><span>/v1/auctions/{id}/cancel</span>
-            </div>
-            <div>
-              <span class="scope-badge">🔒 auth scope: auctions:write</span>
             </div>
             <p>
               Only possible while the auction has zero bids. Once someone has
@@ -1039,6 +831,12 @@
                 <span class="status">200</span
                 ><span class="desc">Cancellation transaction prepared.</span>
               </div>
+              <div class="resp err">
+                <span class="status">400</span
+                ><span class="desc"
+                  >The auction already has bids (`auction_has_bids`).</span
+                >
+              </div>
             </div>
           </div>
           <div class="op-side">
@@ -1056,9 +854,1463 @@
                 ><button class="copy" type="button">Copy</button>
               </div>
               <pre><code class="language-json">{
-  "object": "auction",
-  "id": "auc_3f9a2c7b1d4e",
-  "status": "cancelled"
+  &quot;object&quot;: &quot;auction&quot;,
+  &quot;id&quot;: &quot;auc_3f9a2c7b1d4e&quot;,
+  &quot;status&quot;: &quot;live&quot;,
+  &quot;chain_id&quot;: 11155111,
+  &quot;contract&quot;: &quot;0x5c9d3f1a7b2e4c6d8f0a2b4c6d8e0f2a4b6c8d0e&quot;,
+  &quot;onchain_id&quot;: 117,
+  &quot;seller&quot;: &quot;0x7a3f1c8b9d2e4f6a0b1c2d3e4f5a6b7c8d9e0f1a&quot;,
+  &quot;item&quot;: {
+    &quot;token_contract&quot;: &quot;0x2b1d4e6f8a0c2e4f6a8b0d2f4a6c8e0b2d4f6a8c&quot;,
+    &quot;token_id&quot;: &quot;42&quot;
+  },
+  &quot;reserve_price_wei&quot;: &quot;1000000000000000000&quot;,
+  &quot;reserve_price_display&quot;: &quot;1&quot;,
+  &quot;min_increment_bps&quot;: 500,
+  &quot;minimum_bid_wei&quot;: &quot;1102500000000000000&quot;,
+  &quot;highest_bid_wei&quot;: &quot;1050000000000000000&quot;,
+  &quot;highest_bidder&quot;: &quot;0x9c8b7a6f5e4d3c2b1a0f9e8d7c6b5a4f3e2d1c0b&quot;,
+  &quot;start_time&quot;: &quot;2026-07-08T10:00:00.000Z&quot;,
+  &quot;end_time&quot;: &quot;2026-07-09T10:00:00.000Z&quot;,
+  &quot;anti_snipe&quot;: {
+    &quot;extension_window_seconds&quot;: 300,
+    &quot;extensions_used&quot;: 0,
+    &quot;max_extensions&quot;: 10
+  },
+  &quot;transactions&quot;: {
+    &quot;created&quot;: &quot;0x4c1d7a90f3b2e5c8a1d4f7b0e3c6a9d2f5b8e1c4a7d0f3b6e9c2a5d8f1b4e7c0&quot;,
+    &quot;settled&quot;: null
+  },
+  &quot;metadata&quot;: {
+    &quot;lot_number&quot;: &quot;L-0117&quot;
+  },
+  &quot;created_at&quot;: &quot;2026-07-08T09:59:41.204Z&quot;,
+  &quot;updated_at&quot;: &quot;2026-07-08T14:22:07.881Z&quot;
+}</code></pre>
+            </div>
+          </div>
+        </section>
+        <section class="op" id="post-v1auctionsidclaim">
+          <div class="op-main">
+            <h3>
+              <a
+                class="anchor"
+                href="#post-v1auctionsidclaim"
+                aria-hidden="true"
+                >#</a
+              >Claim a won item
+            </h3>
+            <div class="route">
+              <span class="verb post">POST</span
+              ><span>/v1/auctions/{id}/claim</span>
+            </div>
+            <p>Prepares <code>claimItem()</code> for the winning bidder.</p>
+
+            <h4
+              style="
+                font-family: var(--ui);
+                font-size: 11px;
+                letter-spacing: 0.14em;
+                text-transform: uppercase;
+                color: var(--slate-2);
+                margin: 26px 0 4px;
+              "
+            >
+              Parameters
+            </h4>
+            <div class="params">
+              <div class="param">
+                <div class="param-head">
+                  <span class="name">id</span>
+                  <span class="type">string</span>
+                  <span class="type">path</span>
+                  <span class="req">Required</span>
+                </div>
+                <div class="param-body">
+                  <p>An auction id, e.g. <code>auc_3f9a2c7b1d4e</code>.</p>
+                </div>
+              </div>
+              <div class="param">
+                <div class="param-head">
+                  <span class="name">Idempotency-Key</span>
+                  <span class="type">string</span>
+                  <span class="type">header</span>
+                </div>
+                <div class="param-body">
+                  <p>
+                    A unique string, e.g. a UUID. Replaying the same key with
+                    the same body returns the original response verbatim; with a
+                    different body it returns
+                    <code>409 idempotency_key_reused</code>. Keys expire after
+                    24 hours.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div class="responses">
+              <h4
+                style="
+                  font-family: var(--ui);
+                  font-size: 11px;
+                  letter-spacing: 0.14em;
+                  text-transform: uppercase;
+                  color: var(--slate-2);
+                  margin: 0 0 8px;
+                "
+              >
+                Responses
+              </h4>
+              <div class="resp ok">
+                <span class="status">200</span
+                ><span class="desc">Claim transaction prepared.</span>
+              </div>
+            </div>
+          </div>
+          <div class="op-side">
+            <div class="code">
+              <div class="bar">
+                <span>bash</span
+                ><button class="copy" type="button">Copy</button>
+              </div>
+              <pre><code class="language-bash">curl -X POST &quot;$AUCTRA_URL/v1/auctions/{id}/claim&quot; \
+  -H &quot;Authorization: Bearer $AUCTRA_KEY&quot;</code></pre>
+            </div>
+          </div>
+        </section>
+        <h2 id="bids">
+          <a class="anchor" href="#bids" aria-hidden="true">#</a>Bids
+        </h2>
+        <div style="max-width: var(--measure)">
+          <p>Place bids and read the bid history of an auction.</p>
+        </div>
+        <section class="op" id="get-v1auctionsidbids">
+          <div class="op-main">
+            <h3>
+              <a class="anchor" href="#get-v1auctionsidbids" aria-hidden="true"
+                >#</a
+              >List bids on an auction
+            </h3>
+            <div class="route">
+              <span class="verb get">GET</span
+              ><span>/v1/auctions/{id}/bids</span>
+            </div>
+
+            <h4
+              style="
+                font-family: var(--ui);
+                font-size: 11px;
+                letter-spacing: 0.14em;
+                text-transform: uppercase;
+                color: var(--slate-2);
+                margin: 26px 0 4px;
+              "
+            >
+              Parameters
+            </h4>
+            <div class="params">
+              <div class="param">
+                <div class="param-head">
+                  <span class="name">id</span>
+                  <span class="type">string</span>
+                  <span class="type">path</span>
+                  <span class="req">Required</span>
+                </div>
+                <div class="param-body">
+                  <p>An auction id, e.g. <code>auc_3f9a2c7b1d4e</code>.</p>
+                </div>
+              </div>
+              <div class="param">
+                <div class="param-head">
+                  <span class="name">limit</span>
+                  <span class="type">integer</span>
+                  <span class="type">query</span>
+                  <span class="type">default 25</span>
+                </div>
+                <div class="param-body"><p>Page size, 1–100.</p></div>
+              </div>
+              <div class="param">
+                <div class="param-head">
+                  <span class="name">starting_after</span>
+                  <span class="type">string</span>
+                  <span class="type">query</span>
+                </div>
+                <div class="param-body">
+                  <p>
+                    An object id to page after. Cursor, not offset: auctions are
+                    inserted constantly, and <code>?page=2</code> would skip or
+                    duplicate rows whenever a new one lands between requests.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div class="responses">
+              <h4
+                style="
+                  font-family: var(--ui);
+                  font-size: 11px;
+                  letter-spacing: 0.14em;
+                  text-transform: uppercase;
+                  color: var(--slate-2);
+                  margin: 0 0 8px;
+                "
+              >
+                Responses
+              </h4>
+              <div class="resp ok">
+                <span class="status">200</span
+                ><span class="desc">Bid history, newest first.</span>
+              </div>
+              <div class="resp err">
+                <span class="status">404</span><span class="desc"></span>
+              </div>
+            </div>
+          </div>
+          <div class="op-side">
+            <div class="code">
+              <div class="bar">
+                <span>bash</span
+                ><button class="copy" type="button">Copy</button>
+              </div>
+              <pre><code class="language-bash">curl -X GET &quot;$AUCTRA_URL/v1/auctions/{id}/bids&quot; \
+  -H &quot;Authorization: Bearer $AUCTRA_KEY&quot;</code></pre>
+            </div>
+            <div class="code">
+              <div class="bar">
+                <span>json</span
+                ><button class="copy" type="button">Copy</button>
+              </div>
+              <pre><code class="language-json">{
+  &quot;object&quot;: &quot;list&quot;,
+  &quot;data&quot;: [
+    {
+      &quot;object&quot;: &quot;bid&quot;,
+      &quot;id&quot;: &quot;bid_8d2f4a6c1e3b&quot;,
+      &quot;auction&quot;: &quot;auc_3f9a2c7b1d4e&quot;,
+      &quot;bidder&quot;: &quot;0x9c8b7a6f5e4d3c2b1a0f9e8d7c6b5a4f3e2d1c0b&quot;,
+      &quot;amount_wei&quot;: &quot;1050000000000000000&quot;,
+      &quot;amount_display&quot;: &quot;1.05&quot;,
+      &quot;status&quot;: &quot;winning&quot;,
+      &quot;transaction_hash&quot;: &quot;0x8e1c4a7d0f3b6e9c2a5d8f1b4e7c04c1d7a90f3b2e5c8a1d4f7b0e3c6a9d2f5b&quot;,
+      &quot;block_number&quot;: 6142301,
+      &quot;placed_at&quot;: &quot;2026-07-08T14:22:07.881Z&quot;
+    }
+  ],
+  &quot;has_more&quot;: false,
+  &quot;next_cursor&quot;: null
+}</code></pre>
+            </div>
+          </div>
+        </section>
+        <section class="op" id="post-v1auctionsidbids">
+          <div class="op-main">
+            <h3>
+              <a class="anchor" href="#post-v1auctionsidbids" aria-hidden="true"
+                >#</a
+              >Place a bid
+            </h3>
+            <div class="route">
+              <span class="verb post">POST</span
+              ><span>/v1/auctions/{id}/bids</span>
+            </div>
+            <p>
+              Validates the bid against the live minimum, simulates it against
+              the bidder&#39;s address, and returns an unsigned transaction.
+              Nothing is committed until the bidder signs and the transaction
+              confirms.
+            </p>
+            <p>
+              There is no <code>managed</code> mode here. Bidding spends the
+              bidder&#39;s balance; no configuration makes it appropriate for
+              Auctra to do that on their behalf.
+            </p>
+            <p>
+              A bid landing inside the final
+              <code>extension_window_seconds</code> pushes the end time back, up
+              to <code>max_extensions</code> times. Your countdown must read
+              <code>end_time</code> from the
+              <code>auction.extended</code> webhook, not cache it.
+            </p>
+
+            <h4
+              style="
+                font-family: var(--ui);
+                font-size: 11px;
+                letter-spacing: 0.14em;
+                text-transform: uppercase;
+                color: var(--slate-2);
+                margin: 26px 0 4px;
+              "
+            >
+              Parameters
+            </h4>
+            <div class="params">
+              <div class="param">
+                <div class="param-head">
+                  <span class="name">id</span>
+                  <span class="type">string</span>
+                  <span class="type">path</span>
+                  <span class="req">Required</span>
+                </div>
+                <div class="param-body">
+                  <p>An auction id, e.g. <code>auc_3f9a2c7b1d4e</code>.</p>
+                </div>
+              </div>
+              <div class="param">
+                <div class="param-head">
+                  <span class="name">Idempotency-Key</span>
+                  <span class="type">string</span>
+                  <span class="type">header</span>
+                </div>
+                <div class="param-body">
+                  <p>
+                    A unique string, e.g. a UUID. Replaying the same key with
+                    the same body returns the original response verbatim; with a
+                    different body it returns
+                    <code>409 idempotency_key_reused</code>. Keys expire after
+                    24 hours.
+                  </p>
+                </div>
+              </div>
+            </div>
+            <h4
+              style="
+                font-family: var(--ui);
+                font-size: 11px;
+                letter-spacing: 0.14em;
+                text-transform: uppercase;
+                color: var(--slate-2);
+                margin: 26px 0 4px;
+              "
+            >
+              Body
+            </h4>
+            <div class="params">
+              <div class="param">
+                <div class="param-head">
+                  <span class="name">bidder</span>
+                  <span class="type">string</span>
+                  <span class="req">Required</span>
+                </div>
+                <div class="param-body">
+                  <p>A 20-byte Ethereum address, lowercased in responses.</p>
+                </div>
+              </div>
+              <div class="param">
+                <div class="param-head">
+                  <span class="name">amount_wei</span>
+                  <span class="type">string</span>
+                  <span class="req">Required</span>
+                </div>
+                <div class="param-body">
+                  <p>
+                    A decimal string of wei. Always a string: 1 ETH = 10^18 wei,
+                    and JSON numbers are doubles, which lose integer precision
+                    above 2^53.
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div class="responses">
+              <h4
+                style="
+                  font-family: var(--ui);
+                  font-size: 11px;
+                  letter-spacing: 0.14em;
+                  text-transform: uppercase;
+                  color: var(--slate-2);
+                  margin: 0 0 8px;
+                "
+              >
+                Responses
+              </h4>
+              <div class="resp ok">
+                <span class="status">200</span
+                ><span class="desc"
+                  >A bid intent with a transaction to sign.</span
+                >
+              </div>
+              <div class="resp err">
+                <span class="status">400</span
+                ><span class="desc"
+                  >The bid was rejected before it cost anyone gas.
+                  `bid_below_minimum`</span
+                >
+              </div>
+              <div class="resp err">
+                <span class="status">404</span><span class="desc"></span>
+              </div>
+            </div>
+          </div>
+          <div class="op-side">
+            <div class="code">
+              <div class="bar">
+                <span>bash</span
+                ><button class="copy" type="button">Copy</button>
+              </div>
+              <pre><code class="language-bash">curl -X POST &quot;$AUCTRA_URL/v1/auctions/{id}/bids&quot; \
+  -H &quot;Authorization: Bearer $AUCTRA_KEY&quot; \
+  -H &quot;Content-Type: application/json&quot; \
+  -H &quot;Idempotency-Key: $(uuidgen)&quot; \
+  -d '{
+    &quot;bidder&quot;: &quot;0x9c8b7a6f5e4d3c2b1a0f9e8d7c6b5a4f3e2d1c0b&quot;,
+    &quot;amount_wei&quot;: &quot;1050000000000000000&quot;
+  }'</code></pre>
+            </div>
+            <div class="code">
+              <div class="bar">
+                <span>json</span
+                ><button class="copy" type="button">Copy</button>
+              </div>
+              <pre><code class="language-json">{
+  &quot;error&quot;: {
+    &quot;type&quot;: &quot;invalid_request_error&quot;,
+    &quot;code&quot;: &quot;bid_below_minimum&quot;,
+    &quot;message&quot;: &quot;Bid does not clear the current minimum.&quot;,
+    &quot;param&quot;: &quot;amount_wei&quot;,
+    &quot;detail&quot;: {
+      &quot;minimum_bid_wei&quot;: &quot;1102500000000000000&quot;
+    },
+    &quot;request_id&quot;: &quot;req_9f2ac71b3d8e4a05&quot;,
+    &quot;docs_url&quot;: &quot;https://docs.auctra.dev/errors#bid_below_minimum&quot;
+  }
+}</code></pre>
+            </div>
+          </div>
+        </section>
+        <h2 id="refunds">
+          <a class="anchor" href="#refunds" aria-hidden="true">#</a>Refunds
+        </h2>
+        <div style="max-width: var(--measure)">
+          <p>Credited balances for outbid bidders, and how to withdraw them.</p>
+        </div>
+        <section class="op" id="get-v1refunds">
+          <div class="op-main">
+            <h3>
+              <a class="anchor" href="#get-v1refunds" aria-hidden="true">#</a
+              >List refund credits
+            </h3>
+            <div class="route">
+              <span class="verb get">GET</span><span>/v1/refunds</span>
+            </div>
+            <p>
+              When a bidder is outbid, the contract credits them rather than
+              sending ETH back. Pushing a refund would let a malicious contract
+              revert on receive and freeze the auction for everyone. Refunds are
+              pulled.
+            </p>
+
+            <h4
+              style="
+                font-family: var(--ui);
+                font-size: 11px;
+                letter-spacing: 0.14em;
+                text-transform: uppercase;
+                color: var(--slate-2);
+                margin: 26px 0 4px;
+              "
+            >
+              Parameters
+            </h4>
+            <div class="params">
+              <div class="param">
+                <div class="param-head">
+                  <span class="name">limit</span>
+                  <span class="type">integer</span>
+                  <span class="type">query</span>
+                  <span class="type">default 25</span>
+                </div>
+                <div class="param-body"><p>Page size, 1–100.</p></div>
+              </div>
+              <div class="param">
+                <div class="param-head">
+                  <span class="name">starting_after</span>
+                  <span class="type">string</span>
+                  <span class="type">query</span>
+                </div>
+                <div class="param-body">
+                  <p>
+                    An object id to page after. Cursor, not offset: auctions are
+                    inserted constantly, and <code>?page=2</code> would skip or
+                    duplicate rows whenever a new one lands between requests.
+                  </p>
+                </div>
+              </div>
+              <div class="param">
+                <div class="param-head">
+                  <span class="name">bidder</span>
+                  <span class="type">string</span>
+                  <span class="type">query</span>
+                </div>
+                <div class="param-body"></div>
+              </div>
+              <div class="param">
+                <div class="param-head">
+                  <span class="name">withdrawn</span>
+                  <span class="type">boolean</span>
+                  <span class="type">query</span>
+                </div>
+                <div class="param-body"></div>
+              </div>
+            </div>
+
+            <div class="responses">
+              <h4
+                style="
+                  font-family: var(--ui);
+                  font-size: 11px;
+                  letter-spacing: 0.14em;
+                  text-transform: uppercase;
+                  color: var(--slate-2);
+                  margin: 0 0 8px;
+                "
+              >
+                Responses
+              </h4>
+              <div class="resp ok">
+                <span class="status">200</span
+                ><span class="desc">A paginated list of refund credits.</span>
+              </div>
+            </div>
+          </div>
+          <div class="op-side">
+            <div class="code">
+              <div class="bar">
+                <span>bash</span
+                ><button class="copy" type="button">Copy</button>
+              </div>
+              <pre><code class="language-bash">curl -X GET &quot;$AUCTRA_URL/v1/refunds&quot; \
+  -H &quot;Authorization: Bearer $AUCTRA_KEY&quot;</code></pre>
+            </div>
+            <div class="code">
+              <div class="bar">
+                <span>json</span
+                ><button class="copy" type="button">Copy</button>
+              </div>
+              <pre><code class="language-json">{
+  &quot;object&quot;: &quot;list&quot;,
+  &quot;data&quot;: [
+    {
+      &quot;object&quot;: &quot;refund&quot;,
+      &quot;id&quot;: &quot;ref_1e5a8c3f7b2d&quot;,
+      &quot;bidder&quot;: &quot;0x9c8b7a6f5e4d3c2b1a0f9e8d7c6b5a4f3e2d1c0b&quot;,
+      &quot;amount_wei&quot;: &quot;1050000000000000000&quot;,
+      &quot;amount_display&quot;: &quot;1.05&quot;,
+      &quot;withdrawn&quot;: false,
+      &quot;withdrawal_transaction&quot;: null,
+      &quot;chain_id&quot;: 11155111,
+      &quot;created_at&quot;: &quot;2026-07-08T14:31:52.006Z&quot;
+    }
+  ],
+  &quot;has_more&quot;: false,
+  &quot;next_cursor&quot;: null
+}</code></pre>
+            </div>
+          </div>
+        </section>
+        <section class="op" id="get-v1refundsbalance">
+          <div class="op-main">
+            <h3>
+              <a class="anchor" href="#get-v1refundsbalance" aria-hidden="true"
+                >#</a
+              >Read a withdrawable balance
+            </h3>
+            <div class="route">
+              <span class="verb get">GET</span><span>/v1/refunds/balance</span>
+            </div>
+            <p>
+              Reads <code>pendingReturns()</code> straight from the chain, not
+              the cache.
+            </p>
+
+            <h4
+              style="
+                font-family: var(--ui);
+                font-size: 11px;
+                letter-spacing: 0.14em;
+                text-transform: uppercase;
+                color: var(--slate-2);
+                margin: 26px 0 4px;
+              "
+            >
+              Parameters
+            </h4>
+            <div class="params">
+              <div class="param">
+                <div class="param-head">
+                  <span class="name">bidder</span>
+                  <span class="type">string</span>
+                  <span class="type">query</span>
+                  <span class="req">Required</span>
+                </div>
+                <div class="param-body"></div>
+              </div>
+            </div>
+
+            <div class="responses">
+              <h4
+                style="
+                  font-family: var(--ui);
+                  font-size: 11px;
+                  letter-spacing: 0.14em;
+                  text-transform: uppercase;
+                  color: var(--slate-2);
+                  margin: 0 0 8px;
+                "
+              >
+                Responses
+              </h4>
+              <div class="resp ok">
+                <span class="status">200</span
+                ><span class="desc">The live withdrawable balance.</span>
+              </div>
+            </div>
+          </div>
+          <div class="op-side">
+            <div class="code">
+              <div class="bar">
+                <span>bash</span
+                ><button class="copy" type="button">Copy</button>
+              </div>
+              <pre><code class="language-bash">curl -X GET &quot;$AUCTRA_URL/v1/refunds/balance&quot; \
+  -H &quot;Authorization: Bearer $AUCTRA_KEY&quot;</code></pre>
+            </div>
+            <div class="code">
+              <div class="bar">
+                <span>json</span
+                ><button class="copy" type="button">Copy</button>
+              </div>
+              <pre><code class="language-json">{
+  &quot;object&quot;: &quot;refund_balance&quot;,
+  &quot;bidder&quot;: &quot;0x9c8b7a6f5e4d3c2b1a0f9e8d7c6b5a4f3e2d1c0b&quot;,
+  &quot;withdrawable_wei&quot;: &quot;1050000000000000000&quot;,
+  &quot;withdrawable_display&quot;: &quot;1.05&quot;,
+  &quot;source&quot;: &quot;chain&quot;
+}</code></pre>
+            </div>
+          </div>
+        </section>
+        <section class="op" id="post-v1refundswithdraw">
+          <div class="op-main">
+            <h3>
+              <a
+                class="anchor"
+                href="#post-v1refundswithdraw"
+                aria-hidden="true"
+                >#</a
+              >Withdraw a refund balance
+            </h3>
+            <div class="route">
+              <span class="verb post">POST</span
+              ><span>/v1/refunds/withdraw</span>
+            </div>
+            <p>
+              Prepares <code>withdraw()</code>, which sweeps the bidder&#39;s
+              entire credited balance across all auctions in a single
+              transaction.
+            </p>
+
+            <h4
+              style="
+                font-family: var(--ui);
+                font-size: 11px;
+                letter-spacing: 0.14em;
+                text-transform: uppercase;
+                color: var(--slate-2);
+                margin: 26px 0 4px;
+              "
+            >
+              Parameters
+            </h4>
+            <div class="params">
+              <div class="param">
+                <div class="param-head">
+                  <span class="name">Idempotency-Key</span>
+                  <span class="type">string</span>
+                  <span class="type">header</span>
+                </div>
+                <div class="param-body">
+                  <p>
+                    A unique string, e.g. a UUID. Replaying the same key with
+                    the same body returns the original response verbatim; with a
+                    different body it returns
+                    <code>409 idempotency_key_reused</code>. Keys expire after
+                    24 hours.
+                  </p>
+                </div>
+              </div>
+            </div>
+            <h4
+              style="
+                font-family: var(--ui);
+                font-size: 11px;
+                letter-spacing: 0.14em;
+                text-transform: uppercase;
+                color: var(--slate-2);
+                margin: 26px 0 4px;
+              "
+            >
+              Body
+            </h4>
+            <div class="params">
+              <div class="param">
+                <div class="param-head">
+                  <span class="name">bidder</span>
+                  <span class="type">string</span>
+                  <span class="req">Required</span>
+                </div>
+                <div class="param-body">
+                  <p>A 20-byte Ethereum address, lowercased in responses.</p>
+                </div>
+              </div>
+            </div>
+            <div class="responses">
+              <h4
+                style="
+                  font-family: var(--ui);
+                  font-size: 11px;
+                  letter-spacing: 0.14em;
+                  text-transform: uppercase;
+                  color: var(--slate-2);
+                  margin: 0 0 8px;
+                "
+              >
+                Responses
+              </h4>
+              <div class="resp ok">
+                <span class="status">200</span
+                ><span class="desc">Withdrawal transaction prepared.</span>
+              </div>
+            </div>
+          </div>
+          <div class="op-side">
+            <div class="code">
+              <div class="bar">
+                <span>bash</span
+                ><button class="copy" type="button">Copy</button>
+              </div>
+              <pre><code class="language-bash">curl -X POST &quot;$AUCTRA_URL/v1/refunds/withdraw&quot; \
+  -H &quot;Authorization: Bearer $AUCTRA_KEY&quot;</code></pre>
+            </div>
+          </div>
+        </section>
+        <h2 id="transactions">
+          <a class="anchor" href="#transactions" aria-hidden="true">#</a
+          >Transactions
+        </h2>
+        <div style="max-width: var(--measure)">
+          <p>Broadcast signed transactions and poll for confirmation.</p>
+        </div>
+        <section class="op" id="post-v1transactions">
+          <div class="op-main">
+            <h3>
+              <a class="anchor" href="#post-v1transactions" aria-hidden="true"
+                >#</a
+              >Broadcast a signed transaction
+            </h3>
+            <div class="route">
+              <span class="verb post">POST</span><span>/v1/transactions</span>
+            </div>
+            <p>
+              Optional. You can send a signed transaction to any node; this
+              endpoint exists so an integration needs one network dependency
+              instead of two.
+            </p>
+            <p>
+              Returns <code>202 Accepted</code>, not <code>200</code>. The chain
+              decides whether a transaction succeeds, and it has not decided
+              yet.
+            </p>
+
+            <h4
+              style="
+                font-family: var(--ui);
+                font-size: 11px;
+                letter-spacing: 0.14em;
+                text-transform: uppercase;
+                color: var(--slate-2);
+                margin: 26px 0 4px;
+              "
+            >
+              Parameters
+            </h4>
+            <div class="params">
+              <div class="param">
+                <div class="param-head">
+                  <span class="name">Idempotency-Key</span>
+                  <span class="type">string</span>
+                  <span class="type">header</span>
+                </div>
+                <div class="param-body">
+                  <p>
+                    A unique string, e.g. a UUID. Replaying the same key with
+                    the same body returns the original response verbatim; with a
+                    different body it returns
+                    <code>409 idempotency_key_reused</code>. Keys expire after
+                    24 hours.
+                  </p>
+                </div>
+              </div>
+            </div>
+            <h4
+              style="
+                font-family: var(--ui);
+                font-size: 11px;
+                letter-spacing: 0.14em;
+                text-transform: uppercase;
+                color: var(--slate-2);
+                margin: 26px 0 4px;
+              "
+            >
+              Body
+            </h4>
+            <div class="params">
+              <div class="param">
+                <div class="param-head">
+                  <span class="name">signed_transaction</span>
+                  <span class="type">string</span>
+                  <span class="req">Required</span>
+                </div>
+                <div class="param-body"></div>
+              </div>
+            </div>
+            <div class="responses">
+              <h4
+                style="
+                  font-family: var(--ui);
+                  font-size: 11px;
+                  letter-spacing: 0.14em;
+                  text-transform: uppercase;
+                  color: var(--slate-2);
+                  margin: 0 0 8px;
+                "
+              >
+                Responses
+              </h4>
+              <div class="resp ok">
+                <span class="status">202</span
+                ><span class="desc">Accepted into the mempool.</span>
+              </div>
+              <div class="resp err">
+                <span class="status">422</span><span class="desc"></span>
+              </div>
+            </div>
+          </div>
+          <div class="op-side">
+            <div class="code">
+              <div class="bar">
+                <span>bash</span
+                ><button class="copy" type="button">Copy</button>
+              </div>
+              <pre><code class="language-bash">curl -X POST &quot;$AUCTRA_URL/v1/transactions&quot; \
+  -H &quot;Authorization: Bearer $AUCTRA_KEY&quot;</code></pre>
+            </div>
+            <div class="code">
+              <div class="bar">
+                <span>json</span
+                ><button class="copy" type="button">Copy</button>
+              </div>
+              <pre><code class="language-json">{
+  &quot;object&quot;: &quot;transaction&quot;,
+  &quot;hash&quot;: &quot;0x4c1d7a90f3b2e5c8a1d4f7b0e3c6a9d2f5b8e1c4a7d0f3b6e9c2a5d8f1b4e7c0&quot;,
+  &quot;status&quot;: &quot;pending&quot;,
+  &quot;confirmations&quot;: 0,
+  &quot;poll&quot;: &quot;/v1/transactions/0x4c1d...&quot;
+}</code></pre>
+            </div>
+          </div>
+        </section>
+        <section class="op" id="get-v1transactionshash">
+          <div class="op-main">
+            <h3>
+              <a
+                class="anchor"
+                href="#get-v1transactionshash"
+                aria-hidden="true"
+                >#</a
+              >Retrieve a transaction
+            </h3>
+            <div class="route">
+              <span class="verb get">GET</span
+              ><span>/v1/transactions/{hash}</span>
+            </div>
+
+            <h4
+              style="
+                font-family: var(--ui);
+                font-size: 11px;
+                letter-spacing: 0.14em;
+                text-transform: uppercase;
+                color: var(--slate-2);
+                margin: 26px 0 4px;
+              "
+            >
+              Parameters
+            </h4>
+            <div class="params">
+              <div class="param">
+                <div class="param-head">
+                  <span class="name">hash</span>
+                  <span class="type">string</span>
+                  <span class="type">path</span>
+                  <span class="req">Required</span>
+                </div>
+                <div class="param-body"></div>
+              </div>
+            </div>
+
+            <div class="responses">
+              <h4
+                style="
+                  font-family: var(--ui);
+                  font-size: 11px;
+                  letter-spacing: 0.14em;
+                  text-transform: uppercase;
+                  color: var(--slate-2);
+                  margin: 0 0 8px;
+                "
+              >
+                Responses
+              </h4>
+              <div class="resp ok">
+                <span class="status">200</span
+                ><span class="desc"
+                  >`status` is `pending` until mined, then `confirmed` or
+                  `reverted`.</span
+                >
+              </div>
+            </div>
+          </div>
+          <div class="op-side">
+            <div class="code">
+              <div class="bar">
+                <span>bash</span
+                ><button class="copy" type="button">Copy</button>
+              </div>
+              <pre><code class="language-bash">curl -X GET &quot;$AUCTRA_URL/v1/transactions/{hash}&quot; \
+  -H &quot;Authorization: Bearer $AUCTRA_KEY&quot;</code></pre>
+            </div>
+          </div>
+        </section>
+        <h2 id="webhooks">
+          <a class="anchor" href="#webhooks" aria-hidden="true">#</a>Webhooks
+        </h2>
+        <div style="max-width: var(--measure)">
+          <p>Subscribe to auction events and replay the event log.</p>
+        </div>
+        <section class="op" id="get-v1webhook_endpoints">
+          <div class="op-main">
+            <h3>
+              <a
+                class="anchor"
+                href="#get-v1webhook_endpoints"
+                aria-hidden="true"
+                >#</a
+              >List webhook endpoints
+            </h3>
+            <div class="route">
+              <span class="verb get">GET</span
+              ><span>/v1/webhook_endpoints</span>
+            </div>
+
+            <div class="responses">
+              <h4
+                style="
+                  font-family: var(--ui);
+                  font-size: 11px;
+                  letter-spacing: 0.14em;
+                  text-transform: uppercase;
+                  color: var(--slate-2);
+                  margin: 0 0 8px;
+                "
+              >
+                Responses
+              </h4>
+              <div class="resp ok">
+                <span class="status">200</span
+                ><span class="desc"
+                  >Your endpoints. Secrets are never returned after
+                  creation.</span
+                >
+              </div>
+            </div>
+          </div>
+          <div class="op-side">
+            <div class="code">
+              <div class="bar">
+                <span>bash</span
+                ><button class="copy" type="button">Copy</button>
+              </div>
+              <pre><code class="language-bash">curl -X GET &quot;$AUCTRA_URL/v1/webhook_endpoints&quot; \
+  -H &quot;Authorization: Bearer $AUCTRA_KEY&quot;</code></pre>
+            </div>
+            <div class="code">
+              <div class="bar">
+                <span>json</span
+                ><button class="copy" type="button">Copy</button>
+              </div>
+              <pre><code class="language-json">{
+  &quot;object&quot;: &quot;list&quot;,
+  &quot;data&quot;: [
+    {
+      &quot;object&quot;: &quot;webhook_endpoint&quot;,
+      &quot;id&quot;: &quot;whe_6b3d0f8a2c1e&quot;,
+      &quot;url&quot;: &quot;https://example.com/hooks/auctra&quot;,
+      &quot;enabled_events&quot;: [
+        &quot;auction.bid_placed&quot;,
+        &quot;auction.outbid&quot;,
+        &quot;auction.settled&quot;
+      ],
+      &quot;status&quot;: &quot;enabled&quot;,
+      &quot;created_at&quot;: &quot;2026-07-01T08:14:22.417Z&quot;
+    }
+  ],
+  &quot;has_more&quot;: false,
+  &quot;next_cursor&quot;: null
+}</code></pre>
+            </div>
+          </div>
+        </section>
+        <section class="op" id="post-v1webhook_endpoints">
+          <div class="op-main">
+            <h3>
+              <a
+                class="anchor"
+                href="#post-v1webhook_endpoints"
+                aria-hidden="true"
+                >#</a
+              >Create a webhook endpoint
+            </h3>
+            <div class="route">
+              <span class="verb post">POST</span
+              ><span>/v1/webhook_endpoints</span>
+            </div>
+            <p>
+              The response contains <code>secret</code> exactly once. Store it;
+              every subsequent request is signed with it, and you must verify
+              that signature before trusting the body.
+            </p>
+
+            <h4
+              style="
+                font-family: var(--ui);
+                font-size: 11px;
+                letter-spacing: 0.14em;
+                text-transform: uppercase;
+                color: var(--slate-2);
+                margin: 26px 0 4px;
+              "
+            >
+              Body
+            </h4>
+            <div class="params">
+              <div class="param">
+                <div class="param-head">
+                  <span class="name">url</span>
+                  <span class="type">string</span>
+                  <span class="req">Required</span>
+                </div>
+                <div class="param-body"></div>
+              </div>
+              <div class="param">
+                <div class="param-head">
+                  <span class="name">enabled_events</span>
+                  <span class="type"
+                    >"auction.created" | "auction.bid_placed" | "auction.outbid"
+                    | "auction.extended" | "auction.ending_soon" |
+                    "auction.ended" | "auction.settled" | "auction.cancelled" |
+                    "refund.credited" | "refund.withdrawn" |
+                    "item.claimed"[]</span
+                  >
+                  <span class="req">Required</span>
+                </div>
+                <div class="param-body"></div>
+              </div>
+            </div>
+            <div class="responses">
+              <h4
+                style="
+                  font-family: var(--ui);
+                  font-size: 11px;
+                  letter-spacing: 0.14em;
+                  text-transform: uppercase;
+                  color: var(--slate-2);
+                  margin: 0 0 8px;
+                "
+              >
+                Responses
+              </h4>
+              <div class="resp ok">
+                <span class="status">201</span
+                ><span class="desc"
+                  >Endpoint created. `secret` is shown once.</span
+                >
+              </div>
+            </div>
+          </div>
+          <div class="op-side">
+            <div class="code">
+              <div class="bar">
+                <span>bash</span
+                ><button class="copy" type="button">Copy</button>
+              </div>
+              <pre><code class="language-bash">curl -X POST &quot;$AUCTRA_URL/v1/webhook_endpoints&quot; \
+  -H &quot;Authorization: Bearer $AUCTRA_KEY&quot; \
+  -H &quot;Content-Type: application/json&quot; \
+  -H &quot;Idempotency-Key: $(uuidgen)&quot; \
+  -d '{
+    &quot;url&quot;: &quot;https://example.com/hooks/auctra&quot;,
+    &quot;enabled_events&quot;: [
+      &quot;auction.bid_placed&quot;,
+      &quot;auction.outbid&quot;,
+      &quot;auction.settled&quot;
+    ]
+  }'</code></pre>
+            </div>
+            <div class="code">
+              <div class="bar">
+                <span>json</span
+                ><button class="copy" type="button">Copy</button>
+              </div>
+              <pre><code class="language-json">{
+  &quot;object&quot;: &quot;webhook_endpoint&quot;,
+  &quot;id&quot;: &quot;whe_6b3d0f8a2c1e&quot;,
+  &quot;url&quot;: &quot;https://example.com/hooks/auctra&quot;,
+  &quot;enabled_events&quot;: [
+    &quot;auction.bid_placed&quot;,
+    &quot;auction.outbid&quot;,
+    &quot;auction.settled&quot;
+  ],
+  &quot;secret&quot;: &quot;whsec_9d4f2a7c1b8e0356af914d2c7b0e5836a1f4c9d2&quot;,
+  &quot;created_at&quot;: &quot;2026-07-01T08:14:22.417Z&quot;
+}</code></pre>
+            </div>
+          </div>
+        </section>
+        <section class="op" id="delete-v1webhook_endpointsid">
+          <div class="op-main">
+            <h3>
+              <a
+                class="anchor"
+                href="#delete-v1webhook_endpointsid"
+                aria-hidden="true"
+                >#</a
+              >Delete a webhook endpoint
+            </h3>
+            <div class="route">
+              <span class="verb delete">DELETE</span
+              ><span>/v1/webhook_endpoints/{id}</span>
+            </div>
+
+            <h4
+              style="
+                font-family: var(--ui);
+                font-size: 11px;
+                letter-spacing: 0.14em;
+                text-transform: uppercase;
+                color: var(--slate-2);
+                margin: 26px 0 4px;
+              "
+            >
+              Parameters
+            </h4>
+            <div class="params">
+              <div class="param">
+                <div class="param-head">
+                  <span class="name">id</span>
+                  <span class="type">string</span>
+                  <span class="type">path</span>
+                  <span class="req">Required</span>
+                </div>
+                <div class="param-body"></div>
+              </div>
+            </div>
+
+            <div class="responses">
+              <h4
+                style="
+                  font-family: var(--ui);
+                  font-size: 11px;
+                  letter-spacing: 0.14em;
+                  text-transform: uppercase;
+                  color: var(--slate-2);
+                  margin: 0 0 8px;
+                "
+              >
+                Responses
+              </h4>
+              <div class="resp ok">
+                <span class="status">200</span
+                ><span class="desc">Deleted.</span>
+              </div>
+            </div>
+          </div>
+          <div class="op-side">
+            <div class="code">
+              <div class="bar">
+                <span>bash</span
+                ><button class="copy" type="button">Copy</button>
+              </div>
+              <pre><code class="language-bash">curl -X DELETE &quot;$AUCTRA_URL/v1/webhook_endpoints/{id}&quot; \
+  -H &quot;Authorization: Bearer $AUCTRA_KEY&quot;</code></pre>
+            </div>
+          </div>
+        </section>
+        <section class="op" id="get-v1events">
+          <div class="op-main">
+            <h3>
+              <a class="anchor" href="#get-v1events" aria-hidden="true">#</a
+              >List events
+            </h3>
+            <div class="route">
+              <span class="verb get">GET</span><span>/v1/events</span>
+            </div>
+            <p>
+              Every webhook we send is also a durable row here. If your listener
+              was down, don&#39;t ask us to redeliver — read the log and
+              reconcile.
+            </p>
+
+            <h4
+              style="
+                font-family: var(--ui);
+                font-size: 11px;
+                letter-spacing: 0.14em;
+                text-transform: uppercase;
+                color: var(--slate-2);
+                margin: 26px 0 4px;
+              "
+            >
+              Parameters
+            </h4>
+            <div class="params">
+              <div class="param">
+                <div class="param-head">
+                  <span class="name">limit</span>
+                  <span class="type">integer</span>
+                  <span class="type">query</span>
+                  <span class="type">default 25</span>
+                </div>
+                <div class="param-body"><p>Page size, 1–100.</p></div>
+              </div>
+              <div class="param">
+                <div class="param-head">
+                  <span class="name">starting_after</span>
+                  <span class="type">string</span>
+                  <span class="type">query</span>
+                </div>
+                <div class="param-body">
+                  <p>
+                    An object id to page after. Cursor, not offset: auctions are
+                    inserted constantly, and <code>?page=2</code> would skip or
+                    duplicate rows whenever a new one lands between requests.
+                  </p>
+                </div>
+              </div>
+              <div class="param">
+                <div class="param-head">
+                  <span class="name">type</span>
+                  <span class="type"
+                    >"auction.created" | "auction.bid_placed" | "auction.outbid"
+                    | "auction.extended" | "auction.ending_soon" |
+                    "auction.ended" | "auction.settled" | "auction.cancelled" |
+                    "refund.credited" | "refund.withdrawn" |
+                    "item.claimed"</span
+                  >
+                  <span class="type">query</span>
+                </div>
+                <div class="param-body"></div>
+              </div>
+            </div>
+
+            <div class="responses">
+              <h4
+                style="
+                  font-family: var(--ui);
+                  font-size: 11px;
+                  letter-spacing: 0.14em;
+                  text-transform: uppercase;
+                  color: var(--slate-2);
+                  margin: 0 0 8px;
+                "
+              >
+                Responses
+              </h4>
+              <div class="resp ok">
+                <span class="status">200</span
+                ><span class="desc">A paginated list of events.</span>
+              </div>
+            </div>
+          </div>
+          <div class="op-side">
+            <div class="code">
+              <div class="bar">
+                <span>bash</span
+                ><button class="copy" type="button">Copy</button>
+              </div>
+              <pre><code class="language-bash">curl -X GET &quot;$AUCTRA_URL/v1/events&quot; \
+  -H &quot;Authorization: Bearer $AUCTRA_KEY&quot;</code></pre>
+            </div>
+            <div class="code">
+              <div class="bar">
+                <span>json</span
+                ><button class="copy" type="button">Copy</button>
+              </div>
+              <pre><code class="language-json">{
+  &quot;object&quot;: &quot;list&quot;,
+  &quot;data&quot;: [
+    {
+      &quot;object&quot;: &quot;event&quot;,
+      &quot;id&quot;: &quot;evt_7c2e9a1f4b6d&quot;,
+      &quot;type&quot;: &quot;auction.outbid&quot;,
+      &quot;created_at&quot;: &quot;2026-07-09T10:31:04.882Z&quot;,
+      &quot;data&quot;: {
+        &quot;object&quot;: {
+          &quot;auction&quot;: &quot;auc_3f9a2c7b1d4e&quot;,
+          &quot;outbid_bidder&quot;: &quot;0x9c8b7a6f5e4d3c2b1a0f9e8d7c6b5a4f3e2d1c0b&quot;,
+          &quot;refund_wei&quot;: &quot;1050000000000000000&quot;
+        }
+      }
+    }
+  ],
+  &quot;has_more&quot;: true,
+  &quot;next_cursor&quot;: &quot;evt_7c2e9a1f4b6d&quot;
+}</code></pre>
+            </div>
+          </div>
+        </section>
+        <section class="op" id="get-v1eventsid">
+          <div class="op-main">
+            <h3>
+              <a class="anchor" href="#get-v1eventsid" aria-hidden="true">#</a
+              >Retrieve an event
+            </h3>
+            <div class="route">
+              <span class="verb get">GET</span><span>/v1/events/{id}</span>
+            </div>
+
+            <h4
+              style="
+                font-family: var(--ui);
+                font-size: 11px;
+                letter-spacing: 0.14em;
+                text-transform: uppercase;
+                color: var(--slate-2);
+                margin: 26px 0 4px;
+              "
+            >
+              Parameters
+            </h4>
+            <div class="params">
+              <div class="param">
+                <div class="param-head">
+                  <span class="name">id</span>
+                  <span class="type">string</span>
+                  <span class="type">path</span>
+                  <span class="req">Required</span>
+                </div>
+                <div class="param-body"></div>
+              </div>
+            </div>
+
+            <div class="responses">
+              <h4
+                style="
+                  font-family: var(--ui);
+                  font-size: 11px;
+                  letter-spacing: 0.14em;
+                  text-transform: uppercase;
+                  color: var(--slate-2);
+                  margin: 0 0 8px;
+                "
+              >
+                Responses
+              </h4>
+              <div class="resp ok">
+                <span class="status">200</span
+                ><span class="desc">The event.</span>
+              </div>
+              <div class="resp err">
+                <span class="status">404</span><span class="desc"></span>
+              </div>
+            </div>
+          </div>
+          <div class="op-side">
+            <div class="code">
+              <div class="bar">
+                <span>bash</span
+                ><button class="copy" type="button">Copy</button>
+              </div>
+              <pre><code class="language-bash">curl -X GET &quot;$AUCTRA_URL/v1/events/{id}&quot; \
+  -H &quot;Authorization: Bearer $AUCTRA_KEY&quot;</code></pre>
+            </div>
+          </div>
+        </section>
+        <h2 id="health">
+          <a class="anchor" href="#health" aria-hidden="true">#</a>Health
+        </h2>
+        <div style="max-width: var(--measure)">
+          <p>Liveness and dependency status. No authentication required.</p>
+        </div>
+        <section class="op" id="get-v1health">
+          <div class="op-main">
+            <h3>
+              <a class="anchor" href="#get-v1health" aria-hidden="true">#</a
+              >Check API health
+            </h3>
+            <div class="route">
+              <span class="verb get">GET</span><span>/v1/health</span>
+            </div>
+            <p>
+              Reports the two dependencies that can take the API down: the
+              database and the RPC node. Use <code>head_block</code> to tell
+              whether the indexer is keeping up with the chain.
+            </p>
+
+            <div class="responses">
+              <h4
+                style="
+                  font-family: var(--ui);
+                  font-size: 11px;
+                  letter-spacing: 0.14em;
+                  text-transform: uppercase;
+                  color: var(--slate-2);
+                  margin: 0 0 8px;
+                "
+              >
+                Responses
+              </h4>
+              <div class="resp ok">
+                <span class="status">200</span
+                ><span class="desc">Health report.</span>
+              </div>
+            </div>
+          </div>
+          <div class="op-side">
+            <div class="code">
+              <div class="bar">
+                <span>bash</span
+                ><button class="copy" type="button">Copy</button>
+              </div>
+              <pre><code class="language-bash">curl -X GET &quot;$AUCTRA_URL/v1/health&quot; \
+  -H &quot;Authorization: Bearer $AUCTRA_KEY&quot;</code></pre>
+            </div>
+            <div class="code">
+              <div class="bar">
+                <span>json</span
+                ><button class="copy" type="button">Copy</button>
+              </div>
+              <pre><code class="language-json">{
+  &quot;object&quot;: &quot;health&quot;,
+  &quot;status&quot;: &quot;ok&quot;,
+  &quot;environment&quot;: &quot;sandbox&quot;,
+  &quot;chain_id&quot;: 11155111,
+  &quot;head_block&quot;: 6142398,
+  &quot;database&quot;: &quot;ok&quot;,
+  &quot;rpc&quot;: &quot;ok&quot;,
+  &quot;managed_signer&quot;: &quot;disabled&quot;
 }</code></pre>
             </div>
           </div>
