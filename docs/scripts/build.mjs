@@ -13,6 +13,7 @@ import {
   mkdirSync,
   readdirSync,
   copyFileSync,
+  cpSync,
 } from "node:fs";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -177,6 +178,7 @@ function layout({ title, description, section, body, sidebarHtml, railHtml }) {
     <a class="hide-sm" href="api-reference.html">API reference</a>
     <a class="hide-sm" href="changelog.html">Changelog</a>
     <a class="hide-sm" href="https://github.com/3nylar/auctra-api">GitHub</a>
+    <a class="nav-cta" href="dashboard/signup.html">Get an API key</a>
     <button class="icon-btn" id="theme-toggle" aria-label="Toggle colour theme">◐</button>
   </nav>
 </header>
@@ -776,6 +778,10 @@ copyFileSync(
   join(ROOT, "..", "spec", "openapi.json"),
   join(DIST, "openapi.json"),
 );
+
+// The dashboard: plain HTML/CSS/JS, not run through the markdown pipeline
+// at all — it's an application, not a document, so it's copied verbatim.
+cpSync(join(ROOT, "dashboard"), join(DIST, "dashboard"), { recursive: true });
 
 console.log(`built ${pages.length} pages → docs/dist`);
 for (const p of pages) console.log(`  ${p.meta.slug}.html`);

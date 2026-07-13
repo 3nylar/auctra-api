@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Dashboard — Auctra</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../styles.css">
+<link rel="stylesheet" href="dashboard.css">
+<script>
+  try {
+    const t = localStorage.getItem("auctra-theme");
+    if (t) document.documentElement.dataset.theme = t;
+    else if (matchMedia("(prefers-color-scheme: dark)").matches) document.documentElement.dataset.theme = "dark";
+  } catch {}
+</script>
+</head>
+<body style="background:var(--paper)">
+
+<div class="dash-shell">
+  <a class="dash-wordmark" href="../introduction.html"><b>Auctra</b><span>Dashboard</span></a>
+
+  <div class="dash-card wide" id="card" style="display:none">
+    <div class="dash-header">
+      <div>
+        <h1 style="margin-bottom:2px">API keys</h1>
+        <div class="org" id="org-name"></div>
+      </div>
+      <button class="dash-logout" id="logout-btn">Log out</button>
+    </div>
+
+    <div class="dash-error" id="err"></div>
+
+    <div id="reveal-slot"></div>
+
+    <form class="dash-key-form" id="create-form">
+      <input id="label" type="text" required placeholder="What's this key for? e.g. &quot;Production server&quot;" maxlength="100">
+      <button type="submit" id="create-btn">Create key</button>
+    </form>
+
+    <div id="key-list"></div>
+  </div>
+
+  <!-- Shown briefly while we check whether there's a valid session; also
+       what a logged-out visitor sees if they land here directly. -->
+  <div class="dash-card" id="loading-card">
+    <h1>Loading...</h1>
+    <p class="lede">Checking your session.</p>
+  </div>
+</div>
+
+<script src="client.js"></script>
+<script>
+  const card = document.getElementById("card");
+  const loadingCard = document.getElementById("loading-card");
+  const errEl = document.getElementById("err");
+  const orgNameEl = document.getElementById("org-name");
+  const keyListEl = document.getElementById("key-list");
+  const revealSlot = document.getElementById("reveal-slot");
+
+  function escapeHtml(s) {
+    return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+  }
+
+  function renderKeys(keys) {
+    if (keys.length === 0) {
+      keyListEl.innerHTML = '<div class="dash-empty">No keys yet. Create one above to get started.</div>';
+      return;
+    }
+    keyListEl.innerHTML = keys
+      .map((k) => {
+        const revoked = k.status === "revoked";
+        const lastUsed = k.last_used_at ? new Date(k.last_used_at).toLocaleDateString() : "never used";
+        return `
+          <div class="dash-key-row" data-id="${k.id}">
+            <div class="info">
+              <div class="label">${escapeHtml(k.label)}</div>
+              <div class="meta">${k.prefix}... · ${lastUsed}</div>
+            </div>
+            <span class="status ${revoked ? "revoked" : "active"}">${revoked ? "Revoked" : "Active"}</span>
+            <button class="revoke-btn" data-id="${k.id}" ${revoked ? "disabled" : ""}>
+              ${revoked ? "Revoked" : "Revoke"}
+            </button>
+          </div>`;
+      })
+      .join("");
+  }
+
+  async function loadKeys() {
+    const { data } = await api("GET", "/v1/keys");
+    renderKeys(data);
+  }
+
+  async function init() {
+    try {
+      const me = await api("GET", "/v1/auth/me");
+      orgNameEl.textContent = me.organization ? me.organization.name : me.email;
+      loadingCard.style.display = "none";
+      card.style.display = "block";
+      await loadKeys();
+    } catch {
+      // No valid session — send them to log in rather than show an empty shell.
+      window.location.href = "login.html";
+    }
+  }
+
+  document.getElementById("logout-btn").addEventListener("click", async () => {
+    await api("POST", "/v1/auth/logout").catch(() => {});
+    window.location.href = "login.html";
+  });
+
+  document.getElementById("create-form").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    hideError(errEl);
+    const btn = document.getElementById("create-btn");
+    const labelInput = document.getElementById("label");
+    btn.disabled = true;
+    btn.textContent = "Creating...";
+
+    try {
+      const key = await api("POST", "/v1/keys", { label: labelInput.value });
+      labelInput.value = "";
+
+      // The raw key is shown exactly once, here, and never again — the API
+      // itself never returns it on any later request. Say so plainly.
+      revealSlot.innerHTML = `
+        <div class="dash-reveal">
+          <div class="label">Your new key — copy it now</div>
+          <code>${key.secret}</code>
+          <div class="warn">This is the only time it's shown. If you lose it, revoke it and create a new one.</div>
+        </div>`;
+
+      await loadKeys();
+    } catch (err) {
+      showError(errEl, err);
+    } finally {
+      btn.disabled = false;
+      btn.textContent = "Create key";
+    }
+  });
+
+  keyListEl?.addEventListener("click", async (e) => {
+    if (!e.target.classList.contains("revoke-btn")) return;
+    const id = e.target.dataset.id;
+    if (!confirm("Revoke this key? Anything using it will stop working immediately.")) return;
+
+    e.target.disabled = true;
+    e.target.textContent = "Revoking...";
+    try {
+      await api("DELETE", `/v1/keys/${id}`);
+      await loadKeys();
+    } catch (err) {
+      showError(errEl, err);
+      e.target.disabled = false;
+      e.target.textContent = "Revoke";
+    }
+  });
+
+  init();
+</script>
+</body>
+</html>

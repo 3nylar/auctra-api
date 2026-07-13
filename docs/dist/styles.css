@@ -101,6 +101,7 @@ body {
   height: 60px;
   padding: 0 24px;
   background: color-mix(in srgb, var(--paper) 88%, transparent);
+  -webkit-backdrop-filter: blur(10px);
   backdrop-filter: blur(10px);
   border-bottom: 1px solid var(--rule);
 }
@@ -145,6 +146,16 @@ body {
   text-decoration: none;
 }
 .masthead nav a:hover { color: var(--ink); }
+
+.nav-cta {
+  padding: 6px 14px !important;
+  background: var(--ink);
+  color: #fff !important;
+  border-radius: 5px;
+  font-weight: 600;
+  font-size: 13px;
+}
+.nav-cta:hover { background: var(--brass) !important; color: #fff !important; }
 
 .icon-btn {
   display: grid;
