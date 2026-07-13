@@ -409,14 +409,24 @@ h2:hover .anchor, h3:hover .anchor { opacity: 0.6; }
 
 .code pre {
   margin: 0;
-  padding: 16px 18px;
+  padding: 18px 20px;
   overflow-x: auto;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
   font-family: var(--mono);
   font-size: 13px;
-  line-height: 1.62;
+  line-height: 1.7;
   color: var(--panel-ink);
   tab-size: 2;
 }
+
+/* Thin, theme-coloured scrollbar for the rare line that still needs one
+   (a JSON blob with one very long unbroken string) rather than the bare
+   OS-default bar, which reads as visual noise against a dark panel. */
+.code pre::-webkit-scrollbar { height: 6px; }
+.code pre::-webkit-scrollbar-track { background: transparent; }
+.code pre::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.15); border-radius: 3px; }
+.code pre { scrollbar-width: thin; scrollbar-color: rgba(255, 255, 255, 0.15) transparent; }
 
 .hljs-comment { color: #5f6672; font-style: italic; }
 .hljs-keyword, .hljs-built_in { color: #c99a5b; }
@@ -540,12 +550,12 @@ h2:hover .anchor, h3:hover .anchor { opacity: 0.6; }
 .op {
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(0, 0.92fr);
-  gap: 40px;
-  padding: 40px 0;
+  gap: 56px;
+  padding: 52px 0;
   border-top: 1px solid var(--rule);
   max-width: none;
 }
-.op:first-of-type { border-top: 0; }
+.op:first-of-type { border-top: 0; padding-top: 8px; }
 
 .op-main { min-width: 0; }
 .op-side { min-width: 0; position: sticky; top: 84px; align-self: start; }
@@ -560,6 +570,7 @@ h2:hover .anchor, h3:hover .anchor { opacity: 0.6; }
 .route {
   display: flex;
   align-items: center;
+  flex-wrap: wrap;
   gap: 10px;
   margin-bottom: 16px;
   padding: 8px 12px;
@@ -568,7 +579,7 @@ h2:hover .anchor, h3:hover .anchor { opacity: 0.6; }
   border-radius: 4px;
   font-family: var(--mono);
   font-size: 13px;
-  overflow-x: auto;
+  overflow-wrap: anywhere;
 }
 
 .verb {
@@ -691,6 +702,7 @@ h2:hover .anchor, h3:hover .anchor { opacity: 0.6; }
   letter-spacing: 0.1em;
   text-transform: uppercase;
   color: var(--ink);
+  text-decoration: none;
 }
 .qi-tag:hover { color: var(--brass); }
 .qi-row {
@@ -700,6 +712,7 @@ h2:hover .anchor, h3:hover .anchor { opacity: 0.6; }
   padding: 5px 0;
   font-size: 13.5px;
   color: var(--slate);
+  text-decoration: none;
 }
 .qi-row:hover { color: var(--ink); }
 .qi-row:hover .qi-name { text-decoration: underline; }
@@ -708,7 +721,7 @@ h2:hover .anchor, h3:hover .anchor { opacity: 0.6; }
   font-size: 9px;
   padding: 2px 5px;
 }
-.qi-name { min-width: 0; overflow-wrap: anywhere; }
+.qi-name { min-width: 0; overflow-wrap: anywhere; text-decoration: none; }
 
 /* --- Right rail ---------------------------------------------------------- */
 
