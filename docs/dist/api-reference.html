@@ -46,6 +46,20 @@
     <h1>API reference</h1>
       <p class="lede">Base URL <code>https://auctra-api-production.up.railway.app</code>. Every request needs
       <code>Authorization: Bearer sk_test_…</code>. Amounts are decimal strings of wei.</p>
+      <div class="tryit-bar">
+        <div class="tryit-bar-field">
+          <label for="tryit-key">Your API key</label>
+          <input id="tryit-key" type="password" placeholder="sk_test_..." autocomplete="off" spellcheck="false">
+        </div>
+        <div class="tryit-bar-field narrow">
+          <label for="tryit-base">Base URL</label>
+          <input id="tryit-base" type="text" value="https://auctra-api-production.up.railway.app" spellcheck="false">
+        </div>
+        <p class="tryit-bar-note">
+          Stored only in this browser (<code>localStorage</code>), sent only to the base URL above.
+          No key yet? <a href="dashboard/signup.html">Get one free →</a>
+        </p>
+      </div>
       <nav class="quick-index" aria-label="Endpoint index"><div class="qi-group">
         <a class="qi-tag" href="#auctions">Auctions</a>
         <a class="qi-row" href="#get-v1auctions">
@@ -184,6 +198,7 @@ sent yet.</p>
     <div class="responses"><h4 style="font-family:var(--ui);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--slate-2);margin:0 0 8px">Responses</h4><div class="resp ok"><span class="status">200</span><span class="desc">A paginated list of auctions.</span></div><div class="resp err"><span class="status">401</span><span class="desc"></span></div><div class="resp err"><span class="status">429</span><span class="desc"></span></div></div>
   </div>
   <div class="op-side">
+    <div class="tryit" data-method="get" data-path="/v1/auctions"></div>
     <div class="code lang-group" id="req-get-v1auctions">
   <div class="bar">
     <div class="lang-tabs"><button type="button" class="lang-tab active" data-lang="bash">cURL</button><button type="button" class="lang-tab" data-lang="javascript">JavaScript</button><button type="button" class="lang-tab" data-lang="python">Python</button></div>
@@ -278,6 +293,7 @@ returns <code>409 idempotency_key_reused</code>. Keys expire after 24 hours.</p>
     <div class="responses"><h4 style="font-family:var(--ui);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--slate-2);margin:0 0 8px">Responses</h4><div class="resp ok"><span class="status">201</span><span class="desc">Auction created, awaiting signature and confirmation.</span></div><div class="resp err"><span class="status">400</span><span class="desc"></span></div><div class="resp err"><span class="status">401</span><span class="desc"></span></div><div class="resp err"><span class="status">409</span><span class="desc"></span></div><div class="resp err"><span class="status">422</span><span class="desc"></span></div></div>
   </div>
   <div class="op-side">
+    <div class="tryit" data-method="post" data-path="/v1/auctions"></div>
     <div class="code lang-group" id="req-post-v1auctions">
   <div class="bar">
     <div class="lang-tabs"><button type="button" class="lang-tab active" data-lang="bash">cURL</button><button type="button" class="lang-tab" data-lang="javascript">JavaScript</button><button type="button" class="lang-tab" data-lang="python">Python</button></div>
@@ -398,6 +414,7 @@ data = res.json()</code></pre>
     <div class="responses"><h4 style="font-family:var(--ui);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--slate-2);margin:0 0 8px">Responses</h4><div class="resp ok"><span class="status">200</span><span class="desc">The auction.</span></div><div class="resp err"><span class="status">404</span><span class="desc"></span></div></div>
   </div>
   <div class="op-side">
+    <div class="tryit" data-method="get" data-path="/v1/auctions/{id}"></div>
     <div class="code lang-group" id="req-get-v1auctionsid">
   <div class="bar">
     <div class="lang-tabs"><button type="button" class="lang-tab active" data-lang="bash">cURL</button><button type="button" class="lang-tab" data-lang="javascript">JavaScript</button><button type="button" class="lang-tab" data-lang="python">Python</button></div>
@@ -496,6 +513,7 @@ returns <code>409 idempotency_key_reused</code>. Keys expire after 24 hours.</p>
     <div class="responses"><h4 style="font-family:var(--ui);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--slate-2);margin:0 0 8px">Responses</h4><div class="resp ok"><span class="status">200</span><span class="desc">Settlement transaction prepared or broadcast.</span></div><div class="resp err"><span class="status">400</span><span class="desc">The auction has not ended yet (`auction_not_ended`).</span></div></div>
   </div>
   <div class="op-side">
+    <div class="tryit" data-method="post" data-path="/v1/auctions/{id}/settle"></div>
     <div class="code lang-group" id="req-post-v1auctionsidsettle">
   <div class="bar">
     <div class="lang-tabs"><button type="button" class="lang-tab active" data-lang="bash">cURL</button><button type="button" class="lang-tab" data-lang="javascript">JavaScript</button><button type="button" class="lang-tab" data-lang="python">Python</button></div>
@@ -589,6 +607,7 @@ returns <code>409 idempotency_key_reused</code>. Keys expire after 24 hours.</p>
     <div class="responses"><h4 style="font-family:var(--ui);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--slate-2);margin:0 0 8px">Responses</h4><div class="resp ok"><span class="status">200</span><span class="desc">Cancellation transaction prepared.</span></div><div class="resp err"><span class="status">400</span><span class="desc">The auction already has bids (`auction_has_bids`).</span></div></div>
   </div>
   <div class="op-side">
+    <div class="tryit" data-method="post" data-path="/v1/auctions/{id}/cancel"></div>
     <div class="code lang-group" id="req-post-v1auctionsidcancel">
   <div class="bar">
     <div class="lang-tabs"><button type="button" class="lang-tab active" data-lang="bash">cURL</button><button type="button" class="lang-tab" data-lang="javascript">JavaScript</button><button type="button" class="lang-tab" data-lang="python">Python</button></div>
@@ -680,6 +699,7 @@ returns <code>409 idempotency_key_reused</code>. Keys expire after 24 hours.</p>
     <div class="responses"><h4 style="font-family:var(--ui);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--slate-2);margin:0 0 8px">Responses</h4><div class="resp ok"><span class="status">200</span><span class="desc">Claim transaction prepared.</span></div></div>
   </div>
   <div class="op-side">
+    <div class="tryit" data-method="post" data-path="/v1/auctions/{id}/claim"></div>
     <div class="code lang-group" id="req-post-v1auctionsidclaim">
   <div class="bar">
     <div class="lang-tabs"><button type="button" class="lang-tab active" data-lang="bash">cURL</button><button type="button" class="lang-tab" data-lang="javascript">JavaScript</button><button type="button" class="lang-tab" data-lang="python">Python</button></div>
@@ -746,6 +766,7 @@ one lands between requests.</p>
     <div class="responses"><h4 style="font-family:var(--ui);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--slate-2);margin:0 0 8px">Responses</h4><div class="resp ok"><span class="status">200</span><span class="desc">Bid history, newest first.</span></div><div class="resp err"><span class="status">404</span><span class="desc"></span></div></div>
   </div>
   <div class="op-side">
+    <div class="tryit" data-method="get" data-path="/v1/auctions/{id}/bids"></div>
     <div class="code lang-group" id="req-get-v1auctionsidbids">
   <div class="bar">
     <div class="lang-tabs"><button type="button" class="lang-tab active" data-lang="bash">cURL</button><button type="button" class="lang-tab" data-lang="javascript">JavaScript</button><button type="button" class="lang-tab" data-lang="python">Python</button></div>
@@ -843,6 +864,7 @@ numbers are doubles, which lose integer precision above 2^53.</p>
     <div class="responses"><h4 style="font-family:var(--ui);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--slate-2);margin:0 0 8px">Responses</h4><div class="resp ok"><span class="status">200</span><span class="desc">A bid intent with a transaction to sign.</span></div><div class="resp err"><span class="status">400</span><span class="desc">The bid was rejected before it cost anyone gas. `bid_below_minimum`</span></div><div class="resp err"><span class="status">404</span><span class="desc"></span></div></div>
   </div>
   <div class="op-side">
+    <div class="tryit" data-method="post" data-path="/v1/auctions/{id}/bids"></div>
     <div class="code lang-group" id="req-post-v1auctionsidbids">
   <div class="bar">
     <div class="lang-tabs"><button type="button" class="lang-tab active" data-lang="bash">cURL</button><button type="button" class="lang-tab" data-lang="javascript">JavaScript</button><button type="button" class="lang-tab" data-lang="python">Python</button></div>
@@ -948,6 +970,7 @@ one lands between requests.</p>
     <div class="responses"><h4 style="font-family:var(--ui);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--slate-2);margin:0 0 8px">Responses</h4><div class="resp ok"><span class="status">200</span><span class="desc">A paginated list of refund credits.</span></div></div>
   </div>
   <div class="op-side">
+    <div class="tryit" data-method="get" data-path="/v1/refunds"></div>
     <div class="code lang-group" id="req-get-v1refunds">
   <div class="bar">
     <div class="lang-tabs"><button type="button" class="lang-tab active" data-lang="bash">cURL</button><button type="button" class="lang-tab" data-lang="javascript">JavaScript</button><button type="button" class="lang-tab" data-lang="python">Python</button></div>
@@ -1007,6 +1030,7 @@ data = res.json()</code></pre>
     <div class="responses"><h4 style="font-family:var(--ui);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--slate-2);margin:0 0 8px">Responses</h4><div class="resp ok"><span class="status">200</span><span class="desc">The live withdrawable balance.</span></div></div>
   </div>
   <div class="op-side">
+    <div class="tryit" data-method="get" data-path="/v1/refunds/balance"></div>
     <div class="code lang-group" id="req-get-v1refundsbalance">
   <div class="bar">
     <div class="lang-tabs"><button type="button" class="lang-tab active" data-lang="bash">cURL</button><button type="button" class="lang-tab" data-lang="javascript">JavaScript</button><button type="button" class="lang-tab" data-lang="python">Python</button></div>
@@ -1067,6 +1091,7 @@ returns <code>409 idempotency_key_reused</code>. Keys expire after 24 hours.</p>
     <div class="responses"><h4 style="font-family:var(--ui);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--slate-2);margin:0 0 8px">Responses</h4><div class="resp ok"><span class="status">200</span><span class="desc">Withdrawal transaction prepared.</span></div></div>
   </div>
   <div class="op-side">
+    <div class="tryit" data-method="post" data-path="/v1/refunds/withdraw"></div>
     <div class="code lang-group" id="req-post-v1refundswithdraw">
   <div class="bar">
     <div class="lang-tabs"><button type="button" class="lang-tab active" data-lang="bash">cURL</button><button type="button" class="lang-tab" data-lang="javascript">JavaScript</button><button type="button" class="lang-tab" data-lang="python">Python</button></div>
@@ -1126,6 +1151,7 @@ returns <code>409 idempotency_key_reused</code>. Keys expire after 24 hours.</p>
     <div class="responses"><h4 style="font-family:var(--ui);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--slate-2);margin:0 0 8px">Responses</h4><div class="resp ok"><span class="status">202</span><span class="desc">Accepted into the mempool.</span></div><div class="resp err"><span class="status">422</span><span class="desc"></span></div></div>
   </div>
   <div class="op-side">
+    <div class="tryit" data-method="post" data-path="/v1/transactions"></div>
     <div class="code lang-group" id="req-post-v1transactions">
   <div class="bar">
     <div class="lang-tabs"><button type="button" class="lang-tab active" data-lang="bash">cURL</button><button type="button" class="lang-tab" data-lang="javascript">JavaScript</button><button type="button" class="lang-tab" data-lang="python">Python</button></div>
@@ -1176,6 +1202,7 @@ data = res.json()</code></pre>
     <div class="responses"><h4 style="font-family:var(--ui);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--slate-2);margin:0 0 8px">Responses</h4><div class="resp ok"><span class="status">200</span><span class="desc">`status` is `pending` until mined, then `confirmed` or `reverted`.</span></div></div>
   </div>
   <div class="op-side">
+    <div class="tryit" data-method="get" data-path="/v1/transactions/{hash}"></div>
     <div class="code lang-group" id="req-get-v1transactionshash">
   <div class="bar">
     <div class="lang-tabs"><button type="button" class="lang-tab active" data-lang="bash">cURL</button><button type="button" class="lang-tab" data-lang="javascript">JavaScript</button><button type="button" class="lang-tab" data-lang="python">Python</button></div>
@@ -1210,6 +1237,7 @@ data = res.json()</code></pre>
     <div class="responses"><h4 style="font-family:var(--ui);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--slate-2);margin:0 0 8px">Responses</h4><div class="resp ok"><span class="status">200</span><span class="desc">Your endpoints. Secrets are never returned after creation.</span></div></div>
   </div>
   <div class="op-side">
+    <div class="tryit" data-method="get" data-path="/v1/webhook_endpoints"></div>
     <div class="code lang-group" id="req-get-v1webhook_endpoints">
   <div class="bar">
     <div class="lang-tabs"><button type="button" class="lang-tab active" data-lang="bash">cURL</button><button type="button" class="lang-tab" data-lang="javascript">JavaScript</button><button type="button" class="lang-tab" data-lang="python">Python</button></div>
@@ -1278,6 +1306,7 @@ trusting the body.</p>
     <div class="responses"><h4 style="font-family:var(--ui);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--slate-2);margin:0 0 8px">Responses</h4><div class="resp ok"><span class="status">201</span><span class="desc">Endpoint created. `secret` is shown once.</span></div></div>
   </div>
   <div class="op-side">
+    <div class="tryit" data-method="post" data-path="/v1/webhook_endpoints"></div>
     <div class="code lang-group" id="req-post-v1webhook_endpoints">
   <div class="bar">
     <div class="lang-tabs"><button type="button" class="lang-tab active" data-lang="bash">cURL</button><button type="button" class="lang-tab" data-lang="javascript">JavaScript</button><button type="button" class="lang-tab" data-lang="python">Python</button></div>
@@ -1356,6 +1385,7 @@ data = res.json()</code></pre>
     <div class="responses"><h4 style="font-family:var(--ui);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--slate-2);margin:0 0 8px">Responses</h4><div class="resp ok"><span class="status">200</span><span class="desc">Deleted.</span></div></div>
   </div>
   <div class="op-side">
+    <div class="tryit" data-method="delete" data-path="/v1/webhook_endpoints/{id}"></div>
     <div class="code lang-group" id="req-delete-v1webhook_endpointsid">
   <div class="bar">
     <div class="lang-tabs"><button type="button" class="lang-tab active" data-lang="bash">cURL</button><button type="button" class="lang-tab" data-lang="javascript">JavaScript</button><button type="button" class="lang-tab" data-lang="python">Python</button></div>
@@ -1416,6 +1446,7 @@ one lands between requests.</p>
     <div class="responses"><h4 style="font-family:var(--ui);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--slate-2);margin:0 0 8px">Responses</h4><div class="resp ok"><span class="status">200</span><span class="desc">A paginated list of events.</span></div></div>
   </div>
   <div class="op-side">
+    <div class="tryit" data-method="get" data-path="/v1/events"></div>
     <div class="code lang-group" id="req-get-v1events">
   <div class="bar">
     <div class="lang-tabs"><button type="button" class="lang-tab active" data-lang="bash">cURL</button><button type="button" class="lang-tab" data-lang="javascript">JavaScript</button><button type="button" class="lang-tab" data-lang="python">Python</button></div>
@@ -1476,6 +1507,7 @@ data = res.json()</code></pre>
     <div class="responses"><h4 style="font-family:var(--ui);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--slate-2);margin:0 0 8px">Responses</h4><div class="resp ok"><span class="status">200</span><span class="desc">The event.</span></div><div class="resp err"><span class="status">404</span><span class="desc"></span></div></div>
   </div>
   <div class="op-side">
+    <div class="tryit" data-method="get" data-path="/v1/events/{id}"></div>
     <div class="code lang-group" id="req-get-v1eventsid">
   <div class="bar">
     <div class="lang-tabs"><button type="button" class="lang-tab active" data-lang="bash">cURL</button><button type="button" class="lang-tab" data-lang="javascript">JavaScript</button><button type="button" class="lang-tab" data-lang="python">Python</button></div>
@@ -1513,6 +1545,7 @@ keeping up with the chain.</p>
     <div class="responses"><h4 style="font-family:var(--ui);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--slate-2);margin:0 0 8px">Responses</h4><div class="resp ok"><span class="status">200</span><span class="desc">Health report.</span></div></div>
   </div>
   <div class="op-side">
+    <div class="tryit" data-method="get" data-path="/v1/health"></div>
     <div class="code lang-group" id="req-get-v1health">
   <div class="bar">
     <div class="lang-tabs"><button type="button" class="lang-tab active" data-lang="bash">cURL</button><button type="button" class="lang-tab" data-lang="javascript">JavaScript</button><button type="button" class="lang-tab" data-lang="python">Python</button></div>
@@ -1625,5 +1658,6 @@ data = res.json()</code></pre>
     document.querySelectorAll("h2[id], h3[id]").forEach((h) => io.observe(h));
   }
 </script>
+<script src="try-it.js"></script>
 </body>
 </html>

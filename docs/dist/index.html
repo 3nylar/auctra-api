@@ -55,6 +55,16 @@
     <div class="legend"><span>Clock</span><span><b>Late bid</b> · extended ×1</span></div>
   </div>
 </div>
+
+<div class="note">
+  <span class="label">Before you start</span>
+  <p>You'll need three things in hand — all free, all a couple of minutes each:</p>
+  <ul style="margin:8px 0 0;padding-left:20px">
+    <li>An <a href="dashboard/signup.html">Auctra sandbox key</a> — sign up, no card required</li>
+    <li>A Sepolia wallet, and test ETH from <a href="https://sepoliafaucet.com">sepoliafaucet.com</a></li>
+    <li>Something to auction — a test ERC-721 works fine to start</li>
+  </ul>
+</div>
       <div class="prose"><p>Auctra runs English auctions — open bidding, ascending price, a clock — and settles them on Ethereum. This API gives you the auction house without the blockchain plumbing: list an item, watch bids arrive over webhooks, settle, pay out. In JSON.</p>
 <p>Everything that a bidder trusts is enforced by a contract, not by us. Outbid bidders are refunded without anyone pressing a button. A bid in the final five minutes pushes the clock back, so a sniper cannot win by being fast. Once a single bid lands, nobody can pull the lot — not the seller, not the contract&#39;s deployer, not Auctra.</p>
 <h2 id="the-one-rule-that-shapes-this-api"><a class="anchor" href="#the-one-rule-that-shapes-this-api" aria-hidden="true">#</a>The one rule that shapes this API</h2>
@@ -173,5 +183,6 @@
     document.querySelectorAll("h2[id], h3[id]").forEach((h) => io.observe(h));
   }
 </script>
+
 </body>
 </html>

@@ -14,6 +14,7 @@ import {
   readdirSync,
   copyFileSync,
   cpSync,
+  rmSync,
 } from "node:fs";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -31,6 +32,7 @@ const SITE = {
   name: "Auctra",
   tagline: "On-chain English auctions, over HTTP.",
   sandbox: "https://auctra-api-production.up.railway.app",
+  docsUrl: "https://auctra-api.vercel.app",
 };
 
 // ---------------------------------------------------------------------------
@@ -147,7 +149,15 @@ function pager(pages, index) {
   </nav>`;
 }
 
-function layout({ title, description, section, body, sidebarHtml, railHtml }) {
+function layout({
+  title,
+  description,
+  section,
+  body,
+  sidebarHtml,
+  railHtml,
+  isReference,
+}) {
   return `<!doctype html>
 <html lang="en" data-theme="light">
 <head>
@@ -274,6 +284,7 @@ function layout({ title, description, section, body, sidebarHtml, railHtml }) {
     document.querySelectorAll("h2[id], h3[id]").forEach((h) => io.observe(h));
   }
 </script>
+${isReference ? '<script src="try-it.js"></script>' : ""}
 </body>
 </html>`;
 }
@@ -291,6 +302,16 @@ const HERO = `<div class="ticket">
     <div class="track"><div class="fill"></div></div>
     <div class="legend"><span>Clock</span><span><b>Late bid</b> · extended ×1</span></div>
   </div>
+</div>
+
+<div class="note">
+  <span class="label">Before you start</span>
+  <p>You'll need three things in hand — all free, all a couple of minutes each:</p>
+  <ul style="margin:8px 0 0;padding-left:20px">
+    <li>An <a href="dashboard/signup.html">Auctra sandbox key</a> — sign up, no card required</li>
+    <li>A Sepolia wallet, and test ETH from <a href="https://sepoliafaucet.com">sepoliafaucet.com</a></li>
+    <li>Something to auction — a test ERC-721 works fine to start</li>
+  </ul>
 </div>`;
 
 // ---------------------------------------------------------------------------
@@ -445,9 +466,7 @@ function jsSample(method, path, op) {
 ${indented}
   },`;
   if (hasBody) {
-    const json = JSON.stringify(example, null, 2)
-      .split("\n")
-      .join("\n  ");
+    const json = JSON.stringify(example, null, 2).split("\n").join("\n  ");
     body += `\n  body: JSON.stringify(${json}),`;
   }
   body += `\n});\nconst data = await res.json();`;
@@ -509,7 +528,11 @@ function pyLiteral(value, indent = 0) {
 function requestSample(method, path, op, opId) {
   const samples = [
     { lang: "bash", label: "cURL", code: curlSample(method, path, op) },
-    { lang: "javascript", label: "JavaScript", code: jsSample(method, path, op) },
+    {
+      lang: "javascript",
+      label: "JavaScript",
+      code: jsSample(method, path, op),
+    },
     { lang: "python", label: "Python", code: pySample(method, path, op) },
   ];
   const tabs = samples
@@ -628,6 +651,7 @@ function apiReference(toc) {
     ${responses(op)}
   </div>
   <div class="op-side">
+    <div class="tryit" data-method="${method}" data-path="${escapeHtml(path)}"></div>
     ${requestSample(method, path, op, opId)}
     ${sample ? codeBlock(sample, "json") : ""}
   </div>
@@ -667,7 +691,12 @@ function apiReferenceMarkdown() {
     lines.push(`## ${tag}`, ``);
     if (tagMeta?.description) lines.push(tagMeta.description, ``);
     for (const { path, method, op } of byTag.get(tag)) {
-      lines.push(`### ${op.summary}`, ``, `\`${method.toUpperCase()} ${path}\``, ``);
+      lines.push(
+        `### ${op.summary}`,
+        ``,
+        `\`${method.toUpperCase()} ${path}\``,
+        ``,
+      );
       const key = `${method} ${path}`;
       if (key in SCOPES) {
         lines.push(
@@ -683,7 +712,9 @@ function apiReferenceMarkdown() {
         lines.push(`Parameters:`, ``);
         for (const p of params) {
           const req = p.required ? ", required" : "";
-          lines.push(`- \`${p.name}\` (${typeOf(p.schema)}, ${p.in}${req})${p.description ? ` — ${p.description}` : ""}`);
+          lines.push(
+            `- \`${p.name}\` (${typeOf(p.schema)}, ${p.in}${req})${p.description ? ` — ${p.description}` : ""}`,
+          );
         }
         lines.push(``);
       }
@@ -735,6 +766,20 @@ pages.forEach((page, i) => {
     body = `<h1>API reference</h1>
       <p class="lede">Base URL <code>${SITE.sandbox}</code>. Every request needs
       <code>Authorization: Bearer sk_test_…</code>. Amounts are decimal strings of wei.</p>
+      <div class="tryit-bar">
+        <div class="tryit-bar-field">
+          <label for="tryit-key">Your API key</label>
+          <input id="tryit-key" type="password" placeholder="sk_test_..." autocomplete="off" spellcheck="false">
+        </div>
+        <div class="tryit-bar-field narrow">
+          <label for="tryit-base">Base URL</label>
+          <input id="tryit-base" type="text" value="${SITE.sandbox}" spellcheck="false">
+        </div>
+        <p class="tryit-bar-note">
+          Stored only in this browser (<code>localStorage</code>), sent only to the base URL above.
+          No key yet? <a href="dashboard/signup.html">Get one free →</a>
+        </p>
+      </div>
       ${quickIndex()}
       ${apiReference(toc)}`;
   } else {
@@ -755,6 +800,7 @@ pages.forEach((page, i) => {
       body,
       sidebarHtml: sidebar(pages, page.meta.slug),
       railHtml: rail(toc),
+      isReference: Boolean(page.generated),
     }),
   );
 
@@ -770,6 +816,7 @@ pages.forEach((page, i) => {
 // index.html mirrors the introduction so a bare domain lands somewhere useful.
 copyFileSync(join(DIST, "introduction.html"), join(DIST, "index.html"));
 copyFileSync(join(ROOT, "theme", "styles.css"), join(DIST, "styles.css"));
+copyFileSync(join(ROOT, "theme", "try-it.js"), join(DIST, "try-it.js"));
 copyFileSync(
   join(ROOT, "..", "spec", "openapi.yaml"),
   join(DIST, "openapi.yaml"),
@@ -781,7 +828,24 @@ copyFileSync(
 
 // The dashboard: plain HTML/CSS/JS, not run through the markdown pipeline
 // at all — it's an application, not a document, so it's copied verbatim.
+rmSync(join(DIST, "dashboard"), { recursive: true, force: true });
 cpSync(join(ROOT, "dashboard"), join(DIST, "dashboard"), { recursive: true });
 
 console.log(`built ${pages.length} pages → docs/dist`);
+// llms.txt: a flat, plain-text index of every page, so an AI tool can
+// discover the whole docs set in one fetch instead of crawling link by
+// link. Built from the same `pages` array as the site itself — add a page,
+// it shows up here automatically, nothing to remember to update by hand.
+const llmsTxt = [
+  `# ${SITE.name}`,
+  "",
+  "## Docs",
+  "",
+  ...pages.map(
+    (p) =>
+      `- [${p.meta.title}](${SITE.docsUrl ?? ""}/${p.meta.slug}.md): ${p.meta.description ?? ""}`,
+  ),
+].join("\n");
+writeFileSync(join(DIST, "llms.txt"), llmsTxt + "\n");
+
 for (const p of pages) console.log(`  ${p.meta.slug}.html`);
