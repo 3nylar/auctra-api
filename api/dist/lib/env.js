@@ -18,6 +18,14 @@ const schema = z.object({
     API_KEY_PEPPER: z.string().min(32),
     WEBHOOK_SIGNING_SECRET: z.string().min(8),
     MANAGED_SIGNER_PRIVATE_KEY: z.string().optional().or(z.literal("")),
+    // Dashboard login. SESSION_SECRET signs the login cookie — changing it logs
+    // every signed-in user out at once, the same way API_KEY_PEPPER does for keys.
+    SESSION_SECRET: z.string().min(32),
+    // The exact origin (scheme + host, no path) the dashboard is served from,
+    // e.g. "https://auctra-api.vercel.app". The login cookie is only ever sent
+    // to this one origin — see server.ts for why that has to be exact, not a
+    // wildcard, given the dashboard and API live on different domains.
+    DASHBOARD_ORIGIN: z.string().url(),
 });
 const parsed = schema.safeParse(process.env);
 if (!parsed.success) {
