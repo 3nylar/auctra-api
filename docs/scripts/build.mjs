@@ -491,8 +491,20 @@ pages.forEach((page, i) => {
   let body;
   if (page.generated) {
     body = `<h1>API reference</h1>
-      <p class="lede">Base URL <code>${SITE.sandbox}</code>. Every request needs
-      <code>Authorization: Bearer sk_test_…</code>. Amounts are decimal strings of wei.</p>
+      <div class="lede">All requests are JSON over HTTPS.</div>
+
+      <h2 id="base-url">
+        <a class="anchor" href="#base-url" aria-hidden="true">#</a>Base URL
+      </h2>
+      <div style="max-width: var(--measure)">
+        <p>
+          Every request is made to
+          <a href="${SITE.sandbox}" target="_blank" rel="noopener noreferrer"><code>${SITE.sandbox}</code></a>
+          and must include an <code>Authorization: Bearer sk_test_…</code> header.
+          Amounts are always decimal strings of wei.
+        </p>
+      </div>
+
       ${apiReference(toc)}`;
   } else {
     const isIntro = page.meta.slug === "introduction";
