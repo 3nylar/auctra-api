@@ -1,55 +1,161 @@
 <!doctype html>
 <html lang="en" data-theme="light">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Errors — Auctra API</title>
-<meta name="description" content="One shape, stable codes, and a request id worth quoting.">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="styles.css">
-<script>
-  // Applied before first paint so a dark-mode reader never sees a white flash.
-  try {
-    const t = localStorage.getItem("auctra-theme");
-    if (t) document.documentElement.dataset.theme = t;
-    else if (matchMedia("(prefers-color-scheme: dark)").matches)
-      document.documentElement.dataset.theme = "dark";
-  } catch {}
-</script>
-</head>
-<body>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Errors — Auctra API</title>
+    <meta
+      name="description"
+      content="One shape, stable codes, and a request id worth quoting."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+    <script>
+      // Applied before first paint so a dark-mode reader never sees a white flash.
+      try {
+        const t = localStorage.getItem("auctra-theme");
+        if (t) document.documentElement.dataset.theme = t;
+        else if (matchMedia("(prefers-color-scheme: dark)").matches)
+          document.documentElement.dataset.theme = "dark";
+      } catch {}
+    </script>
+  </head>
+  <body>
+    <header class="masthead">
+      <button
+        class="icon-btn"
+        id="menu-toggle"
+        aria-label="Toggle navigation"
+        aria-expanded="false"
+      >
+        ☰
+      </button>
+      <a class="wordmark" href="introduction.html"
+        ><b>Auctra</b><span>Docs</span></a
+      >
+      <nav>
+        <a class="hide-sm" href="api-reference.html">API reference</a>
+        <a class="hide-sm" href="changelog.html">Changelog</a>
+        <a class="hide-sm" href="https://github.com/3nylar/auctra-api"
+          >GitHub</a
+        >
+        <button
+          class="icon-btn"
+          id="theme-toggle"
+          aria-label="Toggle colour theme"
+        >
+          ◐
+        </button>
+      </nav>
+    </header>
 
-<header class="masthead">
-  <button class="icon-btn" id="menu-toggle" aria-label="Toggle navigation" aria-expanded="false">☰</button>
-  <a class="wordmark" href="introduction.html"><b>Auctra</b><span>Docs</span></a>
-  <nav>
-    <a class="hide-sm" href="api-reference.html">API reference</a>
-    <a class="hide-sm" href="changelog.html">Changelog</a>
-    <a class="hide-sm" href="https://github.com/3nylar/auctra-api">GitHub</a>
-    <a class="nav-cta" href="dashboard/signup.html">Get an API key</a>
-    <button class="icon-btn" id="theme-toggle" aria-label="Toggle colour theme">◐</button>
-  </nav>
-</header>
+    <div class="shell">
+      <aside class="sidebar" id="sidebar">
+        <div class="search-wrap">
+          <input
+            id="search"
+            type="search"
+            placeholder="Search the docs"
+            autocomplete="off"
+          />
+        </div>
+        <h4>Get started</h4>
+        <a
+          href="introduction.html"
+          data-search="Introduction An auction house that settles on Ethereum, exposed as a JSON API."
+          >Introduction</a
+        ><a
+          href="quickstart.html"
+          data-search="Quickstart From zero to a live auction on Sepolia in four steps."
+          >Quickstart</a
+        ><a
+          href="authentication.html"
+          data-search="Authentication API keys, scopes, environments, and what to do when one leaks."
+          >Authentication</a
+        ><a
+          href="environments.html"
+          data-search="Environments Sandbox and production are the same code against different chains."
+          >Environments</a
+        >
+        <h4>Core concepts</h4>
+        <a
+          href="signing-model.html"
+          data-search="The signing model Why write endpoints return a transaction instead of doing the work."
+          >The signing model</a
+        ><a
+          href="auction-lifecycle.html"
+          data-search="Auction lifecycle Six states, one clock, and the two transitions nobody controls."
+          >Auction lifecycle</a
+        ><a
+          href="errors.html"
+          aria-current="page"
+          data-search="Errors One shape, stable codes, and a request id worth quoting."
+          >Errors</a
+        ><a
+          href="idempotency.html"
+          data-search="Idempotency Retry a POST safely, even when you never saw the response."
+          >Idempotency</a
+        ><a
+          href="pagination.html"
+          data-search="Pagination Cursors, not page numbers, and why that isn't pedantry."
+          >Pagination</a
+        ><a
+          href="rate-limits.html"
+          data-search="Rate limits 100 requests a minute, per key, and how to not need them."
+          >Rate limits</a
+        ><a
+          href="webhooks.html"
+          data-search="Webhooks Signed, retried, replayable — and how to verify one before you trust it."
+          >Webhooks</a
+        >
+        <h4>Guides</h4>
+        <a
+          href="guide-list-an-item.html"
+          data-search="Guide: list an item Approve, create, confirm — the full seller flow, end to end."
+          >Guide: list an item</a
+        ><a
+          href="guide-place-a-bid.html"
+          data-search="Guide: place a bid Read the minimum, prepare, sign, and handle being outbid."
+          >Guide: place a bid</a
+        ><a
+          href="guide-settle.html"
+          data-search="Guide: settle and pay out The clock runs out. Now someone has to close the loop."
+          >Guide: settle and pay out</a
+        >
+        <h4>Reference</h4>
+        <a
+          href="api-reference.html"
+          data-search="API reference Every endpoint, parameter and response."
+          >API reference</a
+        ><a
+          href="changelog.html"
+          data-search="Changelog Versions are dated. Breaking changes get a new one."
+          >Changelog</a
+        >
+      </aside>
 
-<div class="shell">
-  <aside class="sidebar" id="sidebar">
-    <div class="search-wrap">
-      <input id="search" type="search" placeholder="Search the docs" autocomplete="off">
-    </div>
-    <h4>Get started</h4><a href="introduction.html" data-search="Introduction An auction house that settles on Ethereum, exposed as a JSON API.">Introduction</a><a href="quickstart.html" data-search="Quickstart From zero to a live auction on Sepolia in four steps.">Quickstart</a><a href="authentication.html" data-search="Authentication API keys, scopes, environments, and what to do when one leaks.">Authentication</a><a href="environments.html" data-search="Environments Sandbox and production are the same code against different chains.">Environments</a><h4>Build</h4><a href="signing-model.html" data-search="The signing model Why write endpoints return a transaction instead of doing the work.">The signing model</a><a href="auction-lifecycle.html" data-search="Auction lifecycle Six states, one clock, and the two transitions nobody controls.">Auction lifecycle</a><a href="idempotency.html" data-search="Idempotency Retry a POST safely, even when you never saw the response.">Idempotency</a><a href="pagination.html" data-search="Pagination Cursors, not page numbers, and why that isn't pedantry.">Pagination</a><a href="rate-limits.html" data-search="Rate limits 100 requests a minute, per key, and how to not need them.">Rate limits</a><a href="webhooks.html" data-search="Webhooks Signed, retried, replayable — and how to verify one before you trust it.">Webhooks</a><a href="guide-list-an-item.html" data-search="Guide: list an item Approve, create, confirm — the full seller flow, end to end.">Guide: list an item</a><a href="guide-place-a-bid.html" data-search="Guide: place a bid Read the minimum, prepare, sign, and handle being outbid.">Guide: place a bid</a><a href="guide-settle.html" data-search="Guide: settle and pay out The clock runs out. Now someone has to close the loop.">Guide: settle and pay out</a><h4>Reference</h4><a href="errors.html" aria-current="page" data-search="Errors One shape, stable codes, and a request id worth quoting.">Errors</a><a href="api-reference.html" data-search="API reference Every endpoint, every field, every scope it requires.">API reference</a><a href="api-reference.html" data-search="API reference Every endpoint, parameter and response.">API reference</a><a href="changelog.html" data-search="Changelog Versions are dated. Breaking changes get a new one.">Changelog</a>
-  </aside>
+      <main class="content">
+        <p class="eyebrow">Core concepts</p>
+        <h1>Errors</h1>
+        <p class="lede">
+          One shape, stable codes, and a request id worth quoting.
+        </p>
 
-  <main class="content">
-    <p class="eyebrow">Reference</p>
-    <h1>Errors</h1>
-      <p class="lede">One shape, stable codes, and a request id worth quoting.</p>
-      
-      <div class="prose"><p>Every error, from a typo&#39;d address to a reverted transaction, has the same shape.</p>
-<div class="code">
-  <div class="bar"><span>json</span><button class="copy" type="button">Copy</button></div>
-  <pre><code class="language-json">{
+        <div class="prose">
+          <p>
+            Every error, from a typo&#39;d address to a reverted transaction,
+            has the same shape.
+          </p>
+          <div class="code">
+            <div class="bar">
+              <span>json</span><button class="copy" type="button">Copy</button>
+            </div>
+            <pre><code class="language-json">{
   &quot;error&quot;: {
     &quot;type&quot;: &quot;invalid_request_error&quot;,
     &quot;code&quot;: &quot;bid_below_minimum&quot;,
@@ -60,175 +166,319 @@
     &quot;docs_url&quot;: &quot;https://docs.auctra.dev/errors#bid_below_minimum&quot;
   }
 }</code></pre>
-</div><p><strong>Switch on <code>code</code>.</strong> Messages are written for humans and will be reworded without warning. Codes are part of the contract and won&#39;t change without a version bump.</p>
-<p><strong>Quote <code>request_id</code>.</strong> It&#39;s on every response, in the body and in the <code>Auctra-Request-Id</code> header. It is the only string support needs from you.</p>
-<h2 id="types-and-status-codes"><a class="anchor" href="#types-and-status-codes" aria-hidden="true">#</a>Types and status codes</h2>
-<table>
-<thead>
-<tr>
-<th><code>type</code></th>
-<th>HTTP</th>
-<th>Meaning</th>
-<th>Retry?</th>
-</tr>
-</thead>
-<tbody><tr>
-<td><code>authentication_error</code></td>
-<td>401</td>
-<td>Bad, missing, revoked or wrong-environment key</td>
-<td>No — fix the key</td>
-</tr>
-<tr>
-<td><code>permission_error</code></td>
-<td>403</td>
-<td>Key lacks the required scope</td>
-<td>No</td>
-</tr>
-<tr>
-<td><code>invalid_request_error</code></td>
-<td>400 / 404</td>
-<td>Malformed input, or an auction rule says no</td>
-<td>No — change the request</td>
-</tr>
-<tr>
-<td><code>idempotency_error</code></td>
-<td>409</td>
-<td>Key reused with a different body, or still in flight</td>
-<td>Yes, for <code>in_flight</code></td>
-</tr>
-<tr>
-<td><code>chain_error</code></td>
-<td>422</td>
-<td>The transaction would revert, or did</td>
-<td>Depends on the reason</td>
-</tr>
-<tr>
-<td><code>rate_limit_error</code></td>
-<td>429</td>
-<td>Too many requests</td>
-<td>Yes, after <code>Retry-After</code></td>
-</tr>
-<tr>
-<td><code>api_error</code></td>
-<td>500 / 503</td>
-<td>Our fault</td>
-<td>Yes, with backoff</td>
-</tr>
-</tbody></table>
-<h2 id="codes-you39ll-actually-hit"><a class="anchor" href="#codes-you39ll-actually-hit" aria-hidden="true">#</a>Codes you&#39;ll actually hit</h2>
-<h3 id="bid_below_minimum"><a class="anchor" href="#bid_below_minimum" aria-hidden="true">#</a><code>bid_below_minimum</code></h3>
-<p>The bid doesn&#39;t clear <code>highest_bid × (1 + min_increment_bps / 10000)</code>, or the reserve if there are no bids. <code>detail.minimum_bid_wei</code> carries the current floor. It moves; re-read the auction rather than retrying the same amount.</p>
-<h3 id="auction_not_live"><a class="anchor" href="#auction_not_live" aria-hidden="true">#</a><code>auction_not_live</code></h3>
-<p>The clock ran out, or the auction was cancelled. The message names the actual status. Note this can happen to a request that was valid when your user clicked the button — five hundred milliseconds is enough.</p>
-<h3 id="auction_has_bids"><a class="anchor" href="#auction_has_bids" aria-hidden="true">#</a><code>auction_has_bids</code></h3>
-<p>You tried to cancel an auction someone has bid on. This is not a permission problem you can escalate. Once ETH is committed, the lot is committed.</p>
-<h3 id="auction_not_ended"><a class="anchor" href="#auction_not_ended" aria-hidden="true">#</a><code>auction_not_ended</code></h3>
-<p>Settlement before <code>end_time</code>. Check for a pending extension: a bid in the last five minutes may have moved the deadline since you last read it.</p>
-<h3 id="environment_mismatch"><a class="anchor" href="#environment_mismatch" aria-hidden="true">#</a><code>environment_mismatch</code></h3>
-<p>An <code>sk_live_</code> key against the sandbox host, or the reverse. See <a href="authentication.html">Authentication</a>.</p>
-<h3 id="idempotency_key_reused"><a class="anchor" href="#idempotency_key_reused" aria-hidden="true">#</a><code>idempotency_key_reused</code></h3>
-<p>The same <code>Idempotency-Key</code> with a different body. The key names a specific request, not a slot to reuse. Generate a fresh one.</p>
-<h3 id="transaction_reverted"><a class="anchor" href="#transaction_reverted" aria-hidden="true">#</a><code>transaction_reverted</code></h3>
-<p>The chain rejected the transaction. AuctionHouse.sol uses custom errors, so <code>message</code> carries a decoded name — <code>BidTooLow</code>, <code>AuctionAlreadyEnded</code>, <code>NotApprovedForTransfer</code> — rather than the useless string &quot;execution reverted&quot;.</p>
-<p><code>NotApprovedForTransfer</code> is the one that catches everybody: you have to <code>setApprovalForAll</code> on the token contract before Auctra can escrow the item.</p>
-<h3 id="rpc_unavailable"><a class="anchor" href="#rpc_unavailable" aria-hidden="true">#</a><code>rpc_unavailable</code></h3>
-<p>We couldn&#39;t reach an Ethereum node. Ours, not yours. Retry with backoff; it usually clears within seconds.</p>
-<h3 id="internal_error"><a class="anchor" href="#internal_error" aria-hidden="true">#</a><code>internal_error</code></h3>
-<p>A 500. The request was <strong>not</strong> processed — we don&#39;t half-commit. Safe to retry with the same <code>Idempotency-Key</code>.</p>
-<h2 id="retrying-without-making-it-worse"><a class="anchor" href="#retrying-without-making-it-worse" aria-hidden="true">#</a>Retrying, without making it worse</h2>
-<p>The dangerous retry is a <code>POST</code> whose response you never saw. Did the bid land? Retrying blind can commit the ETH twice.</p>
-<p>Don&#39;t guess. Send an <code>Idempotency-Key</code> on every POST, and retry with the same key: we replay the original response instead of doing the work again. <a href="idempotency.html">Idempotency →</a></p>
-<p>For <code>429</code> and <code>5xx</code>, back off exponentially with jitter, and cap it:</p>
-<div class="code">
-  <div class="bar"><span>js</span><button class="copy" type="button">Copy</button></div>
-  <pre><code class="language-js">const delay = Math.min(2 ** attempt * 250, 30_000);
+          </div>
+          <p>
+            <strong>Switch on <code>code</code>.</strong> Messages are written
+            for humans and will be reworded without warning. Codes are part of
+            the contract and won&#39;t change without a version bump.
+          </p>
+          <p>
+            <strong>Quote <code>request_id</code>.</strong> It&#39;s on every
+            response, in the body and in the
+            <code>Auctra-Request-Id</code> header. It is the only string support
+            needs from you.
+          </p>
+          <h2 id="types-and-status-codes">
+            <a class="anchor" href="#types-and-status-codes" aria-hidden="true"
+              >#</a
+            >Types and status codes
+          </h2>
+          <table>
+            <thead>
+              <tr>
+                <th><code>type</code></th>
+                <th>HTTP</th>
+                <th>Meaning</th>
+                <th>Retry?</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>authentication_error</code></td>
+                <td>401</td>
+                <td>Bad, missing, revoked or wrong-environment key</td>
+                <td>No — fix the key</td>
+              </tr>
+              <tr>
+                <td><code>permission_error</code></td>
+                <td>403</td>
+                <td>Key lacks the required scope</td>
+                <td>No</td>
+              </tr>
+              <tr>
+                <td><code>invalid_request_error</code></td>
+                <td>400 / 404</td>
+                <td>Malformed input, or an auction rule says no</td>
+                <td>No — change the request</td>
+              </tr>
+              <tr>
+                <td><code>idempotency_error</code></td>
+                <td>409</td>
+                <td>Key reused with a different body, or still in flight</td>
+                <td>Yes, for <code>in_flight</code></td>
+              </tr>
+              <tr>
+                <td><code>chain_error</code></td>
+                <td>422</td>
+                <td>The transaction would revert, or did</td>
+                <td>Depends on the reason</td>
+              </tr>
+              <tr>
+                <td><code>rate_limit_error</code></td>
+                <td>429</td>
+                <td>Too many requests</td>
+                <td>Yes, after <code>Retry-After</code></td>
+              </tr>
+              <tr>
+                <td><code>api_error</code></td>
+                <td>500 / 503</td>
+                <td>Our fault</td>
+                <td>Yes, with backoff</td>
+              </tr>
+            </tbody>
+          </table>
+          <h2 id="codes-you39ll-actually-hit">
+            <a
+              class="anchor"
+              href="#codes-you39ll-actually-hit"
+              aria-hidden="true"
+              >#</a
+            >Codes you&#39;ll actually hit
+          </h2>
+          <h3 id="bid_below_minimum">
+            <a class="anchor" href="#bid_below_minimum" aria-hidden="true">#</a
+            ><code>bid_below_minimum</code>
+          </h3>
+          <p>
+            The bid doesn&#39;t clear
+            <code>highest_bid × (1 + min_increment_bps / 10000)</code>, or the
+            reserve if there are no bids.
+            <code>detail.minimum_bid_wei</code> carries the current floor. It
+            moves; re-read the auction rather than retrying the same amount.
+          </p>
+          <h3 id="auction_not_live">
+            <a class="anchor" href="#auction_not_live" aria-hidden="true">#</a
+            ><code>auction_not_live</code>
+          </h3>
+          <p>
+            The clock ran out, or the auction was cancelled. The message names
+            the actual status. Note this can happen to a request that was valid
+            when your user clicked the button — five hundred milliseconds is
+            enough.
+          </p>
+          <h3 id="auction_has_bids">
+            <a class="anchor" href="#auction_has_bids" aria-hidden="true">#</a
+            ><code>auction_has_bids</code>
+          </h3>
+          <p>
+            You tried to cancel an auction someone has bid on. This is not a
+            permission problem you can escalate. Once ETH is committed, the lot
+            is committed.
+          </p>
+          <h3 id="auction_not_ended">
+            <a class="anchor" href="#auction_not_ended" aria-hidden="true">#</a
+            ><code>auction_not_ended</code>
+          </h3>
+          <p>
+            Settlement before <code>end_time</code>. Check for a pending
+            extension: a bid in the last five minutes may have moved the
+            deadline since you last read it.
+          </p>
+          <h3 id="environment_mismatch">
+            <a class="anchor" href="#environment_mismatch" aria-hidden="true"
+              >#</a
+            ><code>environment_mismatch</code>
+          </h3>
+          <p>
+            An <code>sk_live_</code> key against the sandbox host, or the
+            reverse. See <a href="authentication.html">Authentication</a>.
+          </p>
+          <h3 id="idempotency_key_reused">
+            <a class="anchor" href="#idempotency_key_reused" aria-hidden="true"
+              >#</a
+            ><code>idempotency_key_reused</code>
+          </h3>
+          <p>
+            The same <code>Idempotency-Key</code> with a different body. The key
+            names a specific request, not a slot to reuse. Generate a fresh one.
+          </p>
+          <h3 id="transaction_reverted">
+            <a class="anchor" href="#transaction_reverted" aria-hidden="true"
+              >#</a
+            ><code>transaction_reverted</code>
+          </h3>
+          <p>
+            The chain rejected the transaction. AuctionHouse.sol uses custom
+            errors, so <code>message</code> carries a decoded name —
+            <code>BidTooLow</code>, <code>AuctionAlreadyEnded</code>,
+            <code>NotApprovedForTransfer</code> — rather than the useless string
+            &quot;execution reverted&quot;.
+          </p>
+          <p>
+            <code>NotApprovedForTransfer</code> is the one that catches
+            everybody: you have to <code>setApprovalForAll</code> on the token
+            contract before Auctra can escrow the item.
+          </p>
+          <h3 id="rpc_unavailable">
+            <a class="anchor" href="#rpc_unavailable" aria-hidden="true">#</a
+            ><code>rpc_unavailable</code>
+          </h3>
+          <p>
+            We couldn&#39;t reach an Ethereum node. Ours, not yours. Retry with
+            backoff; it usually clears within seconds.
+          </p>
+          <h3 id="internal_error">
+            <a class="anchor" href="#internal_error" aria-hidden="true">#</a
+            ><code>internal_error</code>
+          </h3>
+          <p>
+            A 500. The request was <strong>not</strong> processed — we don&#39;t
+            half-commit. Safe to retry with the same
+            <code>Idempotency-Key</code>.
+          </p>
+          <h2 id="retrying-without-making-it-worse">
+            <a
+              class="anchor"
+              href="#retrying-without-making-it-worse"
+              aria-hidden="true"
+              >#</a
+            >Retrying, without making it worse
+          </h2>
+          <p>
+            The dangerous retry is a <code>POST</code> whose response you never
+            saw. Did the bid land? Retrying blind can commit the ETH twice.
+          </p>
+          <p>
+            Don&#39;t guess. Send an <code>Idempotency-Key</code> on every POST,
+            and retry with the same key: we replay the original response instead
+            of doing the work again.
+            <a href="idempotency.html">Idempotency →</a>
+          </p>
+          <p>
+            For <code>429</code> and <code>5xx</code>, back off exponentially
+            with jitter, and cap it:
+          </p>
+          <div class="code">
+            <div class="bar">
+              <span>js</span><button class="copy" type="button">Copy</button>
+            </div>
+            <pre><code class="language-js">const delay = Math.min(2 ** attempt * 250, 30_000);
 await sleep(delay + Math.random() * 250);</code></pre>
-</div><p>Never retry a <code>400</code>. The request is wrong and will be wrong again.</p>
-</div>
-      <nav class="pager">
-    <a class="prev" href="auction-lifecycle.html"><span>Previous</span><b>Auction lifecycle</b></a>
-    <a class="next" href="api-reference.html"><span>Next</span><b>API reference</b></a>
-  </nav>
-  </main>
+          </div>
+          <p>
+            Never retry a <code>400</code>. The request is wrong and will be
+            wrong again.
+          </p>
+        </div>
+        <nav class="pager">
+          <a class="prev" href="auction-lifecycle.html"
+            ><span>Previous</span><b>Auction lifecycle</b></a
+          >
+          <a class="next" href="idempotency.html"
+            ><span>Next</span><b>Idempotency</b></a
+          >
+        </nav>
+      </main>
 
-  <aside class="rail"><h5>On this page</h5><a class="h2" href="#types-and-status-codes">Types and status codes</a><a class="h2" href="#codes-you39ll-actually-hit">Codes you&#39;ll actually hit</a><a class="h3" href="#bid_below_minimum"><code>bid_below_minimum</code></a><a class="h3" href="#auction_not_live"><code>auction_not_live</code></a><a class="h3" href="#auction_has_bids"><code>auction_has_bids</code></a><a class="h3" href="#auction_not_ended"><code>auction_not_ended</code></a><a class="h3" href="#environment_mismatch"><code>environment_mismatch</code></a><a class="h3" href="#idempotency_key_reused"><code>idempotency_key_reused</code></a><a class="h3" href="#transaction_reverted"><code>transaction_reverted</code></a><a class="h3" href="#rpc_unavailable"><code>rpc_unavailable</code></a><a class="h3" href="#internal_error"><code>internal_error</code></a><a class="h2" href="#retrying-without-making-it-worse">Retrying, without making it worse</a></aside>
-</div>
+      <aside class="rail">
+        <h5>On this page</h5>
+        <a class="h2" href="#types-and-status-codes">Types and status codes</a
+        ><a class="h2" href="#codes-you39ll-actually-hit"
+          >Codes you&#39;ll actually hit</a
+        ><a class="h3" href="#bid_below_minimum"
+          ><code>bid_below_minimum</code></a
+        ><a class="h3" href="#auction_not_live"><code>auction_not_live</code></a
+        ><a class="h3" href="#auction_has_bids"><code>auction_has_bids</code></a
+        ><a class="h3" href="#auction_not_ended"
+          ><code>auction_not_ended</code></a
+        ><a class="h3" href="#environment_mismatch"
+          ><code>environment_mismatch</code></a
+        ><a class="h3" href="#idempotency_key_reused"
+          ><code>idempotency_key_reused</code></a
+        ><a class="h3" href="#transaction_reverted"
+          ><code>transaction_reverted</code></a
+        ><a class="h3" href="#rpc_unavailable"><code>rpc_unavailable</code></a
+        ><a class="h3" href="#internal_error"><code>internal_error</code></a
+        ><a class="h2" href="#retrying-without-making-it-worse"
+          >Retrying, without making it worse</a
+        >
+      </aside>
+    </div>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
-<script>
-  hljs.highlightAll();
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script>
+      hljs.highlightAll();
 
-  // Copy buttons — copy the active language panel when there's a tab strip,
-  // otherwise the block's only <code>.
-  document.querySelectorAll(".copy").forEach((btn) => {
-    btn.addEventListener("click", async () => {
-      const block = btn.closest(".code");
-      const panel = block.querySelector(".lang-panel.active") ?? block;
-      const code = panel.querySelector("code").innerText;
-      await navigator.clipboard.writeText(code);
-      const was = btn.textContent;
-      btn.textContent = "Copied";
-      setTimeout(() => (btn.textContent = was), 1400);
-    });
-  });
-
-  // Language tabs on multi-sample code blocks
-  document.querySelectorAll(".lang-group").forEach((group) => {
-    const tabs = [...group.querySelectorAll(".lang-tab")];
-    const panels = [...group.querySelectorAll(".lang-panel")];
-    tabs.forEach((tab) => {
-      tab.addEventListener("click", () => {
-        const lang = tab.dataset.lang;
-        tabs.forEach((t) => t.classList.toggle("active", t === tab));
-        panels.forEach((p) =>
-          p.classList.toggle("active", p.dataset.lang === lang),
-        );
+      // Copy buttons
+      document.querySelectorAll(".copy").forEach((btn) => {
+        btn.addEventListener("click", async () => {
+          const code = btn.closest(".code").querySelector("code").innerText;
+          await navigator.clipboard.writeText(code);
+          const was = btn.textContent;
+          btn.textContent = "Copied";
+          setTimeout(() => (btn.textContent = was), 1400);
+        });
       });
-    });
-  });
 
-  // Theme
-  document.getElementById("theme-toggle").addEventListener("click", () => {
-    const next = document.documentElement.dataset.theme === "dark" ? "light" : "dark";
-    document.documentElement.dataset.theme = next;
-    try { localStorage.setItem("auctra-theme", next); } catch {}
-  });
+      // Theme
+      document.getElementById("theme-toggle").addEventListener("click", () => {
+        const next =
+          document.documentElement.dataset.theme === "dark" ? "light" : "dark";
+        document.documentElement.dataset.theme = next;
+        try {
+          localStorage.setItem("auctra-theme", next);
+        } catch {}
+      });
 
-  // Mobile nav
-  const sidebar = document.getElementById("sidebar");
-  const toggle = document.getElementById("menu-toggle");
-  toggle.addEventListener("click", () => {
-    const open = sidebar.dataset.open === "true";
-    sidebar.dataset.open = String(!open);
-    toggle.setAttribute("aria-expanded", String(!open));
-  });
+      // Mobile nav
+      const sidebar = document.getElementById("sidebar");
+      const toggle = document.getElementById("menu-toggle");
+      toggle.addEventListener("click", () => {
+        const open = sidebar.dataset.open === "true";
+        sidebar.dataset.open = String(!open);
+        toggle.setAttribute("aria-expanded", String(!open));
+      });
 
-  // Filter the nav, rather than shipping a search index for fifteen pages.
-  const search = document.getElementById("search");
-  search.addEventListener("input", () => {
-    const q = search.value.toLowerCase().trim();
-    document.querySelectorAll(".sidebar a").forEach((a) => {
-      const hit = !q || (a.dataset.search ?? "").toLowerCase().includes(q);
-      a.style.display = hit ? "" : "none";
-    });
-    document.querySelectorAll(".sidebar h4").forEach((h) => {
-      let n = h.nextElementSibling, any = false;
-      while (n && n.tagName === "A") { if (n.style.display !== "none") any = true; n = n.nextElementSibling; }
-      h.style.display = any ? "" : "none";
-    });
-  });
+      // Filter the nav, rather than shipping a search index for fifteen pages.
+      const search = document.getElementById("search");
+      search.addEventListener("input", () => {
+        const q = search.value.toLowerCase().trim();
+        document.querySelectorAll(".sidebar a").forEach((a) => {
+          const hit = !q || (a.dataset.search ?? "").toLowerCase().includes(q);
+          a.style.display = hit ? "" : "none";
+        });
+        document.querySelectorAll(".sidebar h4").forEach((h) => {
+          let n = h.nextElementSibling,
+            any = false;
+          while (n && n.tagName === "A") {
+            if (n.style.display !== "none") any = true;
+            n = n.nextElementSibling;
+          }
+          h.style.display = any ? "" : "none";
+        });
+      });
 
-  // Highlight the rail entry for whatever section is on screen.
-  const links = [...document.querySelectorAll(".rail a")];
-  if (links.length) {
-    const seen = new Set();
-    const io = new IntersectionObserver((entries) => {
-      entries.forEach((e) => e.isIntersecting ? seen.add(e.target.id) : seen.delete(e.target.id));
-      links.forEach((l) => l.classList.toggle("active", seen.has(l.hash.slice(1))));
-    }, { rootMargin: "-80px 0px -70% 0px" });
-    document.querySelectorAll("h2[id], h3[id]").forEach((h) => io.observe(h));
-  }
-</script>
-
-</body>
+      // Highlight the rail entry for whatever section is on screen.
+      const links = [...document.querySelectorAll(".rail a")];
+      if (links.length) {
+        const seen = new Set();
+        const io = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((e) =>
+              e.isIntersecting
+                ? seen.add(e.target.id)
+                : seen.delete(e.target.id),
+            );
+            links.forEach((l) =>
+              l.classList.toggle("active", seen.has(l.hash.slice(1))),
+            );
+          },
+          { rootMargin: "-80px 0px -70% 0px" },
+        );
+        document
+          .querySelectorAll("h2[id], h3[id]")
+          .forEach((h) => io.observe(h));
+      }
+    </script>
+  </body>
 </html>

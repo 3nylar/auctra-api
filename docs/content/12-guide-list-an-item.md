@@ -1,6 +1,11 @@
-# Guide: list an item
+---
+title: 'Guide: list an item'
+description: Approve, create, confirm — the full seller flow, end to end.
+section: Guides
+slug: guide-list-an-item
+---
 
-Four steps: approve the contract to escrow the token, create the auction, sign and broadcast the transaction, and wait for the confirmation event. The middle two steps are the only ones that touch Auctra.
+Three steps: approve the contract to escrow the token, create the auction, wait for the confirmation event. The middle step is the only one that touches Auctra.
 
 ## 1. Approve, once per collection
 

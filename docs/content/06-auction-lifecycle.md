@@ -1,7 +1,7 @@
 ---
 title: Auction lifecycle
 description: Six states, one clock, and the two transitions nobody controls.
-section: Build
+section: Core concepts
 slug: auction-lifecycle
 ---
 

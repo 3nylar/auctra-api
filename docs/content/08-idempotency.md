@@ -1,7 +1,7 @@
 ---
 title: Idempotency
 description: Retry a POST safely, even when you never saw the response.
-section: Build
+section: Core concepts
 slug: idempotency
 ---
 

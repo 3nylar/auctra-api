@@ -59,26 +59,8 @@ model Organization {
   webhookEndpoints WebhookEndpoint[]
   events           Event[]
   idempotencyKeys  IdempotencyKey[]
-  users            User[]
 
   @@map("organizations")
-}
-
-// A human who can log into the dashboard, as distinct from an ApiKey, which
-// authenticates a program. One organization can have several users; every
-// user in an org sees the same keys, since keys belong to the org, not to
-// whoever happened to click "create."
-model User {
-  id    String @id @default(cuid())
-  orgId String
-  org   Organization @relation(fields: [orgId], references: [id], onDelete: Cascade)
-
-  email        String   @unique
-  passwordHash String // scrypt, salt embedded in the stored string — see lib/password.ts
-  createdAt    DateTime @default(now())
-
-  @@index([orgId])
-  @@map("users")
 }
 
 model ApiKey {

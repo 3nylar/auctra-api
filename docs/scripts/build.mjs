@@ -13,8 +13,6 @@ import {
   mkdirSync,
   readdirSync,
   copyFileSync,
-  cpSync,
-  rmSync,
 } from "node:fs";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -32,7 +30,6 @@ const SITE = {
   name: "Auctra",
   tagline: "On-chain English auctions, over HTTP.",
   sandbox: "https://auctra-api-production.up.railway.app",
-  docsUrl: "https://auctra-api.vercel.app",
 };
 
 // ---------------------------------------------------------------------------
@@ -149,15 +146,7 @@ function pager(pages, index) {
   </nav>`;
 }
 
-function layout({
-  title,
-  description,
-  section,
-  body,
-  sidebarHtml,
-  railHtml,
-  isReference,
-}) {
+function layout({ title, description, section, body, sidebarHtml, railHtml }) {
   return `<!doctype html>
 <html lang="en" data-theme="light">
 <head>
@@ -188,7 +177,6 @@ function layout({
     <a class="hide-sm" href="api-reference.html">API reference</a>
     <a class="hide-sm" href="changelog.html">Changelog</a>
     <a class="hide-sm" href="https://github.com/3nylar/auctra-api">GitHub</a>
-    <a class="nav-cta" href="dashboard/signup.html">Get an API key</a>
     <button class="icon-btn" id="theme-toggle" aria-label="Toggle colour theme">◐</button>
   </nav>
 </header>
@@ -213,32 +201,14 @@ function layout({
 <script>
   hljs.highlightAll();
 
-  // Copy buttons — copy the active language panel when there's a tab strip,
-  // otherwise the block's only <code>.
+  // Copy buttons
   document.querySelectorAll(".copy").forEach((btn) => {
     btn.addEventListener("click", async () => {
-      const block = btn.closest(".code");
-      const panel = block.querySelector(".lang-panel.active") ?? block;
-      const code = panel.querySelector("code").innerText;
+      const code = btn.closest(".code").querySelector("code").innerText;
       await navigator.clipboard.writeText(code);
       const was = btn.textContent;
       btn.textContent = "Copied";
       setTimeout(() => (btn.textContent = was), 1400);
-    });
-  });
-
-  // Language tabs on multi-sample code blocks
-  document.querySelectorAll(".lang-group").forEach((group) => {
-    const tabs = [...group.querySelectorAll(".lang-tab")];
-    const panels = [...group.querySelectorAll(".lang-panel")];
-    tabs.forEach((tab) => {
-      tab.addEventListener("click", () => {
-        const lang = tab.dataset.lang;
-        tabs.forEach((t) => t.classList.toggle("active", t === tab));
-        panels.forEach((p) =>
-          p.classList.toggle("active", p.dataset.lang === lang),
-        );
-      });
     });
   });
 
@@ -284,7 +254,6 @@ function layout({
     document.querySelectorAll("h2[id], h3[id]").forEach((h) => io.observe(h));
   }
 </script>
-${isReference ? '<script src="try-it.js"></script>' : ""}
 </body>
 </html>`;
 }
@@ -302,56 +271,11 @@ const HERO = `<div class="ticket">
     <div class="track"><div class="fill"></div></div>
     <div class="legend"><span>Clock</span><span><b>Late bid</b> · extended ×1</span></div>
   </div>
-</div>
-
-<div class="note">
-  <span class="label">Before you start</span>
-  <p>You'll need three things in hand — all free, all a couple of minutes each:</p>
-  <ul style="margin:8px 0 0;padding-left:20px">
-    <li>An <a href="dashboard/signup.html">Auctra sandbox key</a> — sign up, no card required</li>
-    <li>A Sepolia wallet, and test ETH from <a href="https://sepoliafaucet.com">sepoliafaucet.com</a></li>
-    <li>Something to auction — a test ERC-721 works fine to start</li>
-  </ul>
 </div>`;
 
 // ---------------------------------------------------------------------------
 // API reference, generated from the spec
 // ---------------------------------------------------------------------------
-
-// Scopes aren't in the OpenAPI security block at the operation level (only a
-// blanket bearerAuth + one override for /health), so we mirror the table in
-// authentication.md by hand. Keys are "METHOD path" exactly as written in SPEC.
-const SCOPES = {
-  "get /v1/health": null, // no auth at all
-  "get /v1/auctions": "auctions:read",
-  "post /v1/auctions": "auctions:write",
-  "get /v1/auctions/{id}": "auctions:read",
-  "get /v1/auctions/{id}/bids": "auctions:read",
-  "post /v1/auctions/{id}/bids": "auctions:write",
-  "post /v1/auctions/{id}/settle": "auctions:write",
-  "post /v1/auctions/{id}/cancel": "auctions:write",
-  "post /v1/auctions/{id}/claim": "auctions:write",
-  "get /v1/refunds": "auctions:read",
-  "get /v1/refunds/balance": "auctions:read",
-  "post /v1/refunds/withdraw": "auctions:write",
-  "post /v1/transactions": "auctions:write",
-  "get /v1/transactions/{hash}": "auctions:read",
-  "get /v1/webhook_endpoints": "webhooks:read",
-  "post /v1/webhook_endpoints": "webhooks:write",
-  "delete /v1/webhook_endpoints/{id}": "webhooks:write",
-  "get /v1/events": "auctions:read",
-  "get /v1/events/{id}": "auctions:read",
-};
-
-function scopeBadge(method, path) {
-  const key = `${method} ${path}`;
-  if (!(key in SCOPES)) return "";
-  const scope = SCOPES[key];
-  if (scope === null) {
-    return `<div class="scope-badge scope-none">No authentication required</div>`;
-  }
-  return `<div class="scope-badge">Requires scope <code>${scope}</code></div>`;
-}
 
 const deref = (node) => {
   if (!node || typeof node !== "object") return node;
@@ -450,112 +374,6 @@ function curlSample(method, path, op) {
   return lines.join("\n");
 }
 
-/** Same request, as a fetch() call. Mirrors examples/auctra-client.mjs style. */
-function jsSample(method, path, op) {
-  const example = op.requestBody?.content?.["application/json"]?.example;
-  const hasBody = !!example;
-  const idem = requiresIdempotency(op);
-  const headerLines = [`"Authorization": \`Bearer \${AUCTRA_KEY}\`,`];
-  if (hasBody) headerLines.push(`"Content-Type": "application/json",`);
-  if (idem) headerLines.push(`"Idempotency-Key": crypto.randomUUID(),`);
-  const optLines = [`method: "${method.toUpperCase()}"`, `headers: {`];
-  const indented = headerLines.map((l) => `    ${l}`).join("\n");
-  let body = `const res = await fetch(\`\${AUCTRA_URL}${path.replace(/\{([^}]+)\}/g, "${$1}")}\`, {
-  method: "${method.toUpperCase()}",
-  headers: {
-${indented}
-  },`;
-  if (hasBody) {
-    const json = JSON.stringify(example, null, 2).split("\n").join("\n  ");
-    body += `\n  body: JSON.stringify(${json}),`;
-  }
-  body += `\n});\nconst data = await res.json();`;
-  return body;
-}
-
-/** Same request, as Python + requests. */
-function pySample(method, path, op) {
-  const example = op.requestBody?.content?.["application/json"]?.example;
-  const hasBody = !!example;
-  const idem = requiresIdempotency(op);
-  const urlPath = path.replace(/\{([^}]+)\}/g, (_, name) => `{${name}}`);
-  const lines = [
-    `import requests`,
-    idem ? `import uuid` : null,
-    ``,
-    `headers = {"Authorization": f"Bearer {AUCTRA_KEY}"}`,
-    idem ? `headers["Idempotency-Key"] = str(uuid.uuid4())` : null,
-    ``,
-  ].filter(Boolean);
-  const kwargs = hasBody
-    ? `headers=headers, json=${pyLiteral(example)}`
-    : `headers=headers`;
-  lines.push(
-    `res = requests.${method}(f"{AUCTRA_URL}${urlPath}", ${kwargs})`,
-    `data = res.json()`,
-  );
-  return lines.join("\n");
-}
-
-function requiresIdempotency(op) {
-  return (op.parameters ?? [])
-    .map(deref)
-    .some((p) => p.name === "Idempotency-Key");
-}
-
-/** Minimal JSON->Python literal converter (True/False/None, otherwise json.dumps-compatible). */
-function pyLiteral(value, indent = 0) {
-  const pad = "    ".repeat(indent);
-  const padIn = "    ".repeat(indent + 1);
-  if (value === null) return "None";
-  if (typeof value === "boolean") return value ? "True" : "False";
-  if (typeof value === "number") return String(value);
-  if (typeof value === "string") return JSON.stringify(value);
-  if (Array.isArray(value)) {
-    if (!value.length) return "[]";
-    const items = value.map((v) => `${padIn}${pyLiteral(v, indent + 1)}`);
-    return `[\n${items.join(",\n")},\n${pad}]`;
-  }
-  const keys = Object.keys(value);
-  if (!keys.length) return "{}";
-  const items = keys.map(
-    (k) => `${padIn}${JSON.stringify(k)}: ${pyLiteral(value[k], indent + 1)}`,
-  );
-  return `{\n${items.join(",\n")},\n${pad}}`;
-}
-
-/** A tab strip of bash/JS/Python request samples sharing one visible code panel. */
-function requestSample(method, path, op, opId) {
-  const samples = [
-    { lang: "bash", label: "cURL", code: curlSample(method, path, op) },
-    {
-      lang: "javascript",
-      label: "JavaScript",
-      code: jsSample(method, path, op),
-    },
-    { lang: "python", label: "Python", code: pySample(method, path, op) },
-  ];
-  const tabs = samples
-    .map(
-      (s, i) =>
-        `<button type="button" class="lang-tab${i === 0 ? " active" : ""}" data-lang="${s.lang}">${s.label}</button>`,
-    )
-    .join("");
-  const panels = samples
-    .map(
-      (s, i) =>
-        `<pre class="lang-panel${i === 0 ? " active" : ""}" data-lang="${s.lang}"><code class="language-${s.lang}">${escapeHtml(s.code)}</code></pre>`,
-    )
-    .join("");
-  return `<div class="code lang-group" id="req-${opId}">
-  <div class="bar">
-    <div class="lang-tabs">${tabs}</div>
-    <button class="copy" type="button">Copy</button>
-  </div>
-  ${panels}
-</div>`;
-}
-
 function responseSample(op) {
   for (const r of Object.values(op.responses ?? {})) {
     const c = r.content?.["application/json"];
@@ -581,38 +399,6 @@ function responseSample(op) {
     }
   }
   return null;
-}
-
-/** A scannable verb+name list, grouped by tag, linking straight to each operation's anchor. */
-function quickIndex() {
-  const byTag = new Map();
-  for (const [path, item] of Object.entries(SPEC.paths)) {
-    for (const [method, op] of Object.entries(item)) {
-      const tag = op.tags?.[0] ?? "Other";
-      if (!byTag.has(tag)) byTag.set(tag, []);
-      byTag.get(tag).push({ path, method, op });
-    }
-  }
-  const tagOrder = SPEC.tags.map((t) => t.name).filter((t) => byTag.has(t));
-  const groups = tagOrder
-    .map((tag) => {
-      const rows = byTag
-        .get(tag)
-        .map(({ path, method, op }) => {
-          const opId = slugify(`${method} ${path}`);
-          return `<a class="qi-row" href="#${opId}">
-            <span class="verb ${method}">${method.toUpperCase()}</span>
-            <span class="qi-name">${escapeHtml(op.summary)}</span>
-          </a>`;
-        })
-        .join("");
-      return `<div class="qi-group">
-        <a class="qi-tag" href="#${slugify(tag)}">${tag}</a>
-        ${rows}
-      </div>`;
-    })
-    .join("");
-  return `<nav class="quick-index" aria-label="Endpoint index">${groups}</nav>`;
 }
 
 function apiReference(toc) {
@@ -644,15 +430,13 @@ function apiReference(toc) {
   <div class="op-main">
     <h3><a class="anchor" href="#${opId}" aria-hidden="true">#</a>${escapeHtml(op.summary)}</h3>
     <div class="route"><span class="verb ${method}">${method.toUpperCase()}</span><span>${path}</span></div>
-    ${scopeBadge(method, path)}
     ${md.parse(op.description ?? "")}
     ${paramList(op.parameters)}
     ${bodyFields(op)}
     ${responses(op)}
   </div>
   <div class="op-side">
-    <div class="tryit" data-method="${method}" data-path="${escapeHtml(path)}"></div>
-    ${requestSample(method, path, op, opId)}
+    ${codeBlock(curlSample(method, path, op), "bash")}
     ${sample ? codeBlock(sample, "json") : ""}
   </div>
 </section>`;
@@ -667,63 +451,6 @@ function apiReference(toc) {
   }
 
   return sections.join("\n");
-}
-
-/** Plain-markdown mirror of the generated reference page, for the .md mirror / llms.txt consumers. */
-function apiReferenceMarkdown() {
-  const byTag = new Map();
-  for (const [path, item] of Object.entries(SPEC.paths)) {
-    for (const [method, op] of Object.entries(item)) {
-      const tag = op.tags?.[0] ?? "Other";
-      if (!byTag.has(tag)) byTag.set(tag, []);
-      byTag.get(tag).push({ path, method, op });
-    }
-  }
-  const tagOrder = SPEC.tags.map((t) => t.name).filter((t) => byTag.has(t));
-  const lines = [
-    `# API reference`,
-    ``,
-    `Base URL \`${SITE.sandbox}\`. Every request needs \`Authorization: Bearer sk_test_…\`. Amounts are decimal strings of wei.`,
-    ``,
-  ];
-  for (const tag of tagOrder) {
-    const tagMeta = SPEC.tags.find((t) => t.name === tag);
-    lines.push(`## ${tag}`, ``);
-    if (tagMeta?.description) lines.push(tagMeta.description, ``);
-    for (const { path, method, op } of byTag.get(tag)) {
-      lines.push(
-        `### ${op.summary}`,
-        ``,
-        `\`${method.toUpperCase()} ${path}\``,
-        ``,
-      );
-      const key = `${method} ${path}`;
-      if (key in SCOPES) {
-        lines.push(
-          SCOPES[key] === null
-            ? `_No authentication required._`
-            : `_Requires scope \`${SCOPES[key]}\`._`,
-          ``,
-        );
-      }
-      if (op.description) lines.push(op.description, ``);
-      const params = (op.parameters ?? []).map(deref);
-      if (params.length) {
-        lines.push(`Parameters:`, ``);
-        for (const p of params) {
-          const req = p.required ? ", required" : "";
-          lines.push(
-            `- \`${p.name}\` (${typeOf(p.schema)}, ${p.in}${req})${p.description ? ` — ${p.description}` : ""}`,
-          );
-        }
-        lines.push(``);
-      }
-      lines.push(`\`\`\`bash`, curlSample(method, path, op), `\`\`\``, ``);
-      const sample = responseSample(op);
-      if (sample) lines.push(`\`\`\`json`, sample, `\`\`\``, ``);
-    }
-  }
-  return lines.join("\n");
 }
 
 // ---------------------------------------------------------------------------
@@ -766,21 +493,6 @@ pages.forEach((page, i) => {
     body = `<h1>API reference</h1>
       <p class="lede">Base URL <code>${SITE.sandbox}</code>. Every request needs
       <code>Authorization: Bearer sk_test_…</code>. Amounts are decimal strings of wei.</p>
-      <div class="tryit-bar">
-        <div class="tryit-bar-field">
-          <label for="tryit-key">Your API key</label>
-          <input id="tryit-key" type="password" placeholder="sk_test_..." autocomplete="off" spellcheck="false">
-        </div>
-        <div class="tryit-bar-field narrow">
-          <label for="tryit-base">Base URL</label>
-          <input id="tryit-base" type="text" value="${SITE.sandbox}" spellcheck="false">
-        </div>
-        <p class="tryit-bar-note">
-          Stored only in this browser (<code>localStorage</code>), sent only to the base URL above.
-          No key yet? <a href="dashboard/signup.html">Get one free →</a>
-        </p>
-      </div>
-      ${quickIndex()}
       ${apiReference(toc)}`;
   } else {
     const isIntro = page.meta.slug === "introduction";
@@ -800,23 +512,13 @@ pages.forEach((page, i) => {
       body,
       sidebarHtml: sidebar(pages, page.meta.slug),
       railHtml: rail(toc),
-      isReference: Boolean(page.generated),
     }),
   );
-
-  // Markdown mirror: raw source for hand-written pages, a generated
-  // equivalent for the OpenAPI-derived reference page. Lets llms.txt point
-  // at clean markdown instead of forcing tools to parse HTML.
-  const markdown = page.generated
-    ? apiReferenceMarkdown()
-    : `# ${page.meta.title}\n\n${page.body.trim()}\n`;
-  writeFileSync(join(DIST, `${page.meta.slug}.md`), markdown);
 });
 
 // index.html mirrors the introduction so a bare domain lands somewhere useful.
 copyFileSync(join(DIST, "introduction.html"), join(DIST, "index.html"));
 copyFileSync(join(ROOT, "theme", "styles.css"), join(DIST, "styles.css"));
-copyFileSync(join(ROOT, "theme", "try-it.js"), join(DIST, "try-it.js"));
 copyFileSync(
   join(ROOT, "..", "spec", "openapi.yaml"),
   join(DIST, "openapi.yaml"),
@@ -826,26 +528,5 @@ copyFileSync(
   join(DIST, "openapi.json"),
 );
 
-// The dashboard: plain HTML/CSS/JS, not run through the markdown pipeline
-// at all — it's an application, not a document, so it's copied verbatim.
-rmSync(join(DIST, "dashboard"), { recursive: true, force: true });
-cpSync(join(ROOT, "dashboard"), join(DIST, "dashboard"), { recursive: true });
-
 console.log(`built ${pages.length} pages → docs/dist`);
-// llms.txt: a flat, plain-text index of every page, so an AI tool can
-// discover the whole docs set in one fetch instead of crawling link by
-// link. Built from the same `pages` array as the site itself — add a page,
-// it shows up here automatically, nothing to remember to update by hand.
-const llmsTxt = [
-  `# ${SITE.name}`,
-  "",
-  "## Docs",
-  "",
-  ...pages.map(
-    (p) =>
-      `- [${p.meta.title}](${SITE.docsUrl ?? ""}/${p.meta.slug}.md): ${p.meta.description ?? ""}`,
-  ),
-].join("\n");
-writeFileSync(join(DIST, "llms.txt"), llmsTxt + "\n");
-
 for (const p of pages) console.log(`  ${p.meta.slug}.html`);

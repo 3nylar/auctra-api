@@ -1,72 +1,204 @@
 <!doctype html>
 <html lang="en" data-theme="light">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Guide: place a bid — Auctra API</title>
-<meta name="description" content="Read the minimum, prepare, sign, and handle being outbid.">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="styles.css">
-<script>
-  // Applied before first paint so a dark-mode reader never sees a white flash.
-  try {
-    const t = localStorage.getItem("auctra-theme");
-    if (t) document.documentElement.dataset.theme = t;
-    else if (matchMedia("(prefers-color-scheme: dark)").matches)
-      document.documentElement.dataset.theme = "dark";
-  } catch {}
-</script>
-</head>
-<body>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Guide: place a bid — Auctra API</title>
+    <meta
+      name="description"
+      content="Read the minimum, prepare, sign, and handle being outbid."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+    <script>
+      // Applied before first paint so a dark-mode reader never sees a white flash.
+      try {
+        const t = localStorage.getItem("auctra-theme");
+        if (t) document.documentElement.dataset.theme = t;
+        else if (matchMedia("(prefers-color-scheme: dark)").matches)
+          document.documentElement.dataset.theme = "dark";
+      } catch {}
+    </script>
+  </head>
+  <body>
+    <header class="masthead">
+      <button
+        class="icon-btn"
+        id="menu-toggle"
+        aria-label="Toggle navigation"
+        aria-expanded="false"
+      >
+        ☰
+      </button>
+      <a class="wordmark" href="introduction.html"
+        ><b>Auctra</b><span>Docs</span></a
+      >
+      <nav>
+        <a class="hide-sm" href="api-reference.html">API reference</a>
+        <a class="hide-sm" href="changelog.html">Changelog</a>
+        <a class="hide-sm" href="https://github.com/3nylar/auctra-api"
+          >GitHub</a
+        >
+        <button
+          class="icon-btn"
+          id="theme-toggle"
+          aria-label="Toggle colour theme"
+        >
+          ◐
+        </button>
+      </nav>
+    </header>
 
-<header class="masthead">
-  <button class="icon-btn" id="menu-toggle" aria-label="Toggle navigation" aria-expanded="false">☰</button>
-  <a class="wordmark" href="introduction.html"><b>Auctra</b><span>Docs</span></a>
-  <nav>
-    <a class="hide-sm" href="api-reference.html">API reference</a>
-    <a class="hide-sm" href="changelog.html">Changelog</a>
-    <a class="hide-sm" href="https://github.com/3nylar/auctra-api">GitHub</a>
-    <a class="nav-cta" href="dashboard/signup.html">Get an API key</a>
-    <button class="icon-btn" id="theme-toggle" aria-label="Toggle colour theme">◐</button>
-  </nav>
-</header>
+    <div class="shell">
+      <aside class="sidebar" id="sidebar">
+        <div class="search-wrap">
+          <input
+            id="search"
+            type="search"
+            placeholder="Search the docs"
+            autocomplete="off"
+          />
+        </div>
+        <h4>Get started</h4>
+        <a
+          href="introduction.html"
+          data-search="Introduction An auction house that settles on Ethereum, exposed as a JSON API."
+          >Introduction</a
+        ><a
+          href="quickstart.html"
+          data-search="Quickstart From zero to a live auction on Sepolia in four steps."
+          >Quickstart</a
+        ><a
+          href="authentication.html"
+          data-search="Authentication API keys, scopes, environments, and what to do when one leaks."
+          >Authentication</a
+        ><a
+          href="environments.html"
+          data-search="Environments Sandbox and production are the same code against different chains."
+          >Environments</a
+        >
+        <h4>Core concepts</h4>
+        <a
+          href="signing-model.html"
+          data-search="The signing model Why write endpoints return a transaction instead of doing the work."
+          >The signing model</a
+        ><a
+          href="auction-lifecycle.html"
+          data-search="Auction lifecycle Six states, one clock, and the two transitions nobody controls."
+          >Auction lifecycle</a
+        ><a
+          href="errors.html"
+          data-search="Errors One shape, stable codes, and a request id worth quoting."
+          >Errors</a
+        ><a
+          href="idempotency.html"
+          data-search="Idempotency Retry a POST safely, even when you never saw the response."
+          >Idempotency</a
+        ><a
+          href="pagination.html"
+          data-search="Pagination Cursors, not page numbers, and why that isn't pedantry."
+          >Pagination</a
+        ><a
+          href="rate-limits.html"
+          data-search="Rate limits 100 requests a minute, per key, and how to not need them."
+          >Rate limits</a
+        ><a
+          href="webhooks.html"
+          data-search="Webhooks Signed, retried, replayable — and how to verify one before you trust it."
+          >Webhooks</a
+        >
+        <h4>Guides</h4>
+        <a
+          href="guide-list-an-item.html"
+          data-search="Guide: list an item Approve, create, confirm — the full seller flow, end to end."
+          >Guide: list an item</a
+        ><a
+          href="guide-place-a-bid.html"
+          aria-current="page"
+          data-search="Guide: place a bid Read the minimum, prepare, sign, and handle being outbid."
+          >Guide: place a bid</a
+        ><a
+          href="guide-settle.html"
+          data-search="Guide: settle and pay out The clock runs out. Now someone has to close the loop."
+          >Guide: settle and pay out</a
+        >
+        <h4>Reference</h4>
+        <a
+          href="api-reference.html"
+          data-search="API reference Every endpoint, parameter and response."
+          >API reference</a
+        ><a
+          href="changelog.html"
+          data-search="Changelog Versions are dated. Breaking changes get a new one."
+          >Changelog</a
+        >
+      </aside>
 
-<div class="shell">
-  <aside class="sidebar" id="sidebar">
-    <div class="search-wrap">
-      <input id="search" type="search" placeholder="Search the docs" autocomplete="off">
-    </div>
-    <h4>Get started</h4><a href="introduction.html" data-search="Introduction An auction house that settles on Ethereum, exposed as a JSON API.">Introduction</a><a href="quickstart.html" data-search="Quickstart From zero to a live auction on Sepolia in four steps.">Quickstart</a><a href="authentication.html" data-search="Authentication API keys, scopes, environments, and what to do when one leaks.">Authentication</a><a href="environments.html" data-search="Environments Sandbox and production are the same code against different chains.">Environments</a><h4>Build</h4><a href="signing-model.html" data-search="The signing model Why write endpoints return a transaction instead of doing the work.">The signing model</a><a href="auction-lifecycle.html" data-search="Auction lifecycle Six states, one clock, and the two transitions nobody controls.">Auction lifecycle</a><a href="idempotency.html" data-search="Idempotency Retry a POST safely, even when you never saw the response.">Idempotency</a><a href="pagination.html" data-search="Pagination Cursors, not page numbers, and why that isn't pedantry.">Pagination</a><a href="rate-limits.html" data-search="Rate limits 100 requests a minute, per key, and how to not need them.">Rate limits</a><a href="webhooks.html" data-search="Webhooks Signed, retried, replayable — and how to verify one before you trust it.">Webhooks</a><a href="guide-list-an-item.html" data-search="Guide: list an item Approve, create, confirm — the full seller flow, end to end.">Guide: list an item</a><a href="guide-place-a-bid.html" aria-current="page" data-search="Guide: place a bid Read the minimum, prepare, sign, and handle being outbid.">Guide: place a bid</a><a href="guide-settle.html" data-search="Guide: settle and pay out The clock runs out. Now someone has to close the loop.">Guide: settle and pay out</a><h4>Reference</h4><a href="errors.html" data-search="Errors One shape, stable codes, and a request id worth quoting.">Errors</a><a href="api-reference.html" data-search="API reference Every endpoint, every field, every scope it requires.">API reference</a><a href="api-reference.html" data-search="API reference Every endpoint, parameter and response.">API reference</a><a href="changelog.html" data-search="Changelog Versions are dated. Breaking changes get a new one.">Changelog</a>
-  </aside>
+      <main class="content">
+        <p class="eyebrow">Guides</p>
+        <h1>Guide: place a bid</h1>
+        <p class="lede">
+          Read the minimum, prepare, sign, and handle being outbid.
+        </p>
 
-  <main class="content">
-    <p class="eyebrow">Build</p>
-    <h1>Guide: place a bid</h1>
-      <p class="lede">Read the minimum, prepare, sign, and handle being outbid.</p>
-      
-      <div class="prose"><h2 id="1-read-the-current-minimum"><a class="anchor" href="#1-read-the-current-minimum" aria-hidden="true">#</a>1. Read the current minimum</h2>
-<p>Never compute it yourself. <code>min_increment_bps</code> compounds, and the floor moves every time someone bids.</p>
-<div class="code">
-  <div class="bar"><span>js</span><button class="copy" type="button">Copy</button></div>
-  <pre><code class="language-js">const auction = await get(`/v1/auctions/${id}`);
+        <div class="prose">
+          <h2 id="1-read-the-current-minimum">
+            <a
+              class="anchor"
+              href="#1-read-the-current-minimum"
+              aria-hidden="true"
+              >#</a
+            >1. Read the current minimum
+          </h2>
+          <p>
+            Never compute it yourself. <code>min_increment_bps</code> compounds,
+            and the floor moves every time someone bids.
+          </p>
+          <div class="code">
+            <div class="bar">
+              <span>js</span><button class="copy" type="button">Copy</button>
+            </div>
+            <pre><code class="language-js">const auction = await get(`/v1/auctions/${id}`);
 
 auction.minimum_bid_wei;      // &quot;1102500000000000000&quot;
 auction.minimum_bid_display;  // &quot;1.1025&quot;  ← show this; don't calculate with it
 auction.status;               // &quot;live&quot; | &quot;ending&quot;</code></pre>
-</div><p>If <code>status</code> is anything but <code>live</code> or <code>ending</code>, stop. The clock has run out, and a bid transaction will revert after burning the bidder&#39;s gas.</p>
-<h2 id="2-prepare-the-bid"><a class="anchor" href="#2-prepare-the-bid" aria-hidden="true">#</a>2. Prepare the bid</h2>
-<div class="code">
-  <div class="bar"><span>js</span><button class="copy" type="button">Copy</button></div>
-  <pre><code class="language-js">const intent = await post(`/v1/auctions/${id}/bids`, {
+          </div>
+          <p>
+            If <code>status</code> is anything but <code>live</code> or
+            <code>ending</code>, stop. The clock has run out, and a bid
+            transaction will revert after burning the bidder&#39;s gas.
+          </p>
+          <h2 id="2-prepare-the-bid">
+            <a class="anchor" href="#2-prepare-the-bid" aria-hidden="true">#</a
+            >2. Prepare the bid
+          </h2>
+          <div class="code">
+            <div class="bar">
+              <span>js</span><button class="copy" type="button">Copy</button>
+            </div>
+            <pre><code class="language-js">const intent = await post(`/v1/auctions/${id}/bids`, {
   bidder: bidderAddress,
   amount_wei: &quot;1150000000000000000&quot;,
 });</code></pre>
-</div><p>We simulate the transaction against the bidder&#39;s real address before returning it. A bid that would revert — under the minimum, auction closed, wallet short of funds — fails here, as a <code>400</code> or <code>422</code>, before anyone pays gas to discover it.</p>
-<div class="code">
-  <div class="bar"><span>json</span><button class="copy" type="button">Copy</button></div>
-  <pre><code class="language-json">{
+          </div>
+          <p>
+            We simulate the transaction against the bidder&#39;s real address
+            before returning it. A bid that would revert — under the minimum,
+            auction closed, wallet short of funds — fails here, as a
+            <code>400</code> or <code>422</code>, before anyone pays gas to
+            discover it.
+          </p>
+          <div class="code">
+            <div class="bar">
+              <span>json</span><button class="copy" type="button">Copy</button>
+            </div>
+            <pre><code class="language-json">{
   &quot;error&quot;: {
     &quot;type&quot;: &quot;invalid_request_error&quot;,
     &quot;code&quot;: &quot;bid_below_minimum&quot;,
@@ -75,11 +207,20 @@ auction.status;               // &quot;live&quot; | &quot;ending&quot;</code></p
     &quot;detail&quot;: { &quot;minimum_bid_wei&quot;: &quot;1102500000000000000&quot; }
   }
 }</code></pre>
-</div><p>Re-read the auction and offer the new floor. Don&#39;t retry the same amount — someone got there first.</p>
-<h2 id="3-check-then-sign"><a class="anchor" href="#3-check-then-sign" aria-hidden="true">#</a>3. Check, then sign</h2>
-<div class="code">
-  <div class="bar"><span>js</span><button class="copy" type="button">Copy</button></div>
-  <pre><code class="language-js">const tx = intent.transaction_request;
+          </div>
+          <p>
+            Re-read the auction and offer the new floor. Don&#39;t retry the
+            same amount — someone got there first.
+          </p>
+          <h2 id="3-check-then-sign">
+            <a class="anchor" href="#3-check-then-sign" aria-hidden="true">#</a
+            >3. Check, then sign
+          </h2>
+          <div class="code">
+            <div class="bar">
+              <span>js</span><button class="copy" type="button">Copy</button>
+            </div>
+            <pre><code class="language-js">const tx = intent.transaction_request;
 
 // You are about to spend a user's money. Verify what you're spending it on.
 if (tx.to.toLowerCase() !== AUCTION_HOUSE.toLowerCase()) throw new Error(&quot;unexpected contract&quot;);
@@ -91,126 +232,201 @@ const hash = await wallet.sendTransaction({
   value: BigInt(tx.value),
   gas: BigInt(tx.gas_limit),
 });</code></pre>
-</div><p>These two checks take a microsecond and cost nothing. An API telling a wallet where to send ETH is a trust boundary; Auctra is on the wrong side of it, and so is every other API.</p>
-<p>There is no <code>mode: &quot;managed&quot;</code> for bidding. There never will be.</p>
-<h2 id="4-handle-the-extension"><a class="anchor" href="#4-handle-the-extension" aria-hidden="true">#</a>4. Handle the extension</h2>
-<p>If the bid lands within the final five minutes, the clock moves and the auction keeps taking bids.</p>
-<div class="code">
-  <div class="bar"><span>js</span><button class="copy" type="button">Copy</button></div>
-  <pre><code class="language-js">socket.on(&quot;auction.extended&quot;, ({ data }) =&gt; {
+          </div>
+          <p>
+            These two checks take a microsecond and cost nothing. An API telling
+            a wallet where to send ETH is a trust boundary; Auctra is on the
+            wrong side of it, and so is every other API.
+          </p>
+          <p>
+            There is no <code>mode: &quot;managed&quot;</code> for bidding.
+            There never will be.
+          </p>
+          <h2 id="4-handle-the-extension">
+            <a class="anchor" href="#4-handle-the-extension" aria-hidden="true"
+              >#</a
+            >4. Handle the extension
+          </h2>
+          <p>
+            If the bid lands within the final five minutes, the clock moves and
+            the auction keeps taking bids.
+          </p>
+          <div class="code">
+            <div class="bar">
+              <span>js</span><button class="copy" type="button">Copy</button>
+            </div>
+            <pre><code class="language-js">socket.on(&quot;auction.extended&quot;, ({ data }) =&gt; {
   countdown.setDeadline(data.object.end_time);      // reset, don't decrement
   toast(`Bid in the final minutes — ${data.object.anti_snipe.extensions_used}× extended`);
 });</code></pre>
-</div><p>A countdown started at page load and never corrected will tell your users the auction closed while it is still taking bids. Drive it from the event.</p>
-<h2 id="5-handle-being-outbid"><a class="anchor" href="#5-handle-being-outbid" aria-hidden="true">#</a>5. Handle being outbid</h2>
-<p>Being outbid is not a failure. The bidder&#39;s ETH is credited back to them inside the contract, and it is theirs to withdraw whenever they like.</p>
-<div class="code">
-  <div class="bar"><span>js</span><button class="copy" type="button">Copy</button></div>
-  <pre><code class="language-js">socket.on(&quot;auction.outbid&quot;, ({ data }) =&gt; {
+          </div>
+          <p>
+            A countdown started at page load and never corrected will tell your
+            users the auction closed while it is still taking bids. Drive it
+            from the event.
+          </p>
+          <h2 id="5-handle-being-outbid">
+            <a class="anchor" href="#5-handle-being-outbid" aria-hidden="true"
+              >#</a
+            >5. Handle being outbid
+          </h2>
+          <p>
+            Being outbid is not a failure. The bidder&#39;s ETH is credited back
+            to them inside the contract, and it is theirs to withdraw whenever
+            they like.
+          </p>
+          <div class="code">
+            <div class="bar">
+              <span>js</span><button class="copy" type="button">Copy</button>
+            </div>
+            <pre><code class="language-js">socket.on(&quot;auction.outbid&quot;, ({ data }) =&gt; {
   if (data.object.outbid_bidder !== me) return;
   notify(`You've been outbid. ${formatEther(data.object.refund_wei)} ETH is ready to withdraw.`);
 });</code></pre>
-</div><p>Note what didn&#39;t happen: nobody sent them any ETH. The contract <strong>credits</strong>, it does not push. If it pushed, a bidder could bid from a contract that reverts on <code>receive()</code> — and then nobody could ever outbid them, because the refund would fail and take the whole transaction down with it. The auction would be frozen at their price. Crediting instead of sending is what makes that attack pointless.</p>
-<p>The consequence for your product: a user can be owed money and not know it. Surface the balance.</p>
-<div class="code">
-  <div class="bar"><span>bash</span><button class="copy" type="button">Copy</button></div>
-  <pre><code class="language-bash">curl &quot;$AUCTRA_URL/v1/refunds/balance?bidder=0x9c8b…&quot; \
+          </div>
+          <p>
+            Note what didn&#39;t happen: nobody sent them any ETH. The contract
+            <strong>credits</strong>, it does not push. If it pushed, a bidder
+            could bid from a contract that reverts on <code>receive()</code> —
+            and then nobody could ever outbid them, because the refund would
+            fail and take the whole transaction down with it. The auction would
+            be frozen at their price. Crediting instead of sending is what makes
+            that attack pointless.
+          </p>
+          <p>
+            The consequence for your product: a user can be owed money and not
+            know it. Surface the balance.
+          </p>
+          <div class="code">
+            <div class="bar">
+              <span>bash</span><button class="copy" type="button">Copy</button>
+            </div>
+            <pre><code class="language-bash">curl &quot;$AUCTRA_URL/v1/refunds/balance?bidder=0x9c8b…&quot; \
   -H &quot;Authorization: Bearer $AUCTRA_KEY&quot;</code></pre>
-</div><div class="code">
-  <div class="bar"><span>json</span><button class="copy" type="button">Copy</button></div>
-  <pre><code class="language-json">{ &quot;object&quot;: &quot;refund_balance&quot;, &quot;withdrawable_wei&quot;: &quot;1050000000000000000&quot;, &quot;source&quot;: &quot;chain&quot; }</code></pre>
-</div><p>That reads <code>pendingReturns()</code> directly from the chain, not our cache. Trust it over anything else.</p>
-<h2 id="6-withdraw"><a class="anchor" href="#6-withdraw" aria-hidden="true">#</a>6. Withdraw</h2>
-<div class="code">
-  <div class="bar"><span>js</span><button class="copy" type="button">Copy</button></div>
-  <pre><code class="language-js">const intent = await post(&quot;/v1/refunds/withdraw&quot;, { bidder: bidderAddress });
+          </div>
+          <div class="code">
+            <div class="bar">
+              <span>json</span><button class="copy" type="button">Copy</button>
+            </div>
+            <pre><code class="language-json">{ &quot;object&quot;: &quot;refund_balance&quot;, &quot;withdrawable_wei&quot;: &quot;1050000000000000000&quot;, &quot;source&quot;: &quot;chain&quot; }</code></pre>
+          </div>
+          <p>
+            That reads <code>pendingReturns()</code> directly from the chain,
+            not our cache. Trust it over anything else.
+          </p>
+          <h2 id="6-withdraw">
+            <a class="anchor" href="#6-withdraw" aria-hidden="true">#</a>6.
+            Withdraw
+          </h2>
+          <div class="code">
+            <div class="bar">
+              <span>js</span><button class="copy" type="button">Copy</button>
+            </div>
+            <pre><code class="language-js">const intent = await post(&quot;/v1/refunds/withdraw&quot;, { bidder: bidderAddress });
 await wallet.sendTransaction(intent.transaction_request);</code></pre>
-</div><p><code>withdraw()</code> sweeps the bidder&#39;s entire credited balance across every auction, in one transaction. There&#39;s no partial withdrawal, and no reason to want one.</p>
-</div>
-      <nav class="pager">
-    <a class="prev" href="guide-list-an-item.html"><span>Previous</span><b>Guide: list an item</b></a>
-    <a class="next" href="guide-settle.html"><span>Next</span><b>Guide: settle and pay out</b></a>
-  </nav>
-  </main>
+          </div>
+          <p>
+            <code>withdraw()</code> sweeps the bidder&#39;s entire credited
+            balance across every auction, in one transaction. There&#39;s no
+            partial withdrawal, and no reason to want one.
+          </p>
+        </div>
+        <nav class="pager">
+          <a class="prev" href="guide-list-an-item.html"
+            ><span>Previous</span><b>Guide: list an item</b></a
+          >
+          <a class="next" href="guide-settle.html"
+            ><span>Next</span><b>Guide: settle and pay out</b></a
+          >
+        </nav>
+      </main>
 
-  <aside class="rail"><h5>On this page</h5><a class="h2" href="#1-read-the-current-minimum">1. Read the current minimum</a><a class="h2" href="#2-prepare-the-bid">2. Prepare the bid</a><a class="h2" href="#3-check-then-sign">3. Check, then sign</a><a class="h2" href="#4-handle-the-extension">4. Handle the extension</a><a class="h2" href="#5-handle-being-outbid">5. Handle being outbid</a><a class="h2" href="#6-withdraw">6. Withdraw</a></aside>
-</div>
+      <aside class="rail">
+        <h5>On this page</h5>
+        <a class="h2" href="#1-read-the-current-minimum"
+          >1. Read the current minimum</a
+        ><a class="h2" href="#2-prepare-the-bid">2. Prepare the bid</a
+        ><a class="h2" href="#3-check-then-sign">3. Check, then sign</a
+        ><a class="h2" href="#4-handle-the-extension">4. Handle the extension</a
+        ><a class="h2" href="#5-handle-being-outbid">5. Handle being outbid</a
+        ><a class="h2" href="#6-withdraw">6. Withdraw</a>
+      </aside>
+    </div>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
-<script>
-  hljs.highlightAll();
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script>
+      hljs.highlightAll();
 
-  // Copy buttons — copy the active language panel when there's a tab strip,
-  // otherwise the block's only <code>.
-  document.querySelectorAll(".copy").forEach((btn) => {
-    btn.addEventListener("click", async () => {
-      const block = btn.closest(".code");
-      const panel = block.querySelector(".lang-panel.active") ?? block;
-      const code = panel.querySelector("code").innerText;
-      await navigator.clipboard.writeText(code);
-      const was = btn.textContent;
-      btn.textContent = "Copied";
-      setTimeout(() => (btn.textContent = was), 1400);
-    });
-  });
-
-  // Language tabs on multi-sample code blocks
-  document.querySelectorAll(".lang-group").forEach((group) => {
-    const tabs = [...group.querySelectorAll(".lang-tab")];
-    const panels = [...group.querySelectorAll(".lang-panel")];
-    tabs.forEach((tab) => {
-      tab.addEventListener("click", () => {
-        const lang = tab.dataset.lang;
-        tabs.forEach((t) => t.classList.toggle("active", t === tab));
-        panels.forEach((p) =>
-          p.classList.toggle("active", p.dataset.lang === lang),
-        );
+      // Copy buttons
+      document.querySelectorAll(".copy").forEach((btn) => {
+        btn.addEventListener("click", async () => {
+          const code = btn.closest(".code").querySelector("code").innerText;
+          await navigator.clipboard.writeText(code);
+          const was = btn.textContent;
+          btn.textContent = "Copied";
+          setTimeout(() => (btn.textContent = was), 1400);
+        });
       });
-    });
-  });
 
-  // Theme
-  document.getElementById("theme-toggle").addEventListener("click", () => {
-    const next = document.documentElement.dataset.theme === "dark" ? "light" : "dark";
-    document.documentElement.dataset.theme = next;
-    try { localStorage.setItem("auctra-theme", next); } catch {}
-  });
+      // Theme
+      document.getElementById("theme-toggle").addEventListener("click", () => {
+        const next =
+          document.documentElement.dataset.theme === "dark" ? "light" : "dark";
+        document.documentElement.dataset.theme = next;
+        try {
+          localStorage.setItem("auctra-theme", next);
+        } catch {}
+      });
 
-  // Mobile nav
-  const sidebar = document.getElementById("sidebar");
-  const toggle = document.getElementById("menu-toggle");
-  toggle.addEventListener("click", () => {
-    const open = sidebar.dataset.open === "true";
-    sidebar.dataset.open = String(!open);
-    toggle.setAttribute("aria-expanded", String(!open));
-  });
+      // Mobile nav
+      const sidebar = document.getElementById("sidebar");
+      const toggle = document.getElementById("menu-toggle");
+      toggle.addEventListener("click", () => {
+        const open = sidebar.dataset.open === "true";
+        sidebar.dataset.open = String(!open);
+        toggle.setAttribute("aria-expanded", String(!open));
+      });
 
-  // Filter the nav, rather than shipping a search index for fifteen pages.
-  const search = document.getElementById("search");
-  search.addEventListener("input", () => {
-    const q = search.value.toLowerCase().trim();
-    document.querySelectorAll(".sidebar a").forEach((a) => {
-      const hit = !q || (a.dataset.search ?? "").toLowerCase().includes(q);
-      a.style.display = hit ? "" : "none";
-    });
-    document.querySelectorAll(".sidebar h4").forEach((h) => {
-      let n = h.nextElementSibling, any = false;
-      while (n && n.tagName === "A") { if (n.style.display !== "none") any = true; n = n.nextElementSibling; }
-      h.style.display = any ? "" : "none";
-    });
-  });
+      // Filter the nav, rather than shipping a search index for fifteen pages.
+      const search = document.getElementById("search");
+      search.addEventListener("input", () => {
+        const q = search.value.toLowerCase().trim();
+        document.querySelectorAll(".sidebar a").forEach((a) => {
+          const hit = !q || (a.dataset.search ?? "").toLowerCase().includes(q);
+          a.style.display = hit ? "" : "none";
+        });
+        document.querySelectorAll(".sidebar h4").forEach((h) => {
+          let n = h.nextElementSibling,
+            any = false;
+          while (n && n.tagName === "A") {
+            if (n.style.display !== "none") any = true;
+            n = n.nextElementSibling;
+          }
+          h.style.display = any ? "" : "none";
+        });
+      });
 
-  // Highlight the rail entry for whatever section is on screen.
-  const links = [...document.querySelectorAll(".rail a")];
-  if (links.length) {
-    const seen = new Set();
-    const io = new IntersectionObserver((entries) => {
-      entries.forEach((e) => e.isIntersecting ? seen.add(e.target.id) : seen.delete(e.target.id));
-      links.forEach((l) => l.classList.toggle("active", seen.has(l.hash.slice(1))));
-    }, { rootMargin: "-80px 0px -70% 0px" });
-    document.querySelectorAll("h2[id], h3[id]").forEach((h) => io.observe(h));
-  }
-</script>
-
-</body>
+      // Highlight the rail entry for whatever section is on screen.
+      const links = [...document.querySelectorAll(".rail a")];
+      if (links.length) {
+        const seen = new Set();
+        const io = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((e) =>
+              e.isIntersecting
+                ? seen.add(e.target.id)
+                : seen.delete(e.target.id),
+            );
+            links.forEach((l) =>
+              l.classList.toggle("active", seen.has(l.hash.slice(1))),
+            );
+          },
+          { rootMargin: "-80px 0px -70% 0px" },
+        );
+        document
+          .querySelectorAll("h2[id], h3[id]")
+          .forEach((h) => io.observe(h));
+      }
+    </script>
+  </body>
 </html>

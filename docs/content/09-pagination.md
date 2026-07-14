@@ -1,7 +1,7 @@
 ---
 title: Pagination
 description: Cursors, not page numbers, and why that isn't pedantry.
-section: Build
+section: Core concepts
 slug: pagination
 ---
 

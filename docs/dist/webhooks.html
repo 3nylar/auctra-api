@@ -1,157 +1,305 @@
 <!doctype html>
 <html lang="en" data-theme="light">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Webhooks — Auctra API</title>
-<meta name="description" content="Signed, retried, replayable — and how to verify one before you trust it.">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="styles.css">
-<script>
-  // Applied before first paint so a dark-mode reader never sees a white flash.
-  try {
-    const t = localStorage.getItem("auctra-theme");
-    if (t) document.documentElement.dataset.theme = t;
-    else if (matchMedia("(prefers-color-scheme: dark)").matches)
-      document.documentElement.dataset.theme = "dark";
-  } catch {}
-</script>
-</head>
-<body>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Webhooks — Auctra API</title>
+    <meta
+      name="description"
+      content="Signed, retried, replayable — and how to verify one before you trust it."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+    <script>
+      // Applied before first paint so a dark-mode reader never sees a white flash.
+      try {
+        const t = localStorage.getItem("auctra-theme");
+        if (t) document.documentElement.dataset.theme = t;
+        else if (matchMedia("(prefers-color-scheme: dark)").matches)
+          document.documentElement.dataset.theme = "dark";
+      } catch {}
+    </script>
+  </head>
+  <body>
+    <header class="masthead">
+      <button
+        class="icon-btn"
+        id="menu-toggle"
+        aria-label="Toggle navigation"
+        aria-expanded="false"
+      >
+        ☰
+      </button>
+      <a class="wordmark" href="introduction.html"
+        ><b>Auctra</b><span>Docs</span></a
+      >
+      <nav>
+        <a class="hide-sm" href="api-reference.html">API reference</a>
+        <a class="hide-sm" href="changelog.html">Changelog</a>
+        <a class="hide-sm" href="https://github.com/3nylar/auctra-api"
+          >GitHub</a
+        >
+        <button
+          class="icon-btn"
+          id="theme-toggle"
+          aria-label="Toggle colour theme"
+        >
+          ◐
+        </button>
+      </nav>
+    </header>
 
-<header class="masthead">
-  <button class="icon-btn" id="menu-toggle" aria-label="Toggle navigation" aria-expanded="false">☰</button>
-  <a class="wordmark" href="introduction.html"><b>Auctra</b><span>Docs</span></a>
-  <nav>
-    <a class="hide-sm" href="api-reference.html">API reference</a>
-    <a class="hide-sm" href="changelog.html">Changelog</a>
-    <a class="hide-sm" href="https://github.com/3nylar/auctra-api">GitHub</a>
-    <a class="nav-cta" href="dashboard/signup.html">Get an API key</a>
-    <button class="icon-btn" id="theme-toggle" aria-label="Toggle colour theme">◐</button>
-  </nav>
-</header>
+    <div class="shell">
+      <aside class="sidebar" id="sidebar">
+        <div class="search-wrap">
+          <input
+            id="search"
+            type="search"
+            placeholder="Search the docs"
+            autocomplete="off"
+          />
+        </div>
+        <h4>Get started</h4>
+        <a
+          href="introduction.html"
+          data-search="Introduction An auction house that settles on Ethereum, exposed as a JSON API."
+          >Introduction</a
+        ><a
+          href="quickstart.html"
+          data-search="Quickstart From zero to a live auction on Sepolia in four steps."
+          >Quickstart</a
+        ><a
+          href="authentication.html"
+          data-search="Authentication API keys, scopes, environments, and what to do when one leaks."
+          >Authentication</a
+        ><a
+          href="environments.html"
+          data-search="Environments Sandbox and production are the same code against different chains."
+          >Environments</a
+        >
+        <h4>Core concepts</h4>
+        <a
+          href="signing-model.html"
+          data-search="The signing model Why write endpoints return a transaction instead of doing the work."
+          >The signing model</a
+        ><a
+          href="auction-lifecycle.html"
+          data-search="Auction lifecycle Six states, one clock, and the two transitions nobody controls."
+          >Auction lifecycle</a
+        ><a
+          href="errors.html"
+          data-search="Errors One shape, stable codes, and a request id worth quoting."
+          >Errors</a
+        ><a
+          href="idempotency.html"
+          data-search="Idempotency Retry a POST safely, even when you never saw the response."
+          >Idempotency</a
+        ><a
+          href="pagination.html"
+          data-search="Pagination Cursors, not page numbers, and why that isn't pedantry."
+          >Pagination</a
+        ><a
+          href="rate-limits.html"
+          data-search="Rate limits 100 requests a minute, per key, and how to not need them."
+          >Rate limits</a
+        ><a
+          href="webhooks.html"
+          aria-current="page"
+          data-search="Webhooks Signed, retried, replayable — and how to verify one before you trust it."
+          >Webhooks</a
+        >
+        <h4>Guides</h4>
+        <a
+          href="guide-list-an-item.html"
+          data-search="Guide: list an item Approve, create, confirm — the full seller flow, end to end."
+          >Guide: list an item</a
+        ><a
+          href="guide-place-a-bid.html"
+          data-search="Guide: place a bid Read the minimum, prepare, sign, and handle being outbid."
+          >Guide: place a bid</a
+        ><a
+          href="guide-settle.html"
+          data-search="Guide: settle and pay out The clock runs out. Now someone has to close the loop."
+          >Guide: settle and pay out</a
+        >
+        <h4>Reference</h4>
+        <a
+          href="api-reference.html"
+          data-search="API reference Every endpoint, parameter and response."
+          >API reference</a
+        ><a
+          href="changelog.html"
+          data-search="Changelog Versions are dated. Breaking changes get a new one."
+          >Changelog</a
+        >
+      </aside>
 
-<div class="shell">
-  <aside class="sidebar" id="sidebar">
-    <div class="search-wrap">
-      <input id="search" type="search" placeholder="Search the docs" autocomplete="off">
-    </div>
-    <h4>Get started</h4><a href="introduction.html" data-search="Introduction An auction house that settles on Ethereum, exposed as a JSON API.">Introduction</a><a href="quickstart.html" data-search="Quickstart From zero to a live auction on Sepolia in four steps.">Quickstart</a><a href="authentication.html" data-search="Authentication API keys, scopes, environments, and what to do when one leaks.">Authentication</a><a href="environments.html" data-search="Environments Sandbox and production are the same code against different chains.">Environments</a><h4>Build</h4><a href="signing-model.html" data-search="The signing model Why write endpoints return a transaction instead of doing the work.">The signing model</a><a href="auction-lifecycle.html" data-search="Auction lifecycle Six states, one clock, and the two transitions nobody controls.">Auction lifecycle</a><a href="idempotency.html" data-search="Idempotency Retry a POST safely, even when you never saw the response.">Idempotency</a><a href="pagination.html" data-search="Pagination Cursors, not page numbers, and why that isn't pedantry.">Pagination</a><a href="rate-limits.html" data-search="Rate limits 100 requests a minute, per key, and how to not need them.">Rate limits</a><a href="webhooks.html" aria-current="page" data-search="Webhooks Signed, retried, replayable — and how to verify one before you trust it.">Webhooks</a><a href="guide-list-an-item.html" data-search="Guide: list an item Approve, create, confirm — the full seller flow, end to end.">Guide: list an item</a><a href="guide-place-a-bid.html" data-search="Guide: place a bid Read the minimum, prepare, sign, and handle being outbid.">Guide: place a bid</a><a href="guide-settle.html" data-search="Guide: settle and pay out The clock runs out. Now someone has to close the loop.">Guide: settle and pay out</a><h4>Reference</h4><a href="errors.html" data-search="Errors One shape, stable codes, and a request id worth quoting.">Errors</a><a href="api-reference.html" data-search="API reference Every endpoint, every field, every scope it requires.">API reference</a><a href="api-reference.html" data-search="API reference Every endpoint, parameter and response.">API reference</a><a href="changelog.html" data-search="Changelog Versions are dated. Breaking changes get a new one.">Changelog</a>
-  </aside>
+      <main class="content">
+        <p class="eyebrow">Core concepts</p>
+        <h1>Webhooks</h1>
+        <p class="lede">
+          Signed, retried, replayable — and how to verify one before you trust
+          it.
+        </p>
 
-  <main class="content">
-    <p class="eyebrow">Build</p>
-    <h1>Webhooks</h1>
-      <p class="lede">Signed, retried, replayable — and how to verify one before you trust it.</p>
-      
-      <div class="prose"><p>Auctra pushes an event to your HTTPS endpoint whenever something happens on-chain that concerns one of your auctions.</p>
-<div class="code">
-  <div class="bar"><span>bash</span><button class="copy" type="button">Copy</button></div>
-  <pre><code class="language-bash">curl -X POST &quot;$AUCTRA_URL/v1/webhook_endpoints&quot; \
+        <div class="prose">
+          <p>
+            Auctra pushes an event to your HTTPS endpoint whenever something
+            happens on-chain that concerns one of your auctions.
+          </p>
+          <div class="code">
+            <div class="bar">
+              <span>bash</span><button class="copy" type="button">Copy</button>
+            </div>
+            <pre><code class="language-bash">curl -X POST &quot;$AUCTRA_URL/v1/webhook_endpoints&quot; \
   -H &quot;Authorization: Bearer $AUCTRA_KEY&quot; \
   -H &quot;Content-Type: application/json&quot; \
   -d '{
     &quot;url&quot;: &quot;https://example.com/hooks/auctra&quot;,
     &quot;enabled_events&quot;: [&quot;auction.bid_placed&quot;, &quot;auction.outbid&quot;, &quot;auction.settled&quot;]
   }'</code></pre>
-</div><div class="code">
-  <div class="bar"><span>json</span><button class="copy" type="button">Copy</button></div>
-  <pre><code class="language-json">{
+          </div>
+          <div class="code">
+            <div class="bar">
+              <span>json</span><button class="copy" type="button">Copy</button>
+            </div>
+            <pre><code class="language-json">{
   &quot;object&quot;: &quot;webhook_endpoint&quot;,
   &quot;id&quot;: &quot;whe_6b3d0f8a2c1e&quot;,
   &quot;url&quot;: &quot;https://example.com/hooks/auctra&quot;,
   &quot;secret&quot;: &quot;whsec_9d4f2a7c1b8e0356af914d2c7b0e5836a1f4c9d2&quot;
 }</code></pre>
-</div><p><strong><code>secret</code> appears once.</strong> Store it before you close the terminal. Every request to your endpoint is signed with it, and you must verify that signature before you trust a byte of the body.</p>
-<h2 id="events"><a class="anchor" href="#events" aria-hidden="true">#</a>Events</h2>
-<table>
-<thead>
-<tr>
-<th>Type</th>
-<th>Fires when</th>
-<th>Payload</th>
-</tr>
-</thead>
-<tbody><tr>
-<td><code>auction.created</code></td>
-<td>The creation log confirms. <strong>Now</strong> it&#39;s safe to show bidders.</td>
-<td><code>auction</code></td>
-</tr>
-<tr>
-<td><code>auction.bid_placed</code></td>
-<td>A bid confirms on-chain</td>
-<td><code>auction</code></td>
-</tr>
-<tr>
-<td><code>auction.outbid</code></td>
-<td>A bidder is overtaken and credited a refund</td>
-<td><code>{auction, outbid_bidder, refund_wei}</code></td>
-</tr>
-<tr>
-<td><code>auction.extended</code></td>
-<td>A late bid pushed <code>end_time</code> back</td>
-<td><code>auction</code></td>
-</tr>
-<tr>
-<td><code>auction.ending_soon</code></td>
-<td>Five minutes remain</td>
-<td><code>auction</code></td>
-</tr>
-<tr>
-<td><code>auction.ended</code></td>
-<td>The clock expired</td>
-<td><code>auction</code></td>
-</tr>
-<tr>
-<td><code>auction.settled</code></td>
-<td>Item transferred, seller credited</td>
-<td><code>auction</code> + <code>winner</code>, <code>winning_bid_wei</code></td>
-</tr>
-<tr>
-<td><code>auction.cancelled</code></td>
-<td>Withdrawn before any bid</td>
-<td><code>auction</code></td>
-</tr>
-<tr>
-<td><code>refund.credited</code></td>
-<td>A refund balance became withdrawable</td>
-<td><code>refund</code></td>
-</tr>
-<tr>
-<td><code>refund.withdrawn</code></td>
-<td>A bidder swept their balance</td>
-<td><code>refund</code></td>
-</tr>
-<tr>
-<td><code>item.claimed</code></td>
-<td>The winner took delivery</td>
-<td><code>auction</code></td>
-</tr>
-</tbody></table>
-<p>Every event body:</p>
-<div class="code">
-  <div class="bar"><span>json</span><button class="copy" type="button">Copy</button></div>
-  <pre><code class="language-json">{
+          </div>
+          <p>
+            <strong><code>secret</code> appears once.</strong> Store it before
+            you close the terminal. Every request to your endpoint is signed
+            with it, and you must verify that signature before you trust a byte
+            of the body.
+          </p>
+          <h2 id="events">
+            <a class="anchor" href="#events" aria-hidden="true">#</a>Events
+          </h2>
+          <table>
+            <thead>
+              <tr>
+                <th>Type</th>
+                <th>Fires when</th>
+                <th>Payload</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>auction.created</code></td>
+                <td>
+                  The creation log confirms. <strong>Now</strong> it&#39;s safe
+                  to show bidders.
+                </td>
+                <td><code>auction</code></td>
+              </tr>
+              <tr>
+                <td><code>auction.bid_placed</code></td>
+                <td>A bid confirms on-chain</td>
+                <td><code>auction</code></td>
+              </tr>
+              <tr>
+                <td><code>auction.outbid</code></td>
+                <td>A bidder is overtaken and credited a refund</td>
+                <td><code>{auction, outbid_bidder, refund_wei}</code></td>
+              </tr>
+              <tr>
+                <td><code>auction.extended</code></td>
+                <td>A late bid pushed <code>end_time</code> back</td>
+                <td><code>auction</code></td>
+              </tr>
+              <tr>
+                <td><code>auction.ending_soon</code></td>
+                <td>Five minutes remain</td>
+                <td><code>auction</code></td>
+              </tr>
+              <tr>
+                <td><code>auction.ended</code></td>
+                <td>The clock expired</td>
+                <td><code>auction</code></td>
+              </tr>
+              <tr>
+                <td><code>auction.settled</code></td>
+                <td>Item transferred, seller credited</td>
+                <td>
+                  <code>auction</code> + <code>winner</code>,
+                  <code>winning_bid_wei</code>
+                </td>
+              </tr>
+              <tr>
+                <td><code>auction.cancelled</code></td>
+                <td>Withdrawn before any bid</td>
+                <td><code>auction</code></td>
+              </tr>
+              <tr>
+                <td><code>refund.credited</code></td>
+                <td>A refund balance became withdrawable</td>
+                <td><code>refund</code></td>
+              </tr>
+              <tr>
+                <td><code>refund.withdrawn</code></td>
+                <td>A bidder swept their balance</td>
+                <td><code>refund</code></td>
+              </tr>
+              <tr>
+                <td><code>item.claimed</code></td>
+                <td>The winner took delivery</td>
+                <td><code>auction</code></td>
+              </tr>
+            </tbody>
+          </table>
+          <p>Every event body:</p>
+          <div class="code">
+            <div class="bar">
+              <span>json</span><button class="copy" type="button">Copy</button>
+            </div>
+            <pre><code class="language-json">{
   &quot;id&quot;: &quot;evt_7c2e9a1f4b6d&quot;,
   &quot;object&quot;: &quot;event&quot;,
   &quot;type&quot;: &quot;auction.outbid&quot;,
   &quot;created_at&quot;: &quot;2026-07-09T10:31:04.882Z&quot;,
   &quot;data&quot;: { &quot;object&quot;: { &quot;auction&quot;: &quot;auc_3f9a2c7b1d4e&quot;, &quot;outbid_bidder&quot;: &quot;0x9c8b…&quot;, &quot;refund_wei&quot;: &quot;1050000000000000000&quot; } }
 }</code></pre>
-</div><h2 id="verify-the-signature"><a class="anchor" href="#verify-the-signature" aria-hidden="true">#</a>Verify the signature</h2>
-<p>Every request carries:</p>
-<div class="code">
-  <div class="bar"><span>http</span><button class="copy" type="button">Copy</button></div>
-  <pre><code class="language-http">Auctra-Signature: t=1752076800,v1=5257a869e7d0f1c3b8a2...
+          </div>
+          <h2 id="verify-the-signature">
+            <a class="anchor" href="#verify-the-signature" aria-hidden="true"
+              >#</a
+            >Verify the signature
+          </h2>
+          <p>Every request carries:</p>
+          <div class="code">
+            <div class="bar">
+              <span>http</span><button class="copy" type="button">Copy</button>
+            </div>
+            <pre><code class="language-http">Auctra-Signature: t=1752076800,v1=5257a869e7d0f1c3b8a2...
 Auctra-Event-Id: evt_7c2e9a1f4b6d
 Auctra-Delivery-Attempt: 1</code></pre>
-</div><p><code>v1</code> is <code>HMAC-SHA256(&quot;{timestamp}.{raw body}&quot;, secret)</code>.</p>
-<p>The timestamp is inside the signed payload for a reason. A bare HMAC of the body is valid forever, so anyone who captures one request can replay it at you indefinitely. Signing <code>timestamp.body</code> and rejecting anything older than five minutes turns a captured request into a dead one.</p>
-<div class="code">
-  <div class="bar"><span>js</span><button class="copy" type="button">Copy</button></div>
-  <pre><code class="language-js">import { createHmac, timingSafeEqual } from &quot;node:crypto&quot;;
+          </div>
+          <p>
+            <code>v1</code> is
+            <code>HMAC-SHA256(&quot;{timestamp}.{raw body}&quot;, secret)</code
+            >.
+          </p>
+          <p>
+            The timestamp is inside the signed payload for a reason. A bare HMAC
+            of the body is valid forever, so anyone who captures one request can
+            replay it at you indefinitely. Signing
+            <code>timestamp.body</code> and rejecting anything older than five
+            minutes turns a captured request into a dead one.
+          </p>
+          <div class="code">
+            <div class="bar">
+              <span>js</span><button class="copy" type="button">Copy</button>
+            </div>
+            <pre><code class="language-js">import { createHmac, timingSafeEqual } from &quot;node:crypto&quot;;
 
 export function verify(rawBody, header, secret, tolerance = 300) {
   const parts = Object.fromEntries(header.split(&quot;,&quot;).map((kv) =&gt; kv.split(&quot;=&quot;)));
@@ -165,115 +313,191 @@ export function verify(rawBody, header, secret, tolerance = 300) {
 
   return expected.length === given.length &amp;&amp; timingSafeEqual(expected, given);
 }</code></pre>
-</div><p>Two ways to get this wrong, both common:</p>
-<p><strong>Hash the raw body, not the parsed object.</strong> <code>JSON.stringify(req.body)</code> reorders keys and drops whitespace, and the HMAC will never match. In Express: <code>express.raw({ type: &quot;application/json&quot; })</code>.</p>
-<p><strong>Compare in constant time.</strong> <code>expected === given</code> leaks, one byte at a time, how much of a forged signature was right. <code>timingSafeEqual</code> doesn&#39;t.</p>
-<h2 id="retries"><a class="anchor" href="#retries" aria-hidden="true">#</a>Retries</h2>
-<p>Return a <code>2xx</code> within <strong>10 seconds</strong>. Anything else — a <code>500</code>, a timeout, a connection reset — and we retry:</p>
-<div class="code">
-  <div class="bar"><span>text</span><button class="copy" type="button">Copy</button></div>
-  <pre><code>5s → 25s → 2m → 10m → 1h → 6h → 24h</code></pre>
-</div><p>Seven attempts over about 32 hours, then the delivery is marked <code>exhausted</code> and we stop.</p>
-<p>Ten seconds is not enough time to settle an auction, email a winner and update a ledger. Don&#39;t try. Persist the event, return <code>200</code>, and do the work on a queue. A webhook handler that does real work is a webhook handler that times out during your busiest hour.</p>
-<h2 id="duplicates-are-normal"><a class="anchor" href="#duplicates-are-normal" aria-hidden="true">#</a>Duplicates are normal</h2>
-<p>We guarantee <strong>at least once</strong>, not exactly once. A delivery can succeed on our side and time out on yours; you&#39;ll get it again.</p>
-<p>Deduplicate on <code>Auctra-Event-Id</code>. It&#39;s stable across every retry of the same event.</p>
-<div class="code">
-  <div class="bar"><span>js</span><button class="copy" type="button">Copy</button></div>
-  <pre><code class="language-js">if (await seen(req.headers[&quot;auctra-event-id&quot;])) return res.sendStatus(200);</code></pre>
-</div><p>Ordering is not guaranteed either. <code>auction.settled</code> can arrive before the <code>auction.bid_placed</code> for the winning bid. Each event carries the full object as of the moment it fired, so treat the payload as the truth and <code>created_at</code> as the tiebreaker.</p>
-<h2 id="when-your-listener-was-down"><a class="anchor" href="#when-your-listener-was-down" aria-hidden="true">#</a>When your listener was down</h2>
-<p>Don&#39;t ask us to redeliver. Read the log.</p>
-<div class="code">
-  <div class="bar"><span>bash</span><button class="copy" type="button">Copy</button></div>
-  <pre><code class="language-bash">curl &quot;$AUCTRA_URL/v1/events?type=auction.settled&amp;limit=100&quot; \
+          </div>
+          <p>Two ways to get this wrong, both common:</p>
+          <p>
+            <strong>Hash the raw body, not the parsed object.</strong>
+            <code>JSON.stringify(req.body)</code> reorders keys and drops
+            whitespace, and the HMAC will never match. In Express:
+            <code>express.raw({ type: &quot;application/json&quot; })</code>.
+          </p>
+          <p>
+            <strong>Compare in constant time.</strong>
+            <code>expected === given</code> leaks, one byte at a time, how much
+            of a forged signature was right.
+            <code>timingSafeEqual</code> doesn&#39;t.
+          </p>
+          <h2 id="retries">
+            <a class="anchor" href="#retries" aria-hidden="true">#</a>Retries
+          </h2>
+          <p>
+            Return a <code>2xx</code> within <strong>10 seconds</strong>.
+            Anything else — a <code>500</code>, a timeout, a connection reset —
+            and we retry:
+          </p>
+          <div class="code">
+            <div class="bar">
+              <span>text</span><button class="copy" type="button">Copy</button>
+            </div>
+            <pre><code>5s → 25s → 2m → 10m → 1h → 6h → 24h</code></pre>
+          </div>
+          <p>
+            Seven attempts over about 32 hours, then the delivery is marked
+            <code>exhausted</code> and we stop.
+          </p>
+          <p>
+            Ten seconds is not enough time to settle an auction, email a winner
+            and update a ledger. Don&#39;t try. Persist the event, return
+            <code>200</code>, and do the work on a queue. A webhook handler that
+            does real work is a webhook handler that times out during your
+            busiest hour.
+          </p>
+          <h2 id="duplicates-are-normal">
+            <a class="anchor" href="#duplicates-are-normal" aria-hidden="true"
+              >#</a
+            >Duplicates are normal
+          </h2>
+          <p>
+            We guarantee <strong>at least once</strong>, not exactly once. A
+            delivery can succeed on our side and time out on yours; you&#39;ll
+            get it again.
+          </p>
+          <p>
+            Deduplicate on <code>Auctra-Event-Id</code>. It&#39;s stable across
+            every retry of the same event.
+          </p>
+          <div class="code">
+            <div class="bar">
+              <span>js</span><button class="copy" type="button">Copy</button>
+            </div>
+            <pre><code class="language-js">if (await seen(req.headers[&quot;auctra-event-id&quot;])) return res.sendStatus(200);</code></pre>
+          </div>
+          <p>
+            Ordering is not guaranteed either. <code>auction.settled</code> can
+            arrive before the <code>auction.bid_placed</code> for the winning
+            bid. Each event carries the full object as of the moment it fired,
+            so treat the payload as the truth and <code>created_at</code> as the
+            tiebreaker.
+          </p>
+          <h2 id="when-your-listener-was-down">
+            <a
+              class="anchor"
+              href="#when-your-listener-was-down"
+              aria-hidden="true"
+              >#</a
+            >When your listener was down
+          </h2>
+          <p>Don&#39;t ask us to redeliver. Read the log.</p>
+          <div class="code">
+            <div class="bar">
+              <span>bash</span><button class="copy" type="button">Copy</button>
+            </div>
+            <pre><code class="language-bash">curl &quot;$AUCTRA_URL/v1/events?type=auction.settled&amp;limit=100&quot; \
   -H &quot;Authorization: Bearer $AUCTRA_KEY&quot;</code></pre>
-</div><p>Every webhook we&#39;ve ever sent is a durable, paginated row in <code>GET /v1/events</code>. An outage becomes a reconciliation, not an incident — and unlike a redelivery queue, it works even if your endpoint was misconfigured for a week.</p>
-</div>
-      <nav class="pager">
-    <a class="prev" href="rate-limits.html"><span>Previous</span><b>Rate limits</b></a>
-    <a class="next" href="guide-list-an-item.html"><span>Next</span><b>Guide: list an item</b></a>
-  </nav>
-  </main>
+          </div>
+          <p>
+            Every webhook we&#39;ve ever sent is a durable, paginated row in
+            <code>GET /v1/events</code>. An outage becomes a reconciliation, not
+            an incident — and unlike a redelivery queue, it works even if your
+            endpoint was misconfigured for a week.
+          </p>
+        </div>
+        <nav class="pager">
+          <a class="prev" href="rate-limits.html"
+            ><span>Previous</span><b>Rate limits</b></a
+          >
+          <a class="next" href="guide-list-an-item.html"
+            ><span>Next</span><b>Guide: list an item</b></a
+          >
+        </nav>
+      </main>
 
-  <aside class="rail"><h5>On this page</h5><a class="h2" href="#events">Events</a><a class="h2" href="#verify-the-signature">Verify the signature</a><a class="h2" href="#retries">Retries</a><a class="h2" href="#duplicates-are-normal">Duplicates are normal</a><a class="h2" href="#when-your-listener-was-down">When your listener was down</a></aside>
-</div>
+      <aside class="rail">
+        <h5>On this page</h5>
+        <a class="h2" href="#events">Events</a
+        ><a class="h2" href="#verify-the-signature">Verify the signature</a
+        ><a class="h2" href="#retries">Retries</a
+        ><a class="h2" href="#duplicates-are-normal">Duplicates are normal</a
+        ><a class="h2" href="#when-your-listener-was-down"
+          >When your listener was down</a
+        >
+      </aside>
+    </div>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
-<script>
-  hljs.highlightAll();
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script>
+      hljs.highlightAll();
 
-  // Copy buttons — copy the active language panel when there's a tab strip,
-  // otherwise the block's only <code>.
-  document.querySelectorAll(".copy").forEach((btn) => {
-    btn.addEventListener("click", async () => {
-      const block = btn.closest(".code");
-      const panel = block.querySelector(".lang-panel.active") ?? block;
-      const code = panel.querySelector("code").innerText;
-      await navigator.clipboard.writeText(code);
-      const was = btn.textContent;
-      btn.textContent = "Copied";
-      setTimeout(() => (btn.textContent = was), 1400);
-    });
-  });
-
-  // Language tabs on multi-sample code blocks
-  document.querySelectorAll(".lang-group").forEach((group) => {
-    const tabs = [...group.querySelectorAll(".lang-tab")];
-    const panels = [...group.querySelectorAll(".lang-panel")];
-    tabs.forEach((tab) => {
-      tab.addEventListener("click", () => {
-        const lang = tab.dataset.lang;
-        tabs.forEach((t) => t.classList.toggle("active", t === tab));
-        panels.forEach((p) =>
-          p.classList.toggle("active", p.dataset.lang === lang),
-        );
+      // Copy buttons
+      document.querySelectorAll(".copy").forEach((btn) => {
+        btn.addEventListener("click", async () => {
+          const code = btn.closest(".code").querySelector("code").innerText;
+          await navigator.clipboard.writeText(code);
+          const was = btn.textContent;
+          btn.textContent = "Copied";
+          setTimeout(() => (btn.textContent = was), 1400);
+        });
       });
-    });
-  });
 
-  // Theme
-  document.getElementById("theme-toggle").addEventListener("click", () => {
-    const next = document.documentElement.dataset.theme === "dark" ? "light" : "dark";
-    document.documentElement.dataset.theme = next;
-    try { localStorage.setItem("auctra-theme", next); } catch {}
-  });
+      // Theme
+      document.getElementById("theme-toggle").addEventListener("click", () => {
+        const next =
+          document.documentElement.dataset.theme === "dark" ? "light" : "dark";
+        document.documentElement.dataset.theme = next;
+        try {
+          localStorage.setItem("auctra-theme", next);
+        } catch {}
+      });
 
-  // Mobile nav
-  const sidebar = document.getElementById("sidebar");
-  const toggle = document.getElementById("menu-toggle");
-  toggle.addEventListener("click", () => {
-    const open = sidebar.dataset.open === "true";
-    sidebar.dataset.open = String(!open);
-    toggle.setAttribute("aria-expanded", String(!open));
-  });
+      // Mobile nav
+      const sidebar = document.getElementById("sidebar");
+      const toggle = document.getElementById("menu-toggle");
+      toggle.addEventListener("click", () => {
+        const open = sidebar.dataset.open === "true";
+        sidebar.dataset.open = String(!open);
+        toggle.setAttribute("aria-expanded", String(!open));
+      });
 
-  // Filter the nav, rather than shipping a search index for fifteen pages.
-  const search = document.getElementById("search");
-  search.addEventListener("input", () => {
-    const q = search.value.toLowerCase().trim();
-    document.querySelectorAll(".sidebar a").forEach((a) => {
-      const hit = !q || (a.dataset.search ?? "").toLowerCase().includes(q);
-      a.style.display = hit ? "" : "none";
-    });
-    document.querySelectorAll(".sidebar h4").forEach((h) => {
-      let n = h.nextElementSibling, any = false;
-      while (n && n.tagName === "A") { if (n.style.display !== "none") any = true; n = n.nextElementSibling; }
-      h.style.display = any ? "" : "none";
-    });
-  });
+      // Filter the nav, rather than shipping a search index for fifteen pages.
+      const search = document.getElementById("search");
+      search.addEventListener("input", () => {
+        const q = search.value.toLowerCase().trim();
+        document.querySelectorAll(".sidebar a").forEach((a) => {
+          const hit = !q || (a.dataset.search ?? "").toLowerCase().includes(q);
+          a.style.display = hit ? "" : "none";
+        });
+        document.querySelectorAll(".sidebar h4").forEach((h) => {
+          let n = h.nextElementSibling,
+            any = false;
+          while (n && n.tagName === "A") {
+            if (n.style.display !== "none") any = true;
+            n = n.nextElementSibling;
+          }
+          h.style.display = any ? "" : "none";
+        });
+      });
 
-  // Highlight the rail entry for whatever section is on screen.
-  const links = [...document.querySelectorAll(".rail a")];
-  if (links.length) {
-    const seen = new Set();
-    const io = new IntersectionObserver((entries) => {
-      entries.forEach((e) => e.isIntersecting ? seen.add(e.target.id) : seen.delete(e.target.id));
-      links.forEach((l) => l.classList.toggle("active", seen.has(l.hash.slice(1))));
-    }, { rootMargin: "-80px 0px -70% 0px" });
-    document.querySelectorAll("h2[id], h3[id]").forEach((h) => io.observe(h));
-  }
-</script>
-
-</body>
+      // Highlight the rail entry for whatever section is on screen.
+      const links = [...document.querySelectorAll(".rail a")];
+      if (links.length) {
+        const seen = new Set();
+        const io = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((e) =>
+              e.isIntersecting
+                ? seen.add(e.target.id)
+                : seen.delete(e.target.id),
+            );
+            links.forEach((l) =>
+              l.classList.toggle("active", seen.has(l.hash.slice(1))),
+            );
+          },
+          { rootMargin: "-80px 0px -70% 0px" },
+        );
+        document
+          .querySelectorAll("h2[id], h3[id]")
+          .forEach((h) => io.observe(h));
+      }
+    </script>
+  </body>
 </html>

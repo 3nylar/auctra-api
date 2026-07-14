@@ -1,61 +1,173 @@
 <!doctype html>
 <html lang="en" data-theme="light">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Rate limits — Auctra API</title>
-<meta name="description" content="100 requests a minute, per key, and how to not need them.">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="styles.css">
-<script>
-  // Applied before first paint so a dark-mode reader never sees a white flash.
-  try {
-    const t = localStorage.getItem("auctra-theme");
-    if (t) document.documentElement.dataset.theme = t;
-    else if (matchMedia("(prefers-color-scheme: dark)").matches)
-      document.documentElement.dataset.theme = "dark";
-  } catch {}
-</script>
-</head>
-<body>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Rate limits — Auctra API</title>
+    <meta
+      name="description"
+      content="100 requests a minute, per key, and how to not need them."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+    <script>
+      // Applied before first paint so a dark-mode reader never sees a white flash.
+      try {
+        const t = localStorage.getItem("auctra-theme");
+        if (t) document.documentElement.dataset.theme = t;
+        else if (matchMedia("(prefers-color-scheme: dark)").matches)
+          document.documentElement.dataset.theme = "dark";
+      } catch {}
+    </script>
+  </head>
+  <body>
+    <header class="masthead">
+      <button
+        class="icon-btn"
+        id="menu-toggle"
+        aria-label="Toggle navigation"
+        aria-expanded="false"
+      >
+        ☰
+      </button>
+      <a class="wordmark" href="introduction.html"
+        ><b>Auctra</b><span>Docs</span></a
+      >
+      <nav>
+        <a class="hide-sm" href="api-reference.html">API reference</a>
+        <a class="hide-sm" href="changelog.html">Changelog</a>
+        <a class="hide-sm" href="https://github.com/3nylar/auctra-api"
+          >GitHub</a
+        >
+        <button
+          class="icon-btn"
+          id="theme-toggle"
+          aria-label="Toggle colour theme"
+        >
+          ◐
+        </button>
+      </nav>
+    </header>
 
-<header class="masthead">
-  <button class="icon-btn" id="menu-toggle" aria-label="Toggle navigation" aria-expanded="false">☰</button>
-  <a class="wordmark" href="introduction.html"><b>Auctra</b><span>Docs</span></a>
-  <nav>
-    <a class="hide-sm" href="api-reference.html">API reference</a>
-    <a class="hide-sm" href="changelog.html">Changelog</a>
-    <a class="hide-sm" href="https://github.com/3nylar/auctra-api">GitHub</a>
-    <a class="nav-cta" href="dashboard/signup.html">Get an API key</a>
-    <button class="icon-btn" id="theme-toggle" aria-label="Toggle colour theme">◐</button>
-  </nav>
-</header>
+    <div class="shell">
+      <aside class="sidebar" id="sidebar">
+        <div class="search-wrap">
+          <input
+            id="search"
+            type="search"
+            placeholder="Search the docs"
+            autocomplete="off"
+          />
+        </div>
+        <h4>Get started</h4>
+        <a
+          href="introduction.html"
+          data-search="Introduction An auction house that settles on Ethereum, exposed as a JSON API."
+          >Introduction</a
+        ><a
+          href="quickstart.html"
+          data-search="Quickstart From zero to a live auction on Sepolia in four steps."
+          >Quickstart</a
+        ><a
+          href="authentication.html"
+          data-search="Authentication API keys, scopes, environments, and what to do when one leaks."
+          >Authentication</a
+        ><a
+          href="environments.html"
+          data-search="Environments Sandbox and production are the same code against different chains."
+          >Environments</a
+        >
+        <h4>Core concepts</h4>
+        <a
+          href="signing-model.html"
+          data-search="The signing model Why write endpoints return a transaction instead of doing the work."
+          >The signing model</a
+        ><a
+          href="auction-lifecycle.html"
+          data-search="Auction lifecycle Six states, one clock, and the two transitions nobody controls."
+          >Auction lifecycle</a
+        ><a
+          href="errors.html"
+          data-search="Errors One shape, stable codes, and a request id worth quoting."
+          >Errors</a
+        ><a
+          href="idempotency.html"
+          data-search="Idempotency Retry a POST safely, even when you never saw the response."
+          >Idempotency</a
+        ><a
+          href="pagination.html"
+          data-search="Pagination Cursors, not page numbers, and why that isn't pedantry."
+          >Pagination</a
+        ><a
+          href="rate-limits.html"
+          aria-current="page"
+          data-search="Rate limits 100 requests a minute, per key, and how to not need them."
+          >Rate limits</a
+        ><a
+          href="webhooks.html"
+          data-search="Webhooks Signed, retried, replayable — and how to verify one before you trust it."
+          >Webhooks</a
+        >
+        <h4>Guides</h4>
+        <a
+          href="guide-list-an-item.html"
+          data-search="Guide: list an item Approve, create, confirm — the full seller flow, end to end."
+          >Guide: list an item</a
+        ><a
+          href="guide-place-a-bid.html"
+          data-search="Guide: place a bid Read the minimum, prepare, sign, and handle being outbid."
+          >Guide: place a bid</a
+        ><a
+          href="guide-settle.html"
+          data-search="Guide: settle and pay out The clock runs out. Now someone has to close the loop."
+          >Guide: settle and pay out</a
+        >
+        <h4>Reference</h4>
+        <a
+          href="api-reference.html"
+          data-search="API reference Every endpoint, parameter and response."
+          >API reference</a
+        ><a
+          href="changelog.html"
+          data-search="Changelog Versions are dated. Breaking changes get a new one."
+          >Changelog</a
+        >
+      </aside>
 
-<div class="shell">
-  <aside class="sidebar" id="sidebar">
-    <div class="search-wrap">
-      <input id="search" type="search" placeholder="Search the docs" autocomplete="off">
-    </div>
-    <h4>Get started</h4><a href="introduction.html" data-search="Introduction An auction house that settles on Ethereum, exposed as a JSON API.">Introduction</a><a href="quickstart.html" data-search="Quickstart From zero to a live auction on Sepolia in four steps.">Quickstart</a><a href="authentication.html" data-search="Authentication API keys, scopes, environments, and what to do when one leaks.">Authentication</a><a href="environments.html" data-search="Environments Sandbox and production are the same code against different chains.">Environments</a><h4>Build</h4><a href="signing-model.html" data-search="The signing model Why write endpoints return a transaction instead of doing the work.">The signing model</a><a href="auction-lifecycle.html" data-search="Auction lifecycle Six states, one clock, and the two transitions nobody controls.">Auction lifecycle</a><a href="idempotency.html" data-search="Idempotency Retry a POST safely, even when you never saw the response.">Idempotency</a><a href="pagination.html" data-search="Pagination Cursors, not page numbers, and why that isn't pedantry.">Pagination</a><a href="rate-limits.html" aria-current="page" data-search="Rate limits 100 requests a minute, per key, and how to not need them.">Rate limits</a><a href="webhooks.html" data-search="Webhooks Signed, retried, replayable — and how to verify one before you trust it.">Webhooks</a><a href="guide-list-an-item.html" data-search="Guide: list an item Approve, create, confirm — the full seller flow, end to end.">Guide: list an item</a><a href="guide-place-a-bid.html" data-search="Guide: place a bid Read the minimum, prepare, sign, and handle being outbid.">Guide: place a bid</a><a href="guide-settle.html" data-search="Guide: settle and pay out The clock runs out. Now someone has to close the loop.">Guide: settle and pay out</a><h4>Reference</h4><a href="errors.html" data-search="Errors One shape, stable codes, and a request id worth quoting.">Errors</a><a href="api-reference.html" data-search="API reference Every endpoint, every field, every scope it requires.">API reference</a><a href="api-reference.html" data-search="API reference Every endpoint, parameter and response.">API reference</a><a href="changelog.html" data-search="Changelog Versions are dated. Breaking changes get a new one.">Changelog</a>
-  </aside>
+      <main class="content">
+        <p class="eyebrow">Core concepts</p>
+        <h1>Rate limits</h1>
+        <p class="lede">
+          100 requests a minute, per key, and how to not need them.
+        </p>
 
-  <main class="content">
-    <p class="eyebrow">Build</p>
-    <h1>Rate limits</h1>
-      <p class="lede">100 requests a minute, per key, and how to not need them.</p>
-      
-      <div class="prose"><p><strong>100 requests per minute, per API key.</strong> Every response tells you where you stand.</p>
-<div class="code">
-  <div class="bar"><span>http</span><button class="copy" type="button">Copy</button></div>
-  <pre><code class="language-http">X-RateLimit-Limit: 100
+        <div class="prose">
+          <p>
+            <strong>100 requests per minute, per API key.</strong> Every
+            response tells you where you stand.
+          </p>
+          <div class="code">
+            <div class="bar">
+              <span>http</span><button class="copy" type="button">Copy</button>
+            </div>
+            <pre><code class="language-http">X-RateLimit-Limit: 100
 X-RateLimit-Remaining: 61
 X-RateLimit-Reset: 1752076860</code></pre>
-</div><p>Exceed it and you get <code>429</code> with a <code>Retry-After</code> in seconds:</p>
-<div class="code">
-  <div class="bar"><span>json</span><button class="copy" type="button">Copy</button></div>
-  <pre><code class="language-json">{
+          </div>
+          <p>
+            Exceed it and you get <code>429</code> with a
+            <code>Retry-After</code> in seconds:
+          </p>
+          <div class="code">
+            <div class="bar">
+              <span>json</span><button class="copy" type="button">Copy</button>
+            </div>
+            <pre><code class="language-json">{
   &quot;error&quot;: {
     &quot;type&quot;: &quot;rate_limit_error&quot;,
     &quot;code&quot;: &quot;rate_limit_exceeded&quot;,
@@ -63,113 +175,175 @@ X-RateLimit-Reset: 1752076860</code></pre>
     &quot;request_id&quot;: &quot;req_2c8f1a94e0d7b365&quot;
   }
 }</code></pre>
-</div><p>Limits are keyed to the <strong>API key</strong>, not the IP address. Two customers behind one corporate NAT don&#39;t exhaust each other&#39;s budget, and running your service across ten pods doesn&#39;t multiply your allowance — the budget belongs to the key, so split traffic across several keys if you need to isolate a noisy job from a user-facing path.</p>
-<h2 id="respect-retry-after"><a class="anchor" href="#respect-retry-after" aria-hidden="true">#</a>Respect <code>Retry-After</code></h2>
-<div class="code">
-  <div class="bar"><span>js</span><button class="copy" type="button">Copy</button></div>
-  <pre><code class="language-js">if (res.status === 429) {
+          </div>
+          <p>
+            Limits are keyed to the <strong>API key</strong>, not the IP
+            address. Two customers behind one corporate NAT don&#39;t exhaust
+            each other&#39;s budget, and running your service across ten pods
+            doesn&#39;t multiply your allowance — the budget belongs to the key,
+            so split traffic across several keys if you need to isolate a noisy
+            job from a user-facing path.
+          </p>
+          <h2 id="respect-retry-after">
+            <a class="anchor" href="#respect-retry-after" aria-hidden="true"
+              >#</a
+            >Respect <code>Retry-After</code>
+          </h2>
+          <div class="code">
+            <div class="bar">
+              <span>js</span><button class="copy" type="button">Copy</button>
+            </div>
+            <pre><code class="language-js">if (res.status === 429) {
   const wait = Number(res.headers.get(&quot;retry-after&quot;) ?? 1);
   await sleep(wait * 1000 + Math.random() * 500);  // jitter, or your pods sync up
   return retry();
 }</code></pre>
-</div><p>Jitter matters more than it looks. Ten workers that all sleep exactly one second will all wake up in the same millisecond and hit the same wall together.</p>
-<h2 id="the-polling-trap"><a class="anchor" href="#the-polling-trap" aria-hidden="true">#</a>The polling trap</h2>
-<p>The usual way to run out of budget is a countdown page.</p>
-<p>Fifty people watching one auction, each polling <code>GET /v1/auctions/{id}</code> every two seconds, is 1,500 requests a minute against a limit of 100 — and 1,499 of them return exactly what the last one did.</p>
-<p>Don&#39;t poll for state that we already push:</p>
-<ul>
-<li><strong>Subscribe to <code>auction.bid_placed</code> and <code>auction.extended</code>.</strong> One webhook per real change.</li>
-<li><strong>Fan out from your own server.</strong> Take the webhook, push it to connected browsers over SSE or WebSocket. Your users get updates in a hundred milliseconds instead of two seconds, and you spend one request instead of fifteen hundred.</li>
-<li><strong>Poll only what has no event</strong>, like a transaction hash you&#39;re waiting on, and stop as soon as it confirms.</li>
-</ul>
-<p>If you genuinely need a higher limit — a marketplace with tens of thousands of concurrent lots — mail <code>developers@auctra.dev</code> with your expected request pattern. We&#39;d rather raise your limit than have you build a proxy that hides the problem from both of us.</p>
-<h2 id="not-rate-limited"><a class="anchor" href="#not-rate-limited" aria-hidden="true">#</a>Not rate limited</h2>
-<p><code>GET /v1/health</code> is unauthenticated and unlimited. Point your uptime checks at it.</p>
-</div>
-      <nav class="pager">
-    <a class="prev" href="pagination.html"><span>Previous</span><b>Pagination</b></a>
-    <a class="next" href="webhooks.html"><span>Next</span><b>Webhooks</b></a>
-  </nav>
-  </main>
+          </div>
+          <p>
+            Jitter matters more than it looks. Ten workers that all sleep
+            exactly one second will all wake up in the same millisecond and hit
+            the same wall together.
+          </p>
+          <h2 id="the-polling-trap">
+            <a class="anchor" href="#the-polling-trap" aria-hidden="true">#</a
+            >The polling trap
+          </h2>
+          <p>The usual way to run out of budget is a countdown page.</p>
+          <p>
+            Fifty people watching one auction, each polling
+            <code>GET /v1/auctions/{id}</code> every two seconds, is 1,500
+            requests a minute against a limit of 100 — and 1,499 of them return
+            exactly what the last one did.
+          </p>
+          <p>Don&#39;t poll for state that we already push:</p>
+          <ul>
+            <li>
+              <strong
+                >Subscribe to <code>auction.bid_placed</code> and
+                <code>auction.extended</code>.</strong
+              >
+              One webhook per real change.
+            </li>
+            <li>
+              <strong>Fan out from your own server.</strong> Take the webhook,
+              push it to connected browsers over SSE or WebSocket. Your users
+              get updates in a hundred milliseconds instead of two seconds, and
+              you spend one request instead of fifteen hundred.
+            </li>
+            <li>
+              <strong>Poll only what has no event</strong>, like a transaction
+              hash you&#39;re waiting on, and stop as soon as it confirms.
+            </li>
+          </ul>
+          <p>
+            If you genuinely need a higher limit — a marketplace with tens of
+            thousands of concurrent lots — mail
+            <code>developers@auctra.dev</code> with your expected request
+            pattern. We&#39;d rather raise your limit than have you build a
+            proxy that hides the problem from both of us.
+          </p>
+          <h2 id="not-rate-limited">
+            <a class="anchor" href="#not-rate-limited" aria-hidden="true">#</a
+            >Not rate limited
+          </h2>
+          <p>
+            <code>GET /v1/health</code> is unauthenticated and unlimited. Point
+            your uptime checks at it.
+          </p>
+        </div>
+        <nav class="pager">
+          <a class="prev" href="pagination.html"
+            ><span>Previous</span><b>Pagination</b></a
+          >
+          <a class="next" href="webhooks.html"
+            ><span>Next</span><b>Webhooks</b></a
+          >
+        </nav>
+      </main>
 
-  <aside class="rail"><h5>On this page</h5><a class="h2" href="#respect-retry-after">Respect <code>Retry-After</code></a><a class="h2" href="#the-polling-trap">The polling trap</a><a class="h2" href="#not-rate-limited">Not rate limited</a></aside>
-</div>
+      <aside class="rail">
+        <h5>On this page</h5>
+        <a class="h2" href="#respect-retry-after"
+          >Respect <code>Retry-After</code></a
+        ><a class="h2" href="#the-polling-trap">The polling trap</a
+        ><a class="h2" href="#not-rate-limited">Not rate limited</a>
+      </aside>
+    </div>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
-<script>
-  hljs.highlightAll();
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script>
+      hljs.highlightAll();
 
-  // Copy buttons — copy the active language panel when there's a tab strip,
-  // otherwise the block's only <code>.
-  document.querySelectorAll(".copy").forEach((btn) => {
-    btn.addEventListener("click", async () => {
-      const block = btn.closest(".code");
-      const panel = block.querySelector(".lang-panel.active") ?? block;
-      const code = panel.querySelector("code").innerText;
-      await navigator.clipboard.writeText(code);
-      const was = btn.textContent;
-      btn.textContent = "Copied";
-      setTimeout(() => (btn.textContent = was), 1400);
-    });
-  });
-
-  // Language tabs on multi-sample code blocks
-  document.querySelectorAll(".lang-group").forEach((group) => {
-    const tabs = [...group.querySelectorAll(".lang-tab")];
-    const panels = [...group.querySelectorAll(".lang-panel")];
-    tabs.forEach((tab) => {
-      tab.addEventListener("click", () => {
-        const lang = tab.dataset.lang;
-        tabs.forEach((t) => t.classList.toggle("active", t === tab));
-        panels.forEach((p) =>
-          p.classList.toggle("active", p.dataset.lang === lang),
-        );
+      // Copy buttons
+      document.querySelectorAll(".copy").forEach((btn) => {
+        btn.addEventListener("click", async () => {
+          const code = btn.closest(".code").querySelector("code").innerText;
+          await navigator.clipboard.writeText(code);
+          const was = btn.textContent;
+          btn.textContent = "Copied";
+          setTimeout(() => (btn.textContent = was), 1400);
+        });
       });
-    });
-  });
 
-  // Theme
-  document.getElementById("theme-toggle").addEventListener("click", () => {
-    const next = document.documentElement.dataset.theme === "dark" ? "light" : "dark";
-    document.documentElement.dataset.theme = next;
-    try { localStorage.setItem("auctra-theme", next); } catch {}
-  });
+      // Theme
+      document.getElementById("theme-toggle").addEventListener("click", () => {
+        const next =
+          document.documentElement.dataset.theme === "dark" ? "light" : "dark";
+        document.documentElement.dataset.theme = next;
+        try {
+          localStorage.setItem("auctra-theme", next);
+        } catch {}
+      });
 
-  // Mobile nav
-  const sidebar = document.getElementById("sidebar");
-  const toggle = document.getElementById("menu-toggle");
-  toggle.addEventListener("click", () => {
-    const open = sidebar.dataset.open === "true";
-    sidebar.dataset.open = String(!open);
-    toggle.setAttribute("aria-expanded", String(!open));
-  });
+      // Mobile nav
+      const sidebar = document.getElementById("sidebar");
+      const toggle = document.getElementById("menu-toggle");
+      toggle.addEventListener("click", () => {
+        const open = sidebar.dataset.open === "true";
+        sidebar.dataset.open = String(!open);
+        toggle.setAttribute("aria-expanded", String(!open));
+      });
 
-  // Filter the nav, rather than shipping a search index for fifteen pages.
-  const search = document.getElementById("search");
-  search.addEventListener("input", () => {
-    const q = search.value.toLowerCase().trim();
-    document.querySelectorAll(".sidebar a").forEach((a) => {
-      const hit = !q || (a.dataset.search ?? "").toLowerCase().includes(q);
-      a.style.display = hit ? "" : "none";
-    });
-    document.querySelectorAll(".sidebar h4").forEach((h) => {
-      let n = h.nextElementSibling, any = false;
-      while (n && n.tagName === "A") { if (n.style.display !== "none") any = true; n = n.nextElementSibling; }
-      h.style.display = any ? "" : "none";
-    });
-  });
+      // Filter the nav, rather than shipping a search index for fifteen pages.
+      const search = document.getElementById("search");
+      search.addEventListener("input", () => {
+        const q = search.value.toLowerCase().trim();
+        document.querySelectorAll(".sidebar a").forEach((a) => {
+          const hit = !q || (a.dataset.search ?? "").toLowerCase().includes(q);
+          a.style.display = hit ? "" : "none";
+        });
+        document.querySelectorAll(".sidebar h4").forEach((h) => {
+          let n = h.nextElementSibling,
+            any = false;
+          while (n && n.tagName === "A") {
+            if (n.style.display !== "none") any = true;
+            n = n.nextElementSibling;
+          }
+          h.style.display = any ? "" : "none";
+        });
+      });
 
-  // Highlight the rail entry for whatever section is on screen.
-  const links = [...document.querySelectorAll(".rail a")];
-  if (links.length) {
-    const seen = new Set();
-    const io = new IntersectionObserver((entries) => {
-      entries.forEach((e) => e.isIntersecting ? seen.add(e.target.id) : seen.delete(e.target.id));
-      links.forEach((l) => l.classList.toggle("active", seen.has(l.hash.slice(1))));
-    }, { rootMargin: "-80px 0px -70% 0px" });
-    document.querySelectorAll("h2[id], h3[id]").forEach((h) => io.observe(h));
-  }
-</script>
-
-</body>
+      // Highlight the rail entry for whatever section is on screen.
+      const links = [...document.querySelectorAll(".rail a")];
+      if (links.length) {
+        const seen = new Set();
+        const io = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((e) =>
+              e.isIntersecting
+                ? seen.add(e.target.id)
+                : seen.delete(e.target.id),
+            );
+            links.forEach((l) =>
+              l.classList.toggle("active", seen.has(l.hash.slice(1))),
+            );
+          },
+          { rootMargin: "-80px 0px -70% 0px" },
+        );
+        document
+          .querySelectorAll("h2[id], h3[id]")
+          .forEach((h) => io.observe(h));
+      }
+    </script>
+  </body>
 </html>

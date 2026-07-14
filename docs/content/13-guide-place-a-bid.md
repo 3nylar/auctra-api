@@ -1,7 +1,7 @@
 ---
 title: 'Guide: place a bid'
 description: Read the minimum, prepare, sign, and handle being outbid.
-section: Build
+section: Guides
 slug: guide-place-a-bid
 ---
 

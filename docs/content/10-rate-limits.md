@@ -1,4 +1,9 @@
-# Rate limits
+---
+title: Rate limits
+description: 100 requests a minute, per key, and how to not need them.
+section: Core concepts
+slug: rate-limits
+---
 
 **100 requests per minute, per API key.** Every response tells you where you stand.
 
