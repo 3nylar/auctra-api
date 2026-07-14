@@ -142,11 +142,30 @@
       <main class="content">
         <p class="eyebrow">Reference</p>
         <h1>API reference</h1>
-        <p class="lede">
-          Base URL <code>https://auctra-api-production.up.railway.app</code>.
-          Every request needs <code>Authorization: Bearer sk_test_…</code>.
-          Amounts are decimal strings of wei.
-        </p>
+        <div class="lede">
+          All requests are JSON over HTTPS, and versioned at <code>/v1</code>.
+        </div>
+
+        <h2 id="base-url">
+          <a class="anchor" href="#base-url" aria-hidden="true">#</a>Base URL
+        </h2>
+        <div style="max-width: var(--measure)">
+          <p>
+            Every request is made to
+            <a 
+              href="https://auctra-api-production.up.railway.app" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              style="color: var(--blue-6)"
+            >
+              https://auctra-api-production.up.railway.app
+            </a>
+            and must include an
+            <code>Authorization: Bearer sk_test_… </code> header.
+            Amounts are always decimal strings of wei.
+          </p>
+        </div>
+        
         <h2 id="auctions">
           <a class="anchor" href="#auctions" aria-hidden="true">#</a>Auctions
         </h2>
@@ -2319,7 +2338,7 @@
 
       <aside class="rail">
         <h5>On this page</h5>
-        <a class="h2" href="#auctions">Auctions</a
+        <a class="h2" href="#base-url">Base URL</a><a class="h2" href="#auctions">Auctions</a
         ><a class="h3" href="#get-v1auctions">List auctions</a
         ><a class="h3" href="#post-v1auctions">Create an auction</a
         ><a class="h3" href="#get-v1auctionsid">Retrieve an auction</a
