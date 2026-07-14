@@ -5,7 +5,7 @@ section: Build
 slug: guide-list-an-item
 ---
 
-Three steps: approve the contract to escrow the token, create the auction, wait for the confirmation event. The middle step is the only one that touches Auctra.
+Four steps: approve the contract to escrow the token, create the auction, sign and broadcast the transaction, and wait for the confirmation event. The middle two steps are the only ones that touch Auctra.
 
 ## 1. Approve, once per collection
 

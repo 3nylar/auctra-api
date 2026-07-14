@@ -9,6 +9,7 @@
 - [The signing model](https://auctra-api.vercel.app/signing-model.md): Why write endpoints return a transaction instead of doing the work.
 - [Auction lifecycle](https://auctra-api.vercel.app/auction-lifecycle.md): Six states, one clock, and the two transitions nobody controls.
 - [Errors](https://auctra-api.vercel.app/errors.md): One shape, stable codes, and a request id worth quoting.
+- [API reference](https://auctra-api.vercel.app/api-reference.md): Every endpoint, every field, every scope it requires.
 - [Idempotency](https://auctra-api.vercel.app/idempotency.md): Retry a POST safely, even when you never saw the response.
 - [Pagination](https://auctra-api.vercel.app/pagination.md): Cursors, not page numbers, and why that isn't pedantry.
 - [Rate limits](https://auctra-api.vercel.app/rate-limits.md): 100 requests a minute, per key, and how to not need them.

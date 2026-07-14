@@ -38,7 +38,7 @@ For operations on a wallet **your organisation owns** — listing your own inven
 - **Auctions** you create, browse, settle and cancel.
 - **Bids**, validated against the live minimum and simulated before they cost anyone gas.
 - **Refunds** for outbid bidders, tracked as a queryable balance rather than something a user has to know to go find.
-- **Webhooks** signed with HMAC and retried with backoff for 24 hours, backed by an event log you can replay yourself.
+- **Webhooks** signed with HMAC and retried with backoff for about 32 hours, backed by an event log you can replay yourself.
 - **A sandbox** on Sepolia that exercises every code path in production, with worthless ETH.
 
 ## Two conventions worth reading before you write code
