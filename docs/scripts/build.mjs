@@ -488,16 +488,17 @@ pages.forEach((page, i) => {
 
   let body;
   if (page.generated) {
+    toc.push({ id: "base-url", text: "Base URL", depth: 2 });
     body = `<h1>API reference</h1>
       <div class="lede">All requests are JSON over HTTPS.</div>
 
       <h2 id="base-url">
-        <a class="anchor" href="#base-url" aria-hidden="true" style="color: var(--blue-6)>#</a>Base URL
+        <a class="anchor" href="#base-url" aria-hidden="true">#</a>Base URL
       </h2>
       <div style="max-width: var(--measure)">
         <p>
           Every request is made to
-          <a href="${SITE.sandbox}" target="_blank" rel="noopener noreferrer"><code>${SITE.sandbox}</code></a>
+          <a href="${SITE.sandbox}" target="_blank" rel="noopener noreferrer" style="color: var(--blue-6)"><code>${SITE.sandbox}</code></a>
           and must include an <code>Authorization: Bearer sk_test_…</code> header.
           Amounts are always decimal strings of wei.
         </p>
