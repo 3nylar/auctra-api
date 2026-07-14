@@ -382,8 +382,6 @@ function responseSample(op) {
     const s = deref(c.schema);
     const ex = s?.examples?.[0] ?? s?.example;
     if (ex) return JSON.stringify(ex, null, 2);
-    // allOf composites: a list envelope wrapping `data: Thing[]`. Build the
-    // envelope around the item's own example so list endpoints get a sample too.
     for (const part of s?.allOf ?? []) {
       const d = deref(part);
       if (d?.examples?.[0]) return JSON.stringify(d.examples[0], null, 2);
@@ -494,7 +492,7 @@ pages.forEach((page, i) => {
       <div class="lede">All requests are JSON over HTTPS.</div>
 
       <h2 id="base-url">
-        <a class="anchor" href="#base-url" aria-hidden="true">#</a>Base URL
+        <a class="anchor" href="#base-url" aria-hidden="true" style="color: var(--blue-6)>#</a>Base URL
       </h2>
       <div style="max-width: var(--measure)">
         <p>
